@@ -13,8 +13,8 @@ const ENV_PATH = path.join(ROOT_DIR, ".env");
 const ENV_EXAMPLE_PATH = path.join(ROOT_DIR, ".env.example");
 const SETUP_SCRIPT_PATH = path.join(ROOT_DIR, "scripts", "setup.mjs");
 const MIGRATION_DONE_KEY = "CLAW_MIGRATION_V1_0_5_DONE";
-const START_MARKER = "<!-- BEGIN claw-empire orchestration rules -->";
-const END_MARKER = "<!-- END claw-empire orchestration rules -->";
+const START_MARKER = "<!-- BEGIN claw-republic orchestration rules -->";
+const END_MARKER = "<!-- END claw-republic orchestration rules -->";
 const REQUIRED_AGENTS_SECRET_TOKEN = "INBOX_SECRET_DISCOVERY_V2";
 const REQUIRED_AGENTS_ADDITIONAL_TOKENS = ["TASTE_SKILL_DEFAULT_V1", "WORKFLOW_ORCHESTRATION_BASELINE_V1"];
 const MEETING_PROMPT_ENV_DEFAULTS = [
@@ -74,11 +74,11 @@ function ensureEnvFile() {
   if (fs.existsSync(ENV_PATH)) return;
   if (fs.existsSync(ENV_EXAMPLE_PATH)) {
     fs.copyFileSync(ENV_EXAMPLE_PATH, ENV_PATH);
-    console.log("[Claw-Empire] v1.0.5 auto-apply: created .env from .env.example");
+    console.log("[Claw-Republic] v1.0.5 auto-apply: created .env from .env.example");
     return;
   }
   fs.writeFileSync(ENV_PATH, "", "utf8");
-  console.log("[Claw-Empire] v1.0.5 auto-apply: created empty .env");
+  console.log("[Claw-Republic] v1.0.5 auto-apply: created empty .env");
 }
 
 function resolvePort(content) {
@@ -165,7 +165,7 @@ function maybeAutoPatchEnv() {
 
   fs.writeFileSync(ENV_PATH, content, "utf8");
   if (changes.length > 0) {
-    console.log(`[Claw-Empire] v1.0.5 auto-apply: ${changes.join(", ")}`);
+    console.log(`[Claw-Republic] v1.0.5 auto-apply: ${changes.join(", ")}`);
   }
 
   return {
@@ -202,7 +202,7 @@ function resolveWorkspaceDir() {
 
 function resolveAgentsPath() {
   const projectAgentsPath = path.join(ROOT_DIR, "AGENTS.md");
-  // Default target for migration: project-local AGENTS.md (claw-empire users first).
+  // Default target for migration: project-local AGENTS.md (claw-republic users first).
   // OpenClaw workspace targeting should be explicit via setup --agents-path.
   return projectAgentsPath;
 }
@@ -223,7 +223,7 @@ function shouldRefreshAgentsRules() {
 
 function refreshAgentsRules(port) {
   if (!fs.existsSync(SETUP_SCRIPT_PATH)) {
-    console.warn("[Claw-Empire] v1.0.5 auto-apply: scripts/setup.mjs not found; skipped AGENTS update");
+    console.warn("[Claw-Republic] v1.0.5 auto-apply: scripts/setup.mjs not found; skipped AGENTS update");
     return false;
   }
 
@@ -241,7 +241,7 @@ function refreshAgentsRules(port) {
   const stderr = (result.stderr || "").trim();
   const stdout = (result.stdout || "").trim();
   const reason = stderr || stdout || result.error?.message || "unknown error";
-  console.warn(`[Claw-Empire] v1.0.5 auto-apply: AGENTS update skipped (${reason})`);
+  console.warn(`[Claw-Republic] v1.0.5 auto-apply: AGENTS update skipped (${reason})`);
   return false;
 }
 
@@ -249,7 +249,7 @@ function markMigrationDone(content) {
   if (stripOuterQuotes(readEnvValue(content, MIGRATION_DONE_KEY)) === "1") return;
   const updated = upsertEnv(content, MIGRATION_DONE_KEY, "1");
   fs.writeFileSync(ENV_PATH, updated, "utf8");
-  console.log("[Claw-Empire] v1.0.5 auto-apply: migration marked complete");
+  console.log("[Claw-Republic] v1.0.5 auto-apply: migration marked complete");
 }
 
 function main() {
@@ -271,7 +271,7 @@ function main() {
     markMigrationDone(envContent);
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
-    console.warn(`[Claw-Empire] v1.0.5 auto-apply: non-blocking failure (${msg})`);
+    console.warn(`[Claw-Republic] v1.0.5 auto-apply: non-blocking failure (${msg})`);
   }
 }
 

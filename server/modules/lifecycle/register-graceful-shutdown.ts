@@ -30,7 +30,7 @@ export function registerGracefulShutdownHandlers({
   onBeforeClose,
 }: RegisterGracefulShutdownHandlersOptions): void {
   function gracefulShutdown(signal: string): void {
-    console.log(`\n[Claw-Empire] ${signal} received. Shutting down gracefully...`);
+    console.log(`\n[Claw-Republic] ${signal} received. Shutting down gracefully...`);
 
     try {
       onBeforeClose?.();
@@ -39,7 +39,7 @@ export function registerGracefulShutdownHandlers({
     }
 
     for (const [taskId, child] of activeProcesses) {
-      console.log(`[Claw-Empire] Stopping process for task ${taskId} (pid: ${child.pid})`);
+      console.log(`[Claw-Republic] Stopping process for task ${taskId} (pid: ${child.pid})`);
       stopRequestedTasks.add(taskId);
       if (child.pid) {
         killPidTree(child.pid);
@@ -77,13 +77,13 @@ export function registerGracefulShutdownHandlers({
         } catch {
           /* ignore */
         }
-        console.log("[Claw-Empire] Shutdown complete.");
+        console.log("[Claw-Republic] Shutdown complete.");
         process.exit(0);
       });
     });
 
     setTimeout(() => {
-      console.error("[Claw-Empire] Forced exit after timeout.");
+      console.error("[Claw-Republic] Forced exit after timeout.");
       process.exit(1);
     }, 5000).unref();
   }

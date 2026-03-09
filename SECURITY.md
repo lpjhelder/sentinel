@@ -15,7 +15,7 @@ Please do not open public GitHub issues for security vulnerabilities.
 
 Use GitHub Private Vulnerability Reporting:
 
-- https://github.com/GreenSheep01201/claw-empire/security/advisories/new
+- https://github.com/GreenSheep01201/claw-republic/security/advisories/new
 
 If private reporting is unavailable in your environment, open a minimal issue without exploit details and ask a maintainer for a private channel.
 

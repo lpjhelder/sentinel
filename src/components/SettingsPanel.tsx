@@ -113,7 +113,7 @@ export default function SettingsPanel({
     setForm(settings as LocalSettings);
     const syncedLocale = normalizeLanguage((settings as LocalSettings).language);
     window.localStorage.setItem(LANGUAGE_STORAGE_KEY, syncedLocale);
-    window.dispatchEvent(new Event("climpire-language-change"));
+    window.dispatchEvent(new Event("claw-republic-language-change"));
   }, [settings]);
 
   useEffect(() => {
@@ -170,7 +170,7 @@ export default function SettingsPanel({
   function handleSave() {
     const nextLocale = normalizeLanguage(form.language);
     window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLocale);
-    window.dispatchEvent(new Event("climpire-language-change"));
+    window.dispatchEvent(new Event("claw-republic-language-change"));
     persistSettings(form);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);

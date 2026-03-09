@@ -187,7 +187,7 @@ describe("run complete handler - video preprod review transition", () => {
 
   it("[VIDEO_FINAL_RENDER]는 Remotion 증빙이 없으면 성공 종료여도 실패 처리한다", () => {
     const db = createDb();
-    const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-run-complete-"));
+    const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-republic-run-complete-"));
     try {
       const taskId = "task-final-render";
       db.prepare(
@@ -236,9 +236,9 @@ describe("run complete handler - video preprod review transition", () => {
 
   it("[VIDEO_FINAL_RENDER]는 thinking 내 정책 문구가 있어도 Remotion 렌더 증빙이 있으면 실패 처리하지 않는다", () => {
     const db = createDb();
-    const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-run-complete-"));
-    const worktreeDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-wt-"));
-    const projectPath = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-project-"));
+    const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-republic-run-complete-"));
+    const worktreeDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-republic-wt-"));
+    const projectPath = fs.mkdtempSync(path.join(os.tmpdir(), "claw-republic-project-"));
     try {
       const taskId = "task-final-render-thinking-ok";
       db.prepare(
@@ -267,7 +267,7 @@ describe("run complete handler - video preprod review transition", () => {
       fs.writeFileSync(path.join(worktreeDir, "video_output", "final.mp4"), "rendered-video", "utf8");
 
       const deps = createDeps(db, logsDir);
-      deps.taskWorktrees.set(taskId, { worktreePath: worktreeDir, projectPath, branchName: "climpire/test" });
+      deps.taskWorktrees.set(taskId, { worktreePath: worktreeDir, projectPath, branchName: "claw-republic/test" });
       deps.activeProcesses.set(taskId, { pid: 105 });
       const { handleTaskRunComplete } = createRunCompleteHandler(deps);
 
@@ -303,8 +303,8 @@ describe("run complete handler - video preprod review transition", () => {
 
   it("[VIDEO_FINAL_RENDER]는 렌더 산출물과 Remotion 증빙이 있으면 비정상 종료 코드도 성공으로 복구한다", () => {
     const db = createDb();
-    const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-run-complete-"));
-    const worktreeDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-wt-"));
+    const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-republic-run-complete-"));
+    const worktreeDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-republic-wt-"));
     try {
       const taskId = "task-final-render-recover";
       const projectPath = "/tmp/project";
@@ -332,7 +332,7 @@ describe("run complete handler - video preprod review transition", () => {
       fs.mkdirSync(path.join(projectPath, "video_output"), { recursive: true });
 
       const deps = createDeps(db, logsDir);
-      deps.taskWorktrees.set(taskId, { worktreePath: worktreeDir, projectPath, branchName: "climpire/test" });
+      deps.taskWorktrees.set(taskId, { worktreePath: worktreeDir, projectPath, branchName: "claw-republic/test" });
       deps.activeProcesses.set(taskId, { pid: 104 });
       const { handleTaskRunComplete } = createRunCompleteHandler(deps);
 

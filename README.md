@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/claw-empire.svg" width="80" alt="Claw-Empire" />
+  <img src="public/claw-republic.svg" width="80" alt="Claw-Republic" />
 </p>
 
-<h1 align="center">Claw-Empire</h1>
+<h1 align="center">Claw-Republic</h1>
 
 <p align="center">
   <strong>Command Your AI Agent Empire from the CEO Desk</strong><br>
@@ -11,7 +11,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-2.0.3-blue" alt="Releases" />
-  <a href="https://github.com/GreenSheep01201/claw-empire/actions/workflows/ci.yml"><img src="https://github.com/GreenSheep01201/claw-empire/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
+  <a href="https://github.com/GreenSheep01201/claw-republic/actions/workflows/ci.yml"><img src="https://github.com/GreenSheep01201/claw-republic/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D22-brightgreen" alt="Node.js 22+" />
   <img src="https://img.shields.io/badge/license-Apache%202.0-orange" alt="License" />
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey" alt="Platform" />
@@ -42,11 +42,11 @@
 
 ---
 
-## What is Claw-Empire?
+## What is Claw-Republic?
 
-Claw-Empire transforms your AI coding assistants — connected via **CLI**, **OAuth**, or **direct API keys** — into a fully simulated **virtual software company**. You are the CEO. Your AI agents are the employees. Watch them collaborate across departments, hold meetings, deliver tasks, and level up — all visualized through a charming pixel-art office interface.
+Claw-Republic transforms your AI coding assistants — connected via **CLI**, **OAuth**, or **direct API keys** — into a fully simulated **virtual software company**. You are the CEO. Your AI agents are the employees. Watch them collaborate across departments, hold meetings, deliver tasks, and level up — all visualized through a charming pixel-art office interface.
 
-### Why Claw-Empire?
+### Why Claw-Republic?
 
 - **One interface, many AI agents** — Manage CLI, OAuth, and API-backed agents from a single dashboard
 - **Local-first & private** — All data stays on your machine. SQLite database, no cloud dependency
@@ -60,8 +60,8 @@ Claw-Empire transforms your AI coding assistants — connected via **CLI**, **OA
 > **Just paste this to your AI coding agent (Claude Code, Codex, Gemini CLI, etc.):**
 >
 > ```
-> Install Claw-Empire following the guide at:
-> https://github.com/GreenSheep01201/claw-empire
+> Install Claw-Republic following the guide at:
+> https://github.com/GreenSheep01201/claw-republic
 > ```
 >
 > The AI will read this README and handle everything automatically.
@@ -175,10 +175,10 @@ Each office pack applies a different collaboration topology, naming seed, and wo
 Preview sample intro video output:
 
 <p align="center">
-  <video src="Sample_Img/claw-empire-intro.mp4" controls muted playsinline width="100%"></video>
+  <video src="Sample_Img/claw-republic-intro.mp4" controls muted playsinline width="100%"></video>
 </p>
 
-- Direct file: [`Sample_Img/claw-empire-intro.mp4`](Sample_Img/claw-empire-intro.mp4)
+- Direct file: [`Sample_Img/claw-republic-intro.mp4`](Sample_Img/claw-republic-intro.mp4)
 
 ### PPT Sample Sources
 
@@ -258,8 +258,8 @@ git --version
 ### Step 1: Clone and run one-click setup
 
 ```bash
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/GreenSheep01201/claw-republic.git
+cd claw-republic
 git submodule update --init --recursive
 bash install.sh
 ```
@@ -267,8 +267,8 @@ bash install.sh
 Windows PowerShell:
 
 ```powershell
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/GreenSheep01201/claw-republic.git
+cd claw-republic
 git submodule update --init --recursive
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
@@ -282,7 +282,7 @@ macOS/Linux:
 [ -f .env ] && [ -f scripts/setup.mjs ] && echo "setup files ok"
 
 # AGENTS orchestration rules installed
-grep -R "BEGIN claw-empire orchestration rules" ~/.openclaw/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
+grep -R "BEGIN claw-republic orchestration rules" ~/.openclaw/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
 grep -R "INBOX_SECRET_DISCOVERY_V2" ~/.openclaw/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
 
 # OpenClaw inbox requirements in .env
@@ -294,7 +294,7 @@ Windows PowerShell:
 ```powershell
 if ((Test-Path .\.env) -and (Test-Path .\scripts\setup.mjs)) { "setup files ok" }
 $agentCandidates = @("$env:USERPROFILE\.openclaw\workspace\AGENTS.md", ".\AGENTS.md")
-$agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "BEGIN claw-empire orchestration rules" } }
+$agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "BEGIN claw-republic orchestration rules" } }
 $agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "INBOX_SECRET_DISCOVERY_V2" } }
 
 # OpenClaw inbox requirements in .env
@@ -342,7 +342,7 @@ Expected:
 
 ### Step 5: Direct messenger setup (no OpenClaw required)
 
-You can run messenger channels directly from Claw-Empire without OpenClaw.
+You can run messenger channels directly from Claw-Republic without OpenClaw.
 
 1. Open `Settings > Channel Messages`.
 2. Click `Add Chat`.
@@ -380,8 +380,8 @@ Notes:
 
 | Platform                 | Command                                                                                                                                |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **macOS / Linux**        | `git clone https://github.com/GreenSheep01201/claw-empire.git && cd claw-empire && bash install.sh`                                    |
-| **Windows (PowerShell)** | `git clone https://github.com/GreenSheep01201/claw-empire.git; cd claw-empire; powershell -ExecutionPolicy Bypass -File .\install.ps1` |
+| **macOS / Linux**        | `git clone https://github.com/GreenSheep01201/claw-republic.git && cd claw-republic && bash install.sh`                                    |
+| **Windows (PowerShell)** | `git clone https://github.com/GreenSheep01201/claw-republic.git; cd claw-republic; powershell -ExecutionPolicy Bypass -File .\install.ps1` |
 
 If the repo is already cloned:
 
@@ -413,8 +413,8 @@ For existing clones that only run `git pull`, `pnpm dev*` / `pnpm start*` now au
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/GreenSheep01201/claw-republic.git
+cd claw-republic
 
 # 2. Enable pnpm via corepack
 corepack enable
@@ -434,7 +434,7 @@ node -e "
   fs.writeFileSync(p, content.replace('__CHANGE_ME__', crypto.randomBytes(32).toString('hex')));
 "
 
-# 6. Setup AGENTS.md orchestration rules (teaches your AI agent to be a Claw-Empire project manager)
+# 6. Setup AGENTS.md orchestration rules (teaches your AI agent to be a Claw-Republic project manager)
 pnpm setup -- --port 8790
 
 # 7. Start the development server
@@ -448,8 +448,8 @@ pnpm dev:local
 
 ```powershell
 # 1. Clone the repository
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/GreenSheep01201/claw-republic.git
+cd claw-republic
 
 # 2. Enable pnpm via corepack
 corepack enable
@@ -463,7 +463,7 @@ Copy-Item .env.example .env
 # 5. Generate a random encryption secret
 node -e "const fs=require('fs');const crypto=require('crypto');const p='.env';const c=fs.readFileSync(p,'utf8');fs.writeFileSync(p,c.replace('__CHANGE_ME__',crypto.randomBytes(32).toString('hex')))"
 
-# 6. Setup AGENTS.md orchestration rules (teaches your AI agent to be a Claw-Empire project manager)
+# 6. Setup AGENTS.md orchestration rules (teaches your AI agent to be a Claw-Republic project manager)
 pnpm setup -- --port 8790
 
 # 7. Start the development server
@@ -484,7 +484,7 @@ Open your browser:
 The `pnpm setup` command injects **CEO directive orchestration rules** into your AI agent's `AGENTS.md` file. This teaches your AI coding agent (Claude Code, Codex, etc.) how to:
 
 - Interpret `$` prefix **CEO directives** for priority task delegation
-- Call the Claw-Empire REST API to create tasks, assign agents, and report status
+- Call the Claw-Republic REST API to create tasks, assign agents, and report status
 - Work within isolated git worktrees for safe parallel development
 
 ```bash
@@ -536,7 +536,7 @@ curl -s http://127.0.0.1:8790/api/gateway/targets
 
 ### `$` Command -> OpenClaw Chat Delegation Logic
 
-When a chat message starts with `$`, Claw-Empire handles it as a CEO directive:
+When a chat message starts with `$`, Claw-Republic handles it as a CEO directive:
 
 1. Orchestrator asks whether to hold a team-leader meeting first.
 2. Orchestrator asks for project path/context (`project_path` or `project_context`).
@@ -562,7 +562,7 @@ Without meeting:
 curl -X POST http://127.0.0.1:8790/api/inbox \
   -H "content-type: application/json" \
   -H "x-inbox-secret: $INBOX_WEBHOOK_SECRET" \
-  -d '{"source":"telegram","author":"ceo","text":"$Hotfix production login bug immediately","skipPlannedMeeting":true,"project_context":"existing climpire project"}'
+  -d '{"source":"telegram","author":"ceo","text":"$Hotfix production login bug immediately","skipPlannedMeeting":true,"project_context":"existing claw-republic project"}'
 ```
 
 ---
@@ -580,7 +580,7 @@ Copy `.env.example` to `.env`. All secrets stay local — never commit `.env`.
 | `API_AUTH_TOKEN`                       | Recommended              | Bearer token for non-loopback API/WebSocket access                                                                                           |
 | `INBOX_WEBHOOK_SECRET`                 | **Yes for `/api/inbox`** | Shared secret required in `x-inbox-secret` header                                                                                            |
 | `OPENCLAW_CONFIG`                      | Recommended for OpenClaw | Absolute path to `openclaw.json` used for gateway target discovery/chat relay                                                                |
-| `DB_PATH`                              | No                       | SQLite database path (default: `./claw-empire.sqlite`)                                                                                       |
+| `DB_PATH`                              | No                       | SQLite database path (default: `./claw-republic.sqlite`)                                                                                       |
 | `LOGS_DIR`                             | No                       | Log directory (default: `./logs`)                                                                                                            |
 | `OAUTH_GITHUB_CLIENT_ID`               | No                       | GitHub OAuth App client ID                                                                                                                   |
 | `OAUTH_GITHUB_CLIENT_SECRET`           | No                       | GitHub OAuth App client secret                                                                                                               |
@@ -589,7 +589,7 @@ Copy `.env.example` to `.env`. All secrets stay local — never commit `.env`.
 | `OPENAI_API_KEY`                       | No                       | OpenAI API key (for Codex)                                                                                                                   |
 | `REVIEW_MEETING_ONESHOT_TIMEOUT_MS`    | No                       | One-shot meeting timeout in milliseconds (default `65000`; backward-compatible: values `<= 600` are treated as seconds)                      |
 | `UPDATE_CHECK_ENABLED`                 | No                       | Enable in-app update check banner (`1` default, set `0` to disable)                                                                          |
-| `UPDATE_CHECK_REPO`                    | No                       | GitHub repo slug used for update checks (default: `GreenSheep01201/claw-empire`)                                                             |
+| `UPDATE_CHECK_REPO`                    | No                       | GitHub repo slug used for update checks (default: `GreenSheep01201/claw-republic`)                                                             |
 | `UPDATE_CHECK_TTL_MS`                  | No                       | Update-check cache TTL in milliseconds (default: `1800000`)                                                                                  |
 | `UPDATE_CHECK_TIMEOUT_MS`              | No                       | GitHub request timeout in milliseconds (default: `4000`)                                                                                     |
 | `AUTO_UPDATE_ENABLED`                  | No                       | Default auto-update value when `settings.autoUpdateEnabled` is missing (`0` default)                                                         |
@@ -675,7 +675,7 @@ QA_API_AUTH_TOKEN="<API_AUTH_TOKEN>" pnpm run test:qa:project-path
 
 ### In-App Update Banner
 
-When a newer release is published on GitHub, Claw-Empire shows a top banner in the UI with pull instructions and a release-note link.
+When a newer release is published on GitHub, Claw-Republic shows a top banner in the UI with pull instructions and a release-note link.
 
 - Windows PowerShell: `git pull; pnpm install`
 - macOS/Linux shell: `git pull && pnpm install`
@@ -720,7 +720,7 @@ Use only a plain executable + fixed args format (no shell/interpreter wrappers, 
 
 ## Provider Setup (CLI / OAuth / API)
 
-Claw-Empire supports three provider paths:
+Claw-Republic supports three provider paths:
 
 - **CLI tools** — install local coding CLIs and run tasks through local processes
 - **OAuth accounts** — connect supported providers (for example GitHub/Google-backed flows) via secure token exchange
@@ -745,7 +745,7 @@ Skills learn/unlearn automation is currently designed for CLI-capable providers.
 ## Project Structure
 
 ```
-claw-empire/
+claw-republic/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml             # PR CI (Unicode guard, format, lint, tests)
@@ -790,7 +790,7 @@ claw-empire/
 
 ## Security
 
-Claw-Empire is designed with security in mind:
+Claw-Republic is designed with security in mind:
 
 - **Local-first architecture** — All data stored locally in SQLite; no external cloud services required
 - **Encrypted OAuth + messenger tokens** — User-specific OAuth tokens and direct messenger channel tokens are stored **server-side only** in SQLite, encrypted at rest using AES-256-GCM with `OAUTH_ENCRYPTION_SECRET` (`SESSION_SECRET` fallback). The browser never receives refresh tokens
@@ -837,6 +837,6 @@ Full policy: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 **Built with pixels and passion.**
 
-_Claw-Empire — Where AI agents come to work._
+_Claw-Republic — Where AI agents come to work._
 
 </div>

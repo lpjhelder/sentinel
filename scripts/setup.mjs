@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Claw-Empire setup script
+ * Claw-Republic setup script
  *
  * Prepends CEO directive + orchestration rules to the user's AGENTS.md.
  * This is an UPDATE, not an OVERWRITE — existing content is preserved.
@@ -18,8 +18,8 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATE_PATH = path.join(__dirname, "..", "templates", "AGENTS-empire.md");
-const START_MARKER = "<!-- BEGIN claw-empire orchestration rules -->";
-const END_MARKER = "<!-- END claw-empire orchestration rules -->";
+const START_MARKER = "<!-- BEGIN claw-republic orchestration rules -->";
+const END_MARKER = "<!-- END claw-republic orchestration rules -->";
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -75,7 +75,7 @@ function resolveWorkspaceDir() {
 
 function findAgentsPath() {
   const projectAgentsPath = path.join(process.cwd(), "AGENTS.md");
-  // Default target: current project root (claw-empire users first).
+  // Default target: current project root (claw-republic users first).
   // OpenClaw workspace targeting should be explicit via --agents-path.
   return projectAgentsPath;
 }
@@ -88,9 +88,9 @@ function main() {
   let templateContent = fs.readFileSync(TEMPLATE_PATH, "utf8");
   templateContent = templateContent.replace(/__PORT__/g, port);
 
-  console.log(`[Claw-Empire] Setting up orchestration rules`);
-  console.log(`[Claw-Empire] Target: ${agentsPath}`);
-  console.log(`[Claw-Empire] Port: ${port}`);
+  console.log(`[Claw-Republic] Setting up orchestration rules`);
+  console.log(`[Claw-Republic] Target: ${agentsPath}`);
+  console.log(`[Claw-Republic] Port: ${port}`);
 
   // Read existing content
   let existingContent = "";
@@ -106,8 +106,8 @@ function main() {
     const after = existingContent.slice(endIdx);
     const newContent = before + templateContent + after;
     fs.writeFileSync(agentsPath, newContent, "utf8");
-    console.log(`[Claw-Empire] Updated existing orchestration rules in ${agentsPath}`);
-    console.log(`[Claw-Empire] Done!`);
+    console.log(`[Claw-Republic] Updated existing orchestration rules in ${agentsPath}`);
+    console.log(`[Claw-Republic] Done!`);
     return;
   }
 
@@ -119,9 +119,9 @@ function main() {
   fs.mkdirSync(dir, { recursive: true });
 
   fs.writeFileSync(agentsPath, newContent, "utf8");
-  console.log(`[Claw-Empire] Orchestration rules added to top of ${agentsPath}`);
-  console.log(`[Claw-Empire] Your existing AGENTS.md content is preserved below.`);
-  console.log(`[Claw-Empire] Done!`);
+  console.log(`[Claw-Republic] Orchestration rules added to top of ${agentsPath}`);
+  console.log(`[Claw-Republic] Your existing AGENTS.md content is preserved below.`);
+  console.log(`[Claw-Republic] Done!`);
 }
 
 main();

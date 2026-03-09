@@ -348,8 +348,8 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
     const keyLabel = hasKorean ? "핵심 결과" : "Key Results";
     const progressLabel = hasKorean ? "진행 요약" : "Progress";
     const detailHint = hasKorean
-      ? "상세 내용은 Claw-Empire 채팅창에서 확인하세요."
-      : "See Claw-Empire chat for full details.";
+      ? "상세 내용은 Claw-Republic 채팅창에서 확인하세요."
+      : "See Claw-Republic chat for full details.";
 
     const out: string[] = [title, identityIntro];
     out.push(`${keyLabel}:`);

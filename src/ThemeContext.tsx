@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from "rea
 
 export type ThemeMode = "dark" | "light";
 
-const THEME_STORAGE_KEY = "climpire_theme";
+const THEME_STORAGE_KEY = "claw-republic_theme";
 
 interface ThemeContextValue {
   theme: ThemeMode;

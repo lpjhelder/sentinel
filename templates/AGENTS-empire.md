@@ -1,7 +1,7 @@
-<!-- BEGIN claw-empire orchestration rules -->
-# Claw-Empire Orchestration Rules
+<!-- BEGIN claw-republic orchestration rules -->
+# Claw-Republic Orchestration Rules
 
-> This section was added by Claw-Empire setup (`pnpm setup`).
+> This section was added by Claw-Republic setup (`pnpm setup`).
 > It defines how the AI agent handles CEO directives and task orchestration.
 > Place this at the TOP of your AGENTS.md so it takes priority.
 
@@ -88,7 +88,7 @@ These rules are additive and do NOT delete existing orchestration rules below.
 
 ## CEO Directive (`$` prefix)
 
-**Messages starting with `$` are Claw-Empire CEO Directives.**
+**Messages starting with `$` are Claw-Republic CEO Directives.**
 
 When receiving a message that **starts with `$`**:
 
@@ -241,7 +241,7 @@ Only treat as success when API status is `200` (and response body indicates succ
 ### Step 5: Confirm
 
 If API status is `200`, reply with **only a short confirmation** in the user's language:
-- KO: `✅ Claw-Empire 업무지시 전달 완료` (회의 진행) / `✅ Claw-Empire 업무지시 전달 완료 (회의 생략)` (회의 없이)
+- KO: `✅ Claw-Republic 업무지시 전달 완료` (회의 진행) / `✅ Claw-Republic 업무지시 전달 완료 (회의 생략)` (회의 없이)
 - EN: `✅ Directive sent` (with meeting) / `✅ Directive sent (no meeting)` (without meeting)
 - JA: `✅ 指令を送信しました` (会議あり) / `✅ 指令を送信しました（会議なし）` (会議なし)
 - ZH: `✅ 指令已发送` (召开会议) / `✅ 指令已发送（免会议）` (不开会)
@@ -260,7 +260,7 @@ If status is not the upgrade case above, return only a short failure notice (sta
 
 ### What happens on the server
 
-The Claw-Empire server detects the `$` prefix and automatically:
+The Claw-Republic server detects the `$` prefix and automatically:
 - Broadcasts a company-wide announcement
 - If meeting: Planning team leader convenes a team leader meeting -> discussion -> agent assignment -> CLI execution
 - If no meeting: Planning team leader directly delegates to the best agent -> CLI execution
@@ -464,7 +464,7 @@ curl http://127.0.0.1:__PORT__/api/cli-status
 
 When processing `$` or `#` commands, the response to the user must be **minimal and clean**:
 
-1. **`$` directive**: After collecting required meeting/path inputs and sending to API, reply with only `✅ Claw-Empire 업무지시 전달 완료` (or language equivalent). Nothing else.
+1. **`$` directive**: After collecting required meeting/path inputs and sending to API, reply with only `✅ Claw-Republic 업무지시 전달 완료` (or language equivalent). Nothing else.
 2. **`#` task**: Only `✅ 태스크 등록 완료` (or language equivalent). Nothing else.
 3. **Failure case**: If API status is non-`200`, do not send success text.
    - Exception: for `HTTP 428` + `agent_upgrade_required`, you MUST show installer paths and ask `지금 제가 직접 설치해드릴까요?` (language-matched).
@@ -479,4 +479,4 @@ When processing `$` or `#` commands, the response to the user must be **minimal 
 
 ---
 
-<!-- END claw-empire orchestration rules -->
+<!-- END claw-republic orchestration rules -->

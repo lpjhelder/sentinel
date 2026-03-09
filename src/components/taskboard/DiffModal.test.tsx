@@ -23,7 +23,7 @@ describe("DiffModal", () => {
     apiMocks.getTaskDiff.mockResolvedValue({
       ok: true,
       hasWorktree: true,
-      branchName: "climpire/test",
+      branchName: "claw-republic/test",
       stat: "1 file changed",
       diff: "diff --git a/a b/a",
     });

@@ -229,7 +229,7 @@ export function registerOAuthRoutes(ctx: RuntimeContext): void {
           const emailsResp = await fetch("https://api.github.com/user/emails", {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              "User-Agent": "climpire",
+              "User-Agent": "claw-republic",
               Accept: "application/vnd.github+json",
             },
             signal: AbortSignal.timeout(5000),

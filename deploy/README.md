@@ -1,12 +1,12 @@
-# Claw-Empire Deployment Guide
+# Claw-Republic Deployment Guide
 
 This directory contains production deployment examples for a single-host Linux setup.
 
 Included files:
 
 - `deploy/.env.production.template`: runtime environment template
-- `deploy/claw-empire@.service`: example user-level systemd service
-- `deploy/nginx/claw-empire.conf`: example nginx reverse proxy
+- `deploy/claw-republic@.service`: example user-level systemd service
+- `deploy/nginx/claw-republic.conf`: example nginx reverse proxy
 
 ## Assumptions
 
@@ -18,8 +18,8 @@ Included files:
 ## 1. Build the app
 
 ```bash
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/GreenSheep01201/claw-republic.git
+cd claw-republic
 pnpm install
 pnpm run build
 ```
@@ -48,9 +48,9 @@ If you expose the Node server directly on a LAN or VPN, set `HOST=0.0.0.0` and r
 
 ```bash
 mkdir -p ~/.config/systemd/user
-cp deploy/claw-empire@.service ~/.config/systemd/user/claw-empire.service
+cp deploy/claw-republic@.service ~/.config/systemd/user/claw-republic.service
 systemctl --user daemon-reload
-systemctl --user enable --now claw-empire
+systemctl --user enable --now claw-republic
 ```
 
 If you want the service to survive logout:
@@ -62,15 +62,15 @@ sudo loginctl enable-linger "$USER"
 Useful commands:
 
 ```bash
-systemctl --user status claw-empire
-journalctl --user -u claw-empire -f
+systemctl --user status claw-republic
+journalctl --user -u claw-republic -f
 ```
 
 ## 4. Optional nginx reverse proxy
 
 ```bash
-sudo cp deploy/nginx/claw-empire.conf /etc/nginx/sites-available/claw-empire
-sudo ln -s /etc/nginx/sites-available/claw-empire /etc/nginx/sites-enabled/claw-empire
+sudo cp deploy/nginx/claw-republic.conf /etc/nginx/sites-available/claw-republic
+sudo ln -s /etc/nginx/sites-available/claw-republic /etc/nginx/sites-enabled/claw-republic
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -97,7 +97,7 @@ curl -H "Authorization: Bearer YOUR_API_AUTH_TOKEN" https://claw.example.com/api
 git pull
 pnpm install
 pnpm run build
-systemctl --user restart claw-empire
+systemctl --user restart claw-republic
 ```
 
 ## Notes

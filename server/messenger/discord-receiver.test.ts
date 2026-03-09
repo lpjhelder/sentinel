@@ -8,7 +8,7 @@ import { buildMessengerTokenKey } from "./token-hint.ts";
 const ORIGINAL_ENV = { ...process.env };
 
 function createTestDb(options?: { messengerChannels?: unknown; cursor?: Record<string, string> }): string {
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-empire-discord-receiver-test-"));
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-republic-discord-receiver-test-"));
   const dbPath = path.join(tmpDir, "test.sqlite");
   const db = new DatabaseSync(dbPath);
   try {

@@ -315,7 +315,7 @@ function migrateMessagesDirectiveType(db: DbLike): void {
   const ddl = (row?.sql ?? "").toLowerCase();
   if (ddl.includes("'directive'")) return;
 
-  console.log("[Claw-Empire] Migrating messages.message_type CHECK to include 'directive'");
+  console.log("[Claw-Republic] Migrating messages.message_type CHECK to include 'directive'");
   const oldTable = "messages_directive_migration_old";
   db.exec("PRAGMA foreign_keys = OFF");
   try {
@@ -376,7 +376,7 @@ function migrateLegacyTasksStatusSchema(db: DbLike): void {
   const ddl = (row?.sql ?? "").toLowerCase();
   if (ddl.includes("'collaborating'") && ddl.includes("'pending'")) return;
 
-  console.log("[Claw-Empire] Migrating legacy tasks.status CHECK constraint");
+  console.log("[Claw-Republic] Migrating legacy tasks.status CHECK constraint");
   const newTable = "tasks_status_migration_new";
   db.exec("PRAGMA foreign_keys = OFF");
   try {
@@ -470,7 +470,7 @@ function repairLegacyTaskForeignKeys(db: DbLike): void {
   ).cnt;
   if (refCount === 0) return;
 
-  console.log("[Claw-Empire] Repairing legacy foreign keys to tasks_legacy_status_migration");
+  console.log("[Claw-Republic] Repairing legacy foreign keys to tasks_legacy_status_migration");
   const messagesOld = "messages_fkfix_old";
   const taskLogsOld = "task_logs_fkfix_old";
   const subtasksOld = "subtasks_fkfix_old";

@@ -21,7 +21,7 @@ export default tseslint.config(
       "**/coverage/**",
       "**/test-results/**",
       "**/.tmp/**",
-      "**/.climpire/**",
+      "**/.claw-republic/**",
       "**/logs/**",
       "**/custom-skills/**",
       "**/.agents/**",

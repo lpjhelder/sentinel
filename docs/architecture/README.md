@@ -22,7 +22,7 @@ flowchart LR
   subgraph Backend
     B1["server/index.ts"] --> B2["Express REST API"]
     B1 --> B3["WebSocket Server"]
-    B1 --> B4["SQLite (claw-empire.sqlite)"]
+    B1 --> B4["SQLite (claw-republic.sqlite)"]
     B1 --> B5["Git Worktree + CLI Process"]
   end
 
@@ -33,7 +33,7 @@ flowchart LR
 ## Project Tree
 
 ```text
-climpire
+claw-republic
 ├── docs/
 │   ├── architecture/
 │   │   ├── architecture.json
@@ -46,7 +46,7 @@ climpire
 │   └── DESIGN.md
 ├── public/
 │   ├── public/sprites/ (61 sprite files)
-│   └── climpire.svg
+│   └── claw-republic.svg
 ├── scripts/
 │   └── generate-architecture-report.mjs
 ├── server/

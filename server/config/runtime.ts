@@ -89,5 +89,5 @@ export const IS_PRODUCTION = !process.env.VITE_DEV && fs.existsSync(path.join(DI
 // ---------------------------------------------------------------------------
 // Database defaults
 // ---------------------------------------------------------------------------
-export const DEFAULT_DB_PATH = path.join(process.cwd(), "claw-empire.sqlite");
-export const LEGACY_DB_PATH = path.join(process.cwd(), "climpire.sqlite");
+export const DEFAULT_DB_PATH = path.join(process.cwd(), "claw-republic.sqlite");
+export const LEGACY_DB_PATH = path.join(process.cwd(), "claw-republic.sqlite");

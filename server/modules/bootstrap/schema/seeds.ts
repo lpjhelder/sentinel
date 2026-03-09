@@ -29,7 +29,7 @@ export function applyDefaultSeeds(db: DbLike): void {
       5,
     );
     insertDept.run("operations", "Operations", "운영팀", "運営チーム", "运营组", "⚙️", "#10b981", 6);
-    console.log("[Claw-Empire] Seeded default departments");
+    console.log("[Claw-Republic] Seeded default departments");
   }
 
   const agentCount = (db.prepare("SELECT COUNT(*) as cnt FROM agents").get() as { cnt: number }).cnt;
@@ -60,7 +60,7 @@ export function applyDefaultSeeds(db: DbLike): void {
     insertAgent.run(randomUUID(), "Pipe", "파이프", "devsecops", "senior", "codex", "🔧", "CI/CD 파이프라인 전문가");
     // QA Junior (1)
     insertAgent.run(randomUUID(), "DORO", "도로롱", "qa", "junior", "gemini", "🩷", "꼼꼼한 품질관리 주니어");
-    console.log("[Claw-Empire] Seeded default agents");
+    console.log("[Claw-Republic] Seeded default agents");
   }
 
   // Seed default settings if none exist
@@ -80,7 +80,7 @@ export function applyDefaultSeeds(db: DbLike): void {
     const isLegacySettingsInstall = settingsCount > 0;
     if (settingsCount === 0) {
       const insertSetting = db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)");
-      insertSetting.run("companyName", "Claw-Empire");
+      insertSetting.run("companyName", "Claw-Republic");
       insertSetting.run("ceoName", "CEO");
       insertSetting.run("autoAssign", "true");
       insertSetting.run("yoloMode", "false");
@@ -106,7 +106,7 @@ export function applyDefaultSeeds(db: DbLike): void {
         }),
       );
       insertSetting.run("roomThemes", JSON.stringify(defaultRoomThemes));
-      console.log("[Claw-Empire] Seeded default settings");
+      console.log("[Claw-Republic] Seeded default settings");
     }
 
     const hasLanguageSetting = db.prepare("SELECT 1 FROM settings WHERE key = 'language' LIMIT 1").get() as
@@ -224,7 +224,7 @@ export function applyDefaultSeeds(db: DbLike): void {
     try {
       db.exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_departments_sort_order ON departments(sort_order)");
     } catch (err) {
-      console.warn("[Claw-Empire] Failed to recreate idx_departments_sort_order:", err);
+      console.warn("[Claw-Republic] Failed to recreate idx_departments_sort_order:", err);
     }
 
     const insertAgentIfMissing = db.prepare(
@@ -252,17 +252,17 @@ export function applyDefaultSeeds(db: DbLike): void {
     for (const [name, nameKo, dept, role, provider, emoji, personality] of newAgents) {
       if (!existingNames.has(name)) {
         if (!existingDeptIds.has(dept)) {
-          console.warn(`[Claw-Empire] Skip adding agent "${name}": missing department "${dept}"`);
+          console.warn(`[Claw-Republic] Skip adding agent "${name}": missing department "${dept}"`);
           continue;
         }
         try {
           insertAgentIfMissing.run(randomUUID(), name, nameKo, dept, role, provider, emoji, personality);
           added++;
         } catch (err) {
-          console.warn(`[Claw-Empire] Skip adding agent "${name}":`, err);
+          console.warn(`[Claw-Republic] Skip adding agent "${name}":`, err);
         }
       }
     }
-    if (added > 0) console.log(`[Claw-Empire] Added ${added} new agents`);
+    if (added > 0) console.log(`[Claw-Republic] Added ${added} new agents`);
   }
 }

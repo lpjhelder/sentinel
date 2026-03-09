@@ -4,7 +4,7 @@ import type { UiLanguage } from "../../i18n";
 export type Locale = UiLanguage;
 export type TFunction = (messages: Record<Locale, string>) => string;
 
-const TASK_CREATE_DRAFTS_STORAGE_KEY = "climpire.taskCreateDrafts";
+const TASK_CREATE_DRAFTS_STORAGE_KEY = "claw-republic.taskCreateDrafts";
 
 export const HIDEABLE_STATUSES = ["done", "pending", "cancelled"] as const;
 export type HideableStatus = (typeof HIDEABLE_STATUSES)[number];

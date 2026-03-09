@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
 const customSkillsDir = path.join(projectRoot, "custom-skills");
-const defaultDbPath = path.join(projectRoot, "claw-empire.sqlite");
+const defaultDbPath = path.join(projectRoot, "claw-republic.sqlite");
 
 function toPosInt(value) {
   const n = Number(value);

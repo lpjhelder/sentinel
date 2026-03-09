@@ -284,10 +284,10 @@ export function registerWorktreeAndUsageRoutes(ctx: RuntimeContext): {
     notifyCeo(
       pickL(
         l(
-          [`작업 브랜치가 폐기되었습니다: climpire/${id.slice(0, 8)}`],
-          [`Task branch discarded: climpire/${id.slice(0, 8)}`],
-          [`タスクブランチを破棄しました: climpire/${id.slice(0, 8)}`],
-          [`任务分支已丢弃: climpire/${id.slice(0, 8)}`],
+          [`작업 브랜치가 폐기되었습니다: claw-republic/${id.slice(0, 8)}`],
+          [`Task branch discarded: claw-republic/${id.slice(0, 8)}`],
+          [`タスクブランチを破棄しました: claw-republic/${id.slice(0, 8)}`],
+          [`任务分支已丢弃: claw-republic/${id.slice(0, 8)}`],
         ),
         lang,
       ),

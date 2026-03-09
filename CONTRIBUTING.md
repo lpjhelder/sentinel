@@ -1,4 +1,4 @@
-# Contributing to Claw-Empire
+# Contributing to Claw-Republic
 
 Thanks for contributing.
 

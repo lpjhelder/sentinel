@@ -167,8 +167,8 @@ export function createApiProviderTools(deps: CreateApiProviderToolsDeps) {
       headers["Authorization"] = `Bearer ${apiKey}`;
     }
     if (provider.type === "openrouter") {
-      headers["HTTP-Referer"] = "https://claw-empire.app";
-      headers["X-Title"] = "Claw-Empire";
+      headers["HTTP-Referer"] = "https://claw-republic.app";
+      headers["X-Title"] = "Claw-Republic";
     }
 
     return {
@@ -287,7 +287,7 @@ export function createApiProviderTools(deps: CreateApiProviderToolsDeps) {
           const msg = normalizeStreamChunk(`[api] Error: ${err.message}\n`);
           safeWrite(msg);
           broadcast("cli_output", { task_id: taskId, stream: "stderr", data: msg });
-          console.error(`[Claw-Empire] API provider agent error (task ${taskId}): ${err.message}`);
+          console.error(`[Claw-Republic] API provider agent error (task ${taskId}): ${err.message}`);
         } else {
           const msg = normalizeStreamChunk(`[api] Aborted by user\n`);
           safeWrite(msg);

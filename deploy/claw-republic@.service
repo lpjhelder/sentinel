@@ -1,0 +1,25 @@
+[Unit]
+Description=Claw-Republic service
+Documentation=https://github.com/GreenSheep01201/claw-republic
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=%h/claw-republic
+EnvironmentFile=-%h/claw-republic/deploy/.env.production
+ExecStartPre=/usr/bin/env bash -lc 'mkdir -p %h/claw-republic/logs'
+ExecStart=/usr/bin/env bash -lc 'cd %h/claw-republic && pnpm run start'
+Restart=on-failure
+RestartSec=10
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+StandardOutput=append:%h/claw-republic/logs/claw-republic.log
+StandardError=append:%h/claw-republic/logs/claw-republic.err
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

@@ -36,8 +36,8 @@ docs/reports/*
 !docs/reports/PPT_Sample.pptx
 docs/.bkit-*
 docs/.pdca-*
-.climpire-worktrees/
-.climpire/
+.claw-republic-worktrees/
+.claw-republic/
 
 # IDE / Editor / AI
 .vscode/
@@ -66,3 +66,4 @@ Thumbs.db
 
 # Playwright artifacts
 test-results/
+.climpire-worktrees/

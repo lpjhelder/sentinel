@@ -115,7 +115,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
         /* proceed */
       }
 
-      const mergeMsg = `Merge climpire task ${taskId.slice(0, 8)} (branch ${info.branchName})`;
+      const mergeMsg = `Merge claw-republic task ${taskId.slice(0, 8)} (branch ${info.branchName})`;
       execFileSync("git", ["merge", info.branchName, "--no-ff", "-m", mergeMsg], {
         cwd: projectPath,
         stdio: "pipe",
@@ -237,7 +237,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
             stdio: "pipe",
             timeout: 5000,
           });
-          console.log(`[Claw-Empire] Created dev branch from main for task ${taskId.slice(0, 8)}`);
+          console.log(`[Claw-Republic] Created dev branch from main for task ${taskId.slice(0, 8)}`);
         }
       } catch {
         try {
@@ -257,7 +257,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
         timeout: 5000,
       });
 
-      const mergeMsg = `Merge climpire task ${taskId.slice(0, 8)} (branch ${info.branchName})`;
+      const mergeMsg = `Merge claw-republic task ${taskId.slice(0, 8)} (branch ${info.branchName})`;
       execFileSync("git", ["merge", info.branchName, "--no-ff", "-m", mergeMsg], {
         cwd: projectPath,
         stdio: "pipe",
@@ -290,7 +290,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
             const existingPRs = await listRes.json();
             if (Array.isArray(existingPRs) && existingPRs.length > 0) {
               const prUrl = existingPRs[0].html_url;
-              console.log(`[Claw-Empire] Existing PR updated: ${prUrl}`);
+              console.log(`[Claw-Republic] Existing PR updated: ${prUrl}`);
               appendTaskLog(taskId, "system", `GitHub PR updated: ${prUrl}`);
             } else {
               const createRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/pulls`, {
@@ -309,16 +309,16 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
               });
               if (createRes.ok) {
                 const prData = (await createRes.json()) as { html_url?: string };
-                console.log(`[Claw-Empire] Created PR: ${prData.html_url}`);
+                console.log(`[Claw-Republic] Created PR: ${prData.html_url}`);
                 appendTaskLog(taskId, "system", `GitHub PR created: ${prData.html_url}`);
               } else {
                 const errBody = await createRes.text();
-                console.warn(`[Claw-Empire] Failed to create PR: ${createRes.status} ${errBody}`);
+                console.warn(`[Claw-Republic] Failed to create PR: ${createRes.status} ${errBody}`);
                 appendTaskLog(taskId, "system", `GitHub PR creation failed: ${createRes.status}`);
               }
             }
           } catch (prErr) {
-            console.warn(`[Claw-Empire] PR creation error:`, prErr);
+            console.warn(`[Claw-Republic] PR creation error:`, prErr);
           }
         })();
       }

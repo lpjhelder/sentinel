@@ -155,7 +155,7 @@ export function createSecurityAuditTools(deps: SecurityAuditDeps) {
 
   const securityAuditLogPath = path.join(logsDir, "security-audit.ndjson");
   const securityAuditFallbackLogPath = path.join(logsDir, "security-audit-fallback.ndjson");
-  const SECURITY_AUDIT_CHAIN_SEED = process.env.SECURITY_AUDIT_CHAIN_SEED?.trim() || "claw-empire-security-audit-v1";
+  const SECURITY_AUDIT_CHAIN_SEED = process.env.SECURITY_AUDIT_CHAIN_SEED?.trim() || "claw-republic-security-audit-v1";
   const SECURITY_AUDIT_CHAIN_KEY = process.env.SECURITY_AUDIT_CHAIN_KEY ?? "";
 
   function computeAuditChainHash(
@@ -190,7 +190,7 @@ export function createSecurityAuditTools(deps: SecurityAuditDeps) {
         }
       }
     } catch (err) {
-      console.warn(`[Claw-Empire] security audit chain bootstrap failed: ${String(err)}`);
+      console.warn(`[Claw-Republic] security audit chain bootstrap failed: ${String(err)}`);
     }
     return "GENESIS";
   }
@@ -204,7 +204,7 @@ export function createSecurityAuditTools(deps: SecurityAuditDeps) {
       return true;
     } catch (fallbackErr) {
       try {
-        process.stderr.write(`[Claw-Empire] security audit fallback append failed: ${String(fallbackErr)}\n${line}`);
+        process.stderr.write(`[Claw-Republic] security audit fallback append failed: ${String(fallbackErr)}\n${line}`);
         // Fail closed when neither primary nor fallback file append succeeds.
         return false;
       } catch {
@@ -261,7 +261,7 @@ export function createSecurityAuditTools(deps: SecurityAuditDeps) {
       recordMessageIngressAudit(input);
       return true;
     } catch (err) {
-      console.error(`[Claw-Empire] security audit unavailable: ${String(err)}`);
+      console.error(`[Claw-Republic] security audit unavailable: ${String(err)}`);
       res.status(503).json({ error: "audit_log_unavailable", retryable: true });
       return false;
     }
@@ -283,7 +283,7 @@ export function createSecurityAuditTools(deps: SecurityAuditDeps) {
       await rollbackMessageInsertAfterAuditFailure(messageId);
     } catch (rollbackErr) {
       console.error(
-        `[Claw-Empire] rollback after audit failure failed: message_id=${messageId}, ` + `${String(rollbackErr)}`,
+        `[Claw-Republic] rollback after audit failure failed: message_id=${messageId}, ` + `${String(rollbackErr)}`,
       );
     }
     return false;
@@ -340,7 +340,7 @@ export function createSecurityAuditTools(deps: SecurityAuditDeps) {
         nowMs(),
       );
     } catch (err) {
-      console.warn(`[Claw-Empire] task creation audit failed: ${String(err)}`);
+      console.warn(`[Claw-Republic] task creation audit failed: ${String(err)}`);
     }
   }
 
@@ -348,7 +348,7 @@ export function createSecurityAuditTools(deps: SecurityAuditDeps) {
     try {
       db.prepare("UPDATE task_creation_audits SET completed = ? WHERE task_id = ?").run(completed ? 1 : 0, taskId);
     } catch (err) {
-      console.warn(`[Claw-Empire] task creation audit completion update failed: ${String(err)}`);
+      console.warn(`[Claw-Republic] task creation audit completion update failed: ${String(err)}`);
     }
   }
 

@@ -254,7 +254,7 @@ export function createOAuthRouteHelpers(ctx: RuntimeContext) {
       const emailResp = await fetch("https://api.github.com/user/emails", {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`,
-          "User-Agent": "climpire",
+          "User-Agent": "claw-republic",
           Accept: "application/vnd.github+json",
         },
         signal: AbortSignal.timeout(5000),

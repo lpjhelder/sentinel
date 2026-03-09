@@ -1,6 +1,6 @@
 # API Contract Baseline
 
-This document defines a contributor-facing API baseline for Claw-Empire.
+This document defines a contributor-facing API baseline for Claw-Republic.
 It is intentionally compact and focused on frequently used endpoints.
 Current baseline target: `v1.2.4` (local snapshot, 2026-03-07).
 

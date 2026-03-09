@@ -471,7 +471,7 @@ export function startDiscordReceiver(options: StartDiscordReceiverOptions): Rece
       await pollDiscordReceiverOnce({ db, status, fetchImpl });
     } catch (err) {
       status.lastError = err instanceof Error ? err.message : String(err);
-      console.warn(`[Claw-Empire] discord receiver error: ${status.lastError}`);
+      console.warn(`[Claw-Republic] discord receiver error: ${status.lastError}`);
     } finally {
       busy = false;
       schedule(status.enabled ? DISCORD_ACTIVE_DELAY_MS : DISCORD_IDLE_DELAY_MS);

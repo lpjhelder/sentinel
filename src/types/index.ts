@@ -382,7 +382,7 @@ export interface CompanySettings {
 }
 
 export const DEFAULT_SETTINGS: CompanySettings = {
-  companyName: "Claw-Empire",
+  companyName: "Claw-Republic",
   ceoName: "CEO",
   autoAssign: true,
   yoloMode: false,

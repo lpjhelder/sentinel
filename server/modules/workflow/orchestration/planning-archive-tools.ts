@@ -317,7 +317,7 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
       );
       broadcast("task_report", { task: { id: rootTaskId } });
     } catch (err) {
-      console.error("[Claw-Empire] planning archive generation error:", err);
+      console.error("[Claw-Republic] planning archive generation error:", err);
     }
   }
 

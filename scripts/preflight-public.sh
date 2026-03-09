@@ -9,7 +9,7 @@ failures=0
 pass() { printf '[PASS] %s\n' "$1"; }
 fail() { printf '[FAIL] %s\n' "$1"; failures=$((failures + 1)); }
 
-echo "== Claw-Empire public release preflight =="
+echo "== Claw-Republic public release preflight =="
 
 for cmd in git rg node pnpm; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
@@ -50,9 +50,9 @@ blocked_tracked=(
   ".env"
   ".env.local"
   ".env.production"
-  "claw-empire.sqlite"
-  "claw-empire.sqlite-shm"
-  "claw-empire.sqlite-wal"
+  "claw-republic.sqlite"
+  "claw-republic.sqlite-shm"
+  "claw-republic.sqlite-wal"
 )
 for path in "${blocked_tracked[@]}"; do
   if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
@@ -164,11 +164,11 @@ else
   pass ".env.example uses a consistent placeholder format for key variables"
 fi
 
-if pnpm run build >/tmp/climpire-preflight-build.log 2>&1; then
+if pnpm run build >/tmp/claw-republic-preflight-build.log 2>&1; then
   pass "Build succeeded"
 else
-  fail "Build failed (see /tmp/climpire-preflight-build.log)"
-  tail -n 80 /tmp/climpire-preflight-build.log || true
+  fail "Build failed (see /tmp/claw-republic-preflight-build.log)"
+  tail -n 80 /tmp/claw-republic-preflight-build.log || true
 fi
 
 echo

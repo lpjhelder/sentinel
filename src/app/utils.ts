@@ -260,5 +260,5 @@ export function isForceUpdateBannerEnabled(): boolean {
 export function syncClientLanguage(language: string): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(LANGUAGE_STORAGE_KEY, normalizeLanguage(language));
-  window.dispatchEvent(new Event("climpire-language-change"));
+  window.dispatchEvent(new Event("claw-republic-language-change"));
 }

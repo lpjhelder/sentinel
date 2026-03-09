@@ -149,10 +149,10 @@ export function buildWorktreeCeoNote(
   if (!hasWorktree) return "";
   return deps.pickL(
     deps.l(
-      [` (격리 브랜치: climpire/${delegatedTaskId.slice(0, 8)})`],
-      [` (isolated branch: climpire/${delegatedTaskId.slice(0, 8)})`],
-      [` (分離ブランチ: climpire/${delegatedTaskId.slice(0, 8)})`],
-      [`（隔离分支: climpire/${delegatedTaskId.slice(0, 8)}）`],
+      [` (격리 브랜치: claw-republic/${delegatedTaskId.slice(0, 8)})`],
+      [` (isolated branch: claw-republic/${delegatedTaskId.slice(0, 8)})`],
+      [` (分離ブランチ: claw-republic/${delegatedTaskId.slice(0, 8)})`],
+      [`（隔离分支: claw-republic/${delegatedTaskId.slice(0, 8)}）`],
     ),
     lang,
   );

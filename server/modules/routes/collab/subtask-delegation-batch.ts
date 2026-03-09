@@ -465,7 +465,7 @@ export function createSubtaskDelegationBatch(deps: BatchDeps) {
           appendTaskLog(
             delegatedTaskId,
             "system",
-            `Git worktree created: ${worktreePath} (branch: climpire/${delegatedTaskId.slice(0, 8)})`,
+            `Git worktree created: ${worktreePath} (branch: claw-republic/${delegatedTaskId.slice(0, 8)})`,
           );
           const logFilePath = path.join(logsDir, `${delegatedTaskId}.log`);
           ensureVideoPreprodRemotionBestPracticesSkill({
@@ -484,7 +484,7 @@ export function createSubtaskDelegationBatch(deps: BatchDeps) {
             targetDeptName,
           );
           const executionSession = ensureTaskExecutionSession(delegatedTaskId, execAgent.id, execProvider);
-          const worktreeNote = `\nNOTE: You are working in an isolated Git worktree branch (climpire/${delegatedTaskId.slice(0, 8)}). Commit your changes normally.`;
+          const worktreeNote = `\nNOTE: You are working in an isolated Git worktree branch (claw-republic/${delegatedTaskId.slice(0, 8)}). Commit your changes normally.`;
 
           // Build sibling worktree reference block so agents can read prior departments' work
           let siblingWorktreeBlock = "";
@@ -501,7 +501,7 @@ export function createSubtaskDelegationBatch(deps: BatchDeps) {
             const validSiblings: string[] = [];
             for (const sib of siblingRows) {
               const shortId = sib.delegated_task_id.slice(0, 8);
-              const wtPath = path.join(projPath, ".climpire-worktrees", shortId);
+              const wtPath = path.join(projPath, ".claw-republic-worktrees", shortId);
               if (fs.existsSync(wtPath)) {
                 const deptLabel = sib.target_department_id
                   ? getDeptName(sib.target_department_id, parentTask.workflow_pack_key)

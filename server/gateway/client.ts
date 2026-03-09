@@ -160,7 +160,7 @@ function readPersistedMessengerChannels(): PersistedMessengerChannels | null {
     }
     return parsed as PersistedMessengerChannels;
   } catch (err) {
-    console.warn(`[Claw-Empire] failed to load messenger channels settings: ${String(err)}`);
+    console.warn(`[Claw-Republic] failed to load messenger channels settings: ${String(err)}`);
     return null;
   } finally {
     try {
@@ -923,7 +923,7 @@ function queueWake(params: { key: string; text: string; debounceMs?: number }) {
   }
 
   void sendMessengerWake(params.text).catch((err) => {
-    console.warn(`[Claw-Empire] messenger notification failed (${params.key}): ${String(err)}`);
+    console.warn(`[Claw-Republic] messenger notification failed (${params.key}): ${String(err)}`);
   });
 }
 

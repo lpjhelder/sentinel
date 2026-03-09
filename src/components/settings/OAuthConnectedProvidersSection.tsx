@@ -142,10 +142,10 @@ export default function OAuthConnectedProvidersSection({
             {info.requiresWebOAuth && (
               <div className="text-[11px] text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded px-2.5 py-1.5">
                 {t({
-                  ko: "CLI에서 감지된 자격 증명은 Claw-Empire 실행에 직접 사용되지 않습니다. Web OAuth로 다시 연결하세요.",
-                  en: "CLI-detected credentials are not used directly for Claw-Empire execution. Reconnect with Web OAuth.",
-                  ja: "CLI 検出の資格情報は Claw-Empire 実行では直接利用されません。Web OAuth で再接続してください。",
-                  zh: "CLI 检测到的凭据不会直接用于 Claw-Empire 执行。请使用 Web OAuth 重新连接。",
+                  ko: "CLI에서 감지된 자격 증명은 Claw-Republic 실행에 직접 사용되지 않습니다. Web OAuth로 다시 연결하세요.",
+                  en: "CLI-detected credentials are not used directly for Claw-Republic execution. Reconnect with Web OAuth.",
+                  ja: "CLI 検出の資格情報は Claw-Republic 実行では直接利用されません。Web OAuth で再接続してください。",
+                  zh: "CLI 检测到的凭据不会直接用于 Claw-Republic 执行。请使用 Web OAuth 重新连接。",
                 })}
               </div>
             )}

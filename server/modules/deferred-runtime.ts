@@ -1,4 +1,4 @@
-export const DEFERRED_RUNTIME_FN_TAG = Symbol.for("climpire.deferredRuntimeFnName");
+export const DEFERRED_RUNTIME_FN_TAG = Symbol.for("claw-republic.deferredRuntimeFnName");
 
 type RuntimeRecord = Record<string, any>;
 
@@ -74,7 +74,7 @@ export function assertNoUnresolvedDeferredRuntimeFunctions(
   const ignored = normalizeIgnoredNames(options?.ignoreNames);
   const unresolved = collectUnresolvedDeferredRuntimeFunctions(runtime).filter((name) => !ignored.has(name));
   if (unresolved.length > 0) {
-    throw new Error(`[Claw-Empire] ${label} incomplete: ${unresolved.join(", ")}`);
+    throw new Error(`[Claw-Republic] ${label} incomplete: ${unresolved.join(", ")}`);
   }
 }
 
@@ -85,7 +85,7 @@ export function assertRuntimeFunctionsPresent(
 ): void {
   const missing = [...new Set(functionNames)].filter((name) => typeof runtime[name] !== "function").sort();
   if (missing.length > 0) {
-    throw new Error(`[Claw-Empire] ${label} missing functions: ${missing.join(", ")}`);
+    throw new Error(`[Claw-Republic] ${label} missing functions: ${missing.join(", ")}`);
   }
 }
 
@@ -113,6 +113,6 @@ export function assertRuntimeFunctionsResolved(
     const parts: string[] = [];
     if (missing.length > 0) parts.push(`missing: ${missing.sort().join(", ")}`);
     if (unresolved.length > 0) parts.push(`unresolved: ${unresolved.sort().join(", ")}`);
-    throw new Error(`[Claw-Empire] ${label} ${parts.join(" | ")}`);
+    throw new Error(`[Claw-Republic] ${label} ${parts.join(" | ")}`);
   }
 }

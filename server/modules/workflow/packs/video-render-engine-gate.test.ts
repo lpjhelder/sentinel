@@ -17,7 +17,7 @@ afterEach(() => {
 });
 
 function makeLogsDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-remotion-gate-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-republic-remotion-gate-"));
   tempDirs.push(dir);
   return dir;
 }

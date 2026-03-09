@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-const defaultDbPath = path.resolve(scriptDir, "..", "claw-empire.sqlite");
+const defaultDbPath = path.resolve(scriptDir, "..", "claw-republic.sqlite");
 const dbPath = String(process.env.DB_PATH || defaultDbPath).trim();
 
 const args = new Set(process.argv.slice(2));
@@ -16,7 +16,7 @@ const showDuplicates = args.has("--show-duplicates") || args.has("--all");
 const showRoles = args.has("--show-roles") || args.has("--all");
 
 function printUsage() {
-  console.log("Claw-Empire staff maintenance");
+  console.log("Claw-Republic staff maintenance");
   console.log("");
   console.log("Usage:");
   console.log(
@@ -132,7 +132,7 @@ if (args.size === 0 || (args.size === 1 && dryRun)) {
 
 const db = new DatabaseSync(dbPath);
 try {
-  console.log("Claw-Empire staff maintenance");
+  console.log("Claw-Republic staff maintenance");
   if (dryRun) {
     console.log("Mode: dry-run");
   }

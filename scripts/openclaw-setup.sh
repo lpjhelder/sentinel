@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Claw-Empire one-click setup (macOS/Linux)
+Claw-Republic one-click setup (macOS/Linux)
 
 Usage:
   bash scripts/openclaw-setup.sh [--agents-path PATH] [--port PORT] [--openclaw-config PATH] [--start]
@@ -68,7 +68,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ ! -f package.json || ! -f scripts/setup.mjs ]]; then
-  echo "Run this script from the Claw-Empire repository." >&2
+  echo "Run this script from the Claw-Republic repository." >&2
   exit 1
 fi
 
@@ -92,12 +92,12 @@ if ! command -v pnpm >/dev/null 2>&1; then
   corepack prepare pnpm@latest --activate >/dev/null 2>&1
 fi
 
-echo "[Claw-Empire] Installing dependencies..."
+echo "[Claw-Republic] Installing dependencies..."
 pnpm install
 
 if [[ ! -f .env ]]; then
   cp .env.example .env
-  echo "[Claw-Empire] Created .env from .env.example"
+  echo "[Claw-Republic] Created .env from .env.example"
 fi
 
 if [[ -z "${OPENCLAW_CONFIG}" ]]; then
@@ -108,7 +108,7 @@ if [[ -z "${OPENCLAW_CONFIG}" ]]; then
 else
   OPENCLAW_CONFIG="$(expand_path "${OPENCLAW_CONFIG}")"
   if [[ ! -f "${OPENCLAW_CONFIG}" ]]; then
-    echo "[Claw-Empire] Warning: OPENCLAW config not found at ${OPENCLAW_CONFIG}. Keeping path for later."
+    echo "[Claw-Republic] Warning: OPENCLAW config not found at ${OPENCLAW_CONFIG}. Keeping path for later."
   fi
 fi
 
@@ -157,27 +157,27 @@ const currentSecret = read("OAUTH_ENCRYPTION_SECRET");
 if (!currentSecret || currentSecret === "__CHANGE_ME__") {
   const generated = crypto.randomBytes(32).toString("hex");
   upsert("OAUTH_ENCRYPTION_SECRET", `"${generated}"`);
-  console.log("[Claw-Empire] Generated OAUTH_ENCRYPTION_SECRET");
+  console.log("[Claw-Republic] Generated OAUTH_ENCRYPTION_SECRET");
 }
 
 const currentInboxSecret = read("INBOX_WEBHOOK_SECRET");
 if (!currentInboxSecret || currentInboxSecret === "__CHANGE_ME__") {
   const generatedInbox = crypto.randomBytes(32).toString("hex");
   upsert("INBOX_WEBHOOK_SECRET", `"${generatedInbox}"`);
-  console.log("[Claw-Empire] Generated INBOX_WEBHOOK_SECRET");
+  console.log("[Claw-Republic] Generated INBOX_WEBHOOK_SECRET");
 }
 
 const port = process.env.CLAW_SETUP_PORT?.trim();
 if (port) {
   upsert("PORT", port);
-  console.log(`[Claw-Empire] Set PORT=${port}`);
+  console.log(`[Claw-Republic] Set PORT=${port}`);
 }
 
 const openclaw = process.env.CLAW_SETUP_OPENCLAW?.trim();
 if (openclaw) {
   const normalized = openclaw.replace(/\\/g, "/");
   upsert("OPENCLAW_CONFIG", `"${normalized}"`);
-  console.log(`[Claw-Empire] Set OPENCLAW_CONFIG=${normalized}`);
+  console.log(`[Claw-Republic] Set OPENCLAW_CONFIG=${normalized}`);
 }
 
 fs.writeFileSync(envPath, content, "utf8");
@@ -199,16 +199,16 @@ if [[ -n "${AGENTS_PATH}" ]]; then
   SETUP_ARGS+=(--agents-path "${AGENTS_PATH}")
 fi
 
-echo "[Claw-Empire] Installing AGENTS.md orchestration rules..."
+echo "[Claw-Republic] Installing AGENTS.md orchestration rules..."
 pnpm setup -- "${SETUP_ARGS[@]}"
 
 echo
-echo "[Claw-Empire] Setup complete."
+echo "[Claw-Republic] Setup complete."
 echo "Frontend: http://127.0.0.1:8800"
 echo "API:      http://127.0.0.1:${PORT_TO_USE}/healthz"
 
 if [[ "${START_AFTER_SETUP}" == "1" ]]; then
-  echo "[Claw-Empire] Starting development server..."
+  echo "[Claw-Republic] Starting development server..."
   exec pnpm dev:local
 fi
 

@@ -521,9 +521,9 @@ export function startTelegramReceiver(options: StartTelegramReceiverOptions): Re
         conflictPauseUntil = Date.now() + TELEGRAM_CONFLICT_BACKOFF_MS;
         status.enabled = false;
         if (!conflictWarnedInPause) {
-          console.warn(`[Claw-Empire] telegram receiver paused: ${status.lastError}`);
+          console.warn(`[Claw-Republic] telegram receiver paused: ${status.lastError}`);
           console.warn(
-            `[Claw-Empire] telegram receiver hint: another bot instance is polling this token. retry in ${Math.round(
+            `[Claw-Republic] telegram receiver hint: another bot instance is polling this token. retry in ${Math.round(
               TELEGRAM_CONFLICT_BACKOFF_MS / 1000,
             )}s`,
           );
@@ -531,7 +531,7 @@ export function startTelegramReceiver(options: StartTelegramReceiverOptions): Re
         }
       } else {
         conflictWarnedInPause = false;
-        console.warn(`[Claw-Empire] telegram receiver error: ${status.lastError}`);
+        console.warn(`[Claw-Republic] telegram receiver error: ${status.lastError}`);
       }
     } finally {
       busy = false;
