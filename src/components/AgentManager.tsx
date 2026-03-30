@@ -544,6 +544,7 @@ export default function AgentManager({
           onEditAgent={openEdit}
           onEditDepartment={openEditDept}
           onDeleteAgent={handleDelete}
+          onAgentsChange={onAgentsChange}
           saving={saving}
           randomIconSprites={{ total: randomIconSprites.total }}
         />

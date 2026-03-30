@@ -247,11 +247,15 @@ case "$EVENT" in
     fi
     ;;
 
-  # ─── SubagentStart: agent spawned → create room + assign + working ───
+  # ─── SubagentStart: agent spawned → sync + create room + assign + working ───
   SubagentStart)
     AGENT_TYPE=$(parse "agent_type")
     OFFICE_AGENT=$(map_agent "$AGENT_TYPE")
     [ -z "$OFFICE_AGENT" ] && exit 0
+
+    # Sync agent profiles from disk before starting work
+    curl -s -o /dev/null --connect-timeout 1 --max-time 3 \
+      -X POST -H "$AUTH" "$API/agents-disk/sync" 2>/dev/null || true
 
     # Ensure room exists
     ROOM_NAME=$(ensure_room "")

@@ -1,5 +1,7 @@
+import { useState } from "react";
 import type { Agent, Department } from "../../types";
 import { localeName } from "../../i18n";
+import { syncAgentsDisk } from "../../api/messaging-runtime-oauth";
 import AgentCard from "./AgentCard";
 import { StackedSpriteIcon } from "./EmojiPicker";
 import type { Translator } from "./types";
@@ -21,6 +23,7 @@ interface AgentsTabProps {
   onEditAgent: (agent: Agent) => void;
   onEditDepartment: (department: Department) => void;
   onDeleteAgent: (agentId: string) => void;
+  onAgentsChange?: () => void;
   saving: boolean;
   randomIconSprites: {
     total: [number, number];
@@ -44,9 +47,29 @@ export default function AgentsTab({
   onEditAgent,
   onEditDepartment,
   onDeleteAgent,
+  onAgentsChange,
   saving,
   randomIconSprites,
 }: AgentsTabProps) {
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<string | null>(null);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    setSyncMsg(null);
+    try {
+      const result = await syncAgentsDisk();
+      setSyncMsg(`${result.synced} ${tr("동기화됨", "synced")}, ${result.skipped} ${tr("건너뜀", "skipped")}`);
+      if (result.synced > 0) onAgentsChange?.();
+      setTimeout(() => setSyncMsg(null), 4000);
+    } catch {
+      setSyncMsg(tr("동기화 실패", "Sync failed"));
+      setTimeout(() => setSyncMsg(null), 3000);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const workingCount = agents.filter((agent) => agent.status === "working").length;
   const deptCounts = new Map<string, { total: number; working: number }>();
   for (const agent of agents) {
@@ -116,7 +139,21 @@ export default function AgentsTab({
             </button>
           );
         })}
-        <div className="ml-auto pb-1">
+        <div className="ml-auto pb-1 flex items-center gap-2">
+          {syncMsg && (
+            <span className="text-[10px]" style={{ color: "var(--th-text-secondary)" }}>
+              {syncMsg}
+            </span>
+          )}
+          <button
+            onClick={handleSync}
+            disabled={syncing}
+            className="px-2.5 py-1.5 rounded-lg text-[10px] font-medium transition-colors disabled:opacity-40"
+            style={{ background: "var(--th-input-bg)", border: "1px solid var(--th-input-border)", color: "var(--th-text-secondary)" }}
+            title={tr("디스크에서 에이전트 프로필 동기화", "Sync agent profiles from disk")}
+          >
+            {syncing ? tr("동기화 중...", "Syncing...") : tr("디스크 동기화", "Sync Disk")}
+          </button>
           <input
             type="text"
             placeholder={`${tr("검색", "Search")}...`}

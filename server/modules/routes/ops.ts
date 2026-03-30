@@ -235,7 +235,7 @@ export function registerRoutesPartC(ctx: RuntimeContext): RouteOpsExports {
 
   registerTaskReportRoutes(__ctx);
 
-  registerAgentsDiskRoutes({ app, readSettingString });
+  registerAgentsDiskRoutes({ app, db, broadcast, readSettingString });
 
   return {
     prettyStreamJson,

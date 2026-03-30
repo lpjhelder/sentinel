@@ -263,6 +263,17 @@ export async function deleteAgentDisk(name: string): Promise<void> {
   await del(`/api/agents-disk/${encodeURIComponent(name)}`);
 }
 
+export interface AgentDiskSyncResult {
+  synced: number;
+  skipped: number;
+  total: number;
+  details: Array<{ file: string; agent: string; action: string }>;
+}
+
+export async function syncAgentsDisk(): Promise<AgentDiskSyncResult> {
+  return post("/api/agents-disk/sync", {});
+}
+
 export interface UpdateStatus {
   current_version: string;
   latest_version: string | null;
