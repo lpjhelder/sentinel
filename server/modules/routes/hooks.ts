@@ -1,6 +1,9 @@
 import type { RuntimeContext } from "../../types/runtime-context.ts";
 
-export type HookRouteDeps = Pick<RuntimeContext, "app" | "db" | "broadcast">;
+export type HookRouteDeps = Pick<
+  RuntimeContext,
+  "app" | "db" | "broadcast" | "meetingPresenceUntil" | "meetingSeatIndexByAgent" | "meetingPhaseByAgent" | "meetingTaskIdByAgent" | "meetingReviewDecisionByAgent"
+>;
 
 interface HookEvent {
   hook_type: string;
@@ -75,5 +78,143 @@ export function registerHookRoutes(deps: HookRouteDeps): void {
   // GET /api/hooks/events — List recent hook events (optional helper)
   app.get("/api/hooks/events", (_req, res) => {
     res.json({ events: recentHookEvents });
+  });
+
+  // ─── Meeting Trigger Endpoints (for Claude Code plan mode integration) ───
+
+  const {
+    meetingPresenceUntil,
+    meetingSeatIndexByAgent,
+    meetingPhaseByAgent,
+    meetingTaskIdByAgent,
+    meetingReviewDecisionByAgent,
+  } = deps;
+
+  // POST /api/meetings/start — Seat agents at the collab table
+  app.post("/api/meetings/start", (req, res) => {
+    try {
+      const body = (req.body ?? {}) as Record<string, unknown>;
+      const phase = body.phase === "review" ? "review" : "kickoff";
+      const taskId = typeof body.task_id === "string" ? body.task_id : `hook-${Date.now()}`;
+      const holdMs = typeof body.hold_ms === "number" ? body.hold_ms : 600_000;
+      const agentNames = Array.isArray(body.agent_names) ? body.agent_names : [];
+
+      if (agentNames.length === 0) {
+        return res.status(400).json({ error: "agent_names required (array of agent names)" });
+      }
+
+      // Resolve agent IDs from names
+      const agents = agentNames.slice(0, 6).map((name: unknown) => {
+        const n = typeof name === "string" ? name.trim() : "";
+        return n
+          ? (db.prepare("SELECT id, name FROM agents WHERE name = ? LIMIT 1").get(n) as { id: string; name: string } | undefined)
+          : undefined;
+      }).filter(Boolean) as { id: string; name: string }[];
+
+      if (agents.length === 0) {
+        return res.status(404).json({ error: "no matching agents found" });
+      }
+
+      // Seat each agent at the collab table
+      const now = Date.now();
+      agents.forEach((agent, seatIndex) => {
+        meetingPresenceUntil.set(agent.id, now + holdMs);
+        meetingSeatIndexByAgent.set(agent.id, seatIndex);
+        meetingPhaseByAgent.set(agent.id, phase);
+        meetingTaskIdByAgent.set(agent.id, taskId);
+        if (phase === "review") {
+          meetingReviewDecisionByAgent.set(agent.id, "reviewing");
+        }
+
+        broadcast("ceo_office_call", {
+          from_agent_id: agent.id,
+          seat_index: seatIndex,
+          phase,
+          task_id: taskId,
+          action: "arrive",
+        });
+      });
+
+      res.json({ ok: true, seated: agents.map((a) => a.name), task_id: taskId, phase });
+    } catch (err) {
+      console.error("[hooks] POST meetings/start failed:", err);
+      res.status(500).json({ error: "internal_error" });
+    }
+  });
+
+  // POST /api/meetings/dismiss — Remove agents from the collab table
+  app.post("/api/meetings/dismiss", (req, res) => {
+    try {
+      const body = (req.body ?? {}) as Record<string, unknown>;
+      const agentNames = Array.isArray(body.agent_names) ? body.agent_names : [];
+      const dismissAll = body.all === true;
+
+      if (dismissAll) {
+        // Dismiss everyone
+        const dismissed: string[] = [];
+        for (const [agentId] of meetingPresenceUntil) {
+          const agent = db.prepare("SELECT name FROM agents WHERE id = ? LIMIT 1").get(agentId) as { name: string } | undefined;
+          if (agent) dismissed.push(agent.name);
+
+          meetingPresenceUntil.delete(agentId);
+          meetingSeatIndexByAgent.delete(agentId);
+          meetingPhaseByAgent.delete(agentId);
+          meetingTaskIdByAgent.delete(agentId);
+          meetingReviewDecisionByAgent.delete(agentId);
+
+          broadcast("ceo_office_call", {
+            from_agent_id: agentId,
+            action: "dismiss",
+          });
+        }
+        return res.json({ ok: true, dismissed });
+      }
+
+      // Dismiss specific agents
+      const dismissed: string[] = [];
+      for (const name of agentNames) {
+        const n = typeof name === "string" ? name.trim() : "";
+        if (!n) continue;
+        const agent = db.prepare("SELECT id FROM agents WHERE name = ? LIMIT 1").get(n) as { id: string } | undefined;
+        if (!agent) continue;
+
+        meetingPresenceUntil.delete(agent.id);
+        meetingSeatIndexByAgent.delete(agent.id);
+        meetingPhaseByAgent.delete(agent.id);
+        meetingTaskIdByAgent.delete(agent.id);
+        meetingReviewDecisionByAgent.delete(agent.id);
+
+        broadcast("ceo_office_call", {
+          from_agent_id: agent.id,
+          action: "dismiss",
+        });
+        dismissed.push(n);
+      }
+
+      res.json({ ok: true, dismissed });
+    } catch (err) {
+      console.error("[hooks] POST meetings/dismiss failed:", err);
+      res.status(500).json({ error: "internal_error" });
+    }
+  });
+
+  // GET /api/meetings/status — Current meeting state
+  app.get("/api/meetings/status", (_req, res) => {
+    const now = Date.now();
+    const seated: Array<{ agent_id: string; seat: number; phase: string; task_id: string; remaining_ms: number }> = [];
+
+    for (const [agentId, until] of meetingPresenceUntil) {
+      if (until > now) {
+        seated.push({
+          agent_id: agentId,
+          seat: meetingSeatIndexByAgent.get(agentId) ?? -1,
+          phase: meetingPhaseByAgent.get(agentId) ?? "kickoff",
+          task_id: meetingTaskIdByAgent.get(agentId) ?? "",
+          remaining_ms: until - now,
+        });
+      }
+    }
+
+    res.json({ active: seated.length > 0, seated });
   });
 }

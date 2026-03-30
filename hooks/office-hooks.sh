@@ -220,14 +220,29 @@ api_ok || exit 0
 
 case "$EVENT" in
 
-  # ─── PreToolUse(Agent): capture description for room name ───
+  # ─── PreToolUse(Agent): capture description + plan mode meeting ───
   PreToolUse)
     DESC=$(parse "tool_input.description")
+    MODE=$(parse "tool_input.mode")
+    SUBAGENT_TYPE=$(parse "tool_input.subagent_type")
+
+    # Save description for room naming
     if [ -n "$DESC" ]; then
       EXISTING=$(get_room)
-      # Only save if no room yet
       if [ -z "$EXISTING" ]; then
         save_room "__pending:$DESC"
+      fi
+    fi
+
+    # Plan mode → trigger collab table meeting (kickoff)
+    if [ "$MODE" = "plan" ] && [ -n "$SUBAGENT_TYPE" ]; then
+      OFFICE_AGENT=$(map_agent "$SUBAGENT_TYPE")
+      if [ -n "$OFFICE_AGENT" ]; then
+        curl -s -o /dev/null --connect-timeout 2 --max-time 3 \
+          -X POST -H "$AUTH" -H "Content-Type: application/json" \
+          "$API/meetings/start" \
+          -d "{\"agent_names\":[\"$OFFICE_AGENT\"],\"phase\":\"kickoff\",\"task_id\":\"plan-$SUBAGENT_TYPE-$(date +%s)\"}" \
+          2>/dev/null || true
       fi
     fi
     ;;
@@ -246,11 +261,17 @@ case "$EVENT" in
     set_status "$OFFICE_AGENT" "working"
     ;;
 
-  # ─── SubagentStop: agent finished → idle + release hired + auto-close ───
+  # ─── SubagentStop: agent finished → dismiss meeting + idle + release hired + auto-close ───
   SubagentStop)
     AGENT_TYPE=$(parse "agent_type")
     OFFICE_AGENT=$(map_agent "$AGENT_TYPE")
     [ -z "$OFFICE_AGENT" ] && exit 0
+
+    # Dismiss from collab table if seated
+    curl -s -o /dev/null --connect-timeout 1 --max-time 2 \
+      -X POST -H "$AUTH" -H "Content-Type: application/json" \
+      "$API/meetings/dismiss" \
+      -d "{\"agent_names\":[\"$OFFICE_AGENT\"]}" 2>/dev/null || true
 
     set_status "$OFFICE_AGENT" "idle"
     release_hired "$OFFICE_AGENT"
@@ -306,6 +327,10 @@ case "$EVENT" in
 
   # ─── SessionEnd: cleanup everything ───
   SessionEnd)
+    # Dismiss all meetings
+    curl -s -o /dev/null --connect-timeout 1 --max-time 2 \
+      -X POST -H "$AUTH" -H "Content-Type: application/json" \
+      "$API/meetings/dismiss" -d '{"all":true}' 2>/dev/null || true
     idle_all
     close_active_room
     ;;

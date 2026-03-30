@@ -484,6 +484,11 @@ export function registerRoutesPartA(ctx: RuntimeContext): Record<string, never> 
     app,
     db,
     broadcast,
+    meetingPresenceUntil,
+    meetingSeatIndexByAgent,
+    meetingPhaseByAgent,
+    meetingTaskIdByAgent,
+    meetingReviewDecisionByAgent,
   });
 
   return {};
