@@ -490,6 +490,33 @@ export function registerTaskCrudRoutes(deps: TaskCrudRouteDeps): void {
 
     params.push(id);
     db.prepare(`UPDATE tasks SET ${updates.join(", ")} WHERE id = ?`).run(...(params as SQLInputValue[]));
+
+    // Award XP and increment stats when task transitions to done
+    if ((body as any).status === "done" && (existing as Record<string, unknown>).status !== "done") {
+      const agentId = (body as any).assigned_agent_id ?? (existing as Record<string, unknown>).assigned_agent_id;
+      if (agentId && typeof agentId === "string") {
+        const taskType = (existing as Record<string, unknown>).task_type as string;
+        const started = (existing as Record<string, unknown>).started_at as number | null;
+        const created = (existing as Record<string, unknown>).created_at as number;
+
+        // XP formula: base 10 + type bonus + speed bonus
+        let xp = 10;
+        if (taskType === "development") xp += 5;
+        else if (taskType === "analysis") xp += 3;
+        else if (taskType === "design" || taskType === "presentation") xp += 4;
+
+        // Speed bonus: completed within 1 hour of starting
+        if (started && nowMs() - started < 3600_000) xp += 5;
+        // Longevity bonus: task existed for a while (complex work)
+        if (started && nowMs() - created > 86400_000) xp += 3;
+
+        db.prepare(
+          "UPDATE agents SET stats_tasks_done = stats_tasks_done + 1, stats_xp = stats_xp + ? WHERE id = ?",
+        ).run(xp, agentId);
+        const updatedAgent = db.prepare("SELECT * FROM agents WHERE id = ?").get(agentId);
+        if (updatedAgent) broadcast("agent_status", updatedAgent);
+      }
+    }
     if (touchedProjectId) {
       db.prepare("UPDATE projects SET last_used_at = ?, updated_at = ? WHERE id = ?").run(
         updateTs,

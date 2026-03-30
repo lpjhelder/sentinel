@@ -298,6 +298,11 @@ export function DashboardRankingBoard({
                       >
                         {numberFormatter.format(agent.xp)} XP
                       </span>
+                      {agent.tasksDone > 0 && (
+                        <span className="text-[9px]" style={{ color: "var(--th-text-muted)" }}>
+                          {numberFormatter.format(agent.tasksDone)} tasks
+                        </span>
+                      )}
                       <RankBadge xp={agent.xp} size="sm" />
                     </div>
 
@@ -352,6 +357,11 @@ export function DashboardRankingBoard({
                       <XpBar xp={agent.xp} maxXp={maxXp} color={tier.color} />
                     </div>
                     <div className="flex items-center gap-2">
+                      {agent.tasksDone > 0 && (
+                        <span className="text-[10px]" style={{ color: "var(--th-text-muted)" }}>
+                          {numberFormatter.format(agent.tasksDone)}
+                        </span>
+                      )}
                       <span className="font-mono text-xs font-bold" style={{ color: tier.color }}>
                         {numberFormatter.format(agent.xp)}
                       </span>
