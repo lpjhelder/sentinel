@@ -351,6 +351,7 @@ export default function OfficeView({
     unreadAgentIds,
     language,
     activeMeetingTaskId,
+    rooms,
     customDeptThemes,
     currentTheme,
   });

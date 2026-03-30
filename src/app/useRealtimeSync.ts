@@ -253,6 +253,9 @@ export function useRealtimeSync({
       on("room_updated", () => {
         api.getRooms().then(setRooms).catch(console.error);
       }),
+      on("room_archived", () => {
+        api.getRooms().then(setRooms).catch(console.error);
+      }),
       on("agent_moved", () => {
         scheduleLiveSync(80);
         api.getRooms().then(setRooms).catch(console.error);

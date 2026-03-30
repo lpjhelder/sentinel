@@ -329,6 +329,7 @@ export type WSEventType =
   | "task_report"
   | "room_created"
   | "room_updated"
+  | "room_archived"
   | "agent_moved"
   | "agent_hired"
   | "agent_released"
