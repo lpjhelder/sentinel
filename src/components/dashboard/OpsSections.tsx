@@ -195,6 +195,7 @@ export function DashboardDeptAndSquad({
 
 interface DashboardMissionLogProps {
   recentTasks: Task[];
+  allTasks: Task[];
   agentMap: Map<string, Agent>;
   agents: Agent[];
   language: UiLanguage;
@@ -204,8 +205,22 @@ interface DashboardMissionLogProps {
   t: TFunction;
 }
 
+function formatDuration(startMs: number, endMs: number, t: TFunction): string {
+  const diff = endMs - startMs;
+  if (diff < 0) return "";
+  const mins = Math.floor(diff / 60_000);
+  if (mins < 1) return `<1 ${t({ ko: "분", en: "min", ja: "分", zh: "分", pt: "min" })}`;
+  if (mins < 60) return `${mins} ${t({ ko: "분", en: "min", ja: "分", zh: "分", pt: "min" })}`;
+  const hours = Math.floor(mins / 60);
+  const remMins = mins % 60;
+  if (hours < 24) return remMins > 0 ? `${hours}h ${remMins}m` : `${hours}h`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ${hours % 24}h`;
+}
+
 export function DashboardMissionLog({
   recentTasks,
+  allTasks,
   agentMap,
   agents,
   language,
@@ -214,6 +229,44 @@ export function DashboardMissionLog({
   numberFormatter,
   t,
 }: DashboardMissionLogProps) {
+  // Build parent→children map for indentation
+  const childrenByParent = new Map<string, Task[]>();
+  for (const task of allTasks) {
+    if (task.source_task_id) {
+      const existing = childrenByParent.get(task.source_task_id) ?? [];
+      existing.push(task);
+      childrenByParent.set(task.source_task_id, existing);
+    }
+  }
+
+  // Build ordered list: parent tasks from recentTasks, with children inserted after
+  const orderedTasks: Array<{ task: Task; indent: boolean }> = [];
+  const seen = new Set<string>();
+  for (const task of recentTasks) {
+    if (seen.has(task.id)) continue;
+    // Skip child tasks at top level — they'll appear under their parent
+    if (task.source_task_id && recentTasks.some((t) => t.id === task.source_task_id)) continue;
+    seen.add(task.id);
+    orderedTasks.push({ task, indent: false });
+    // Insert children right after parent
+    const children = childrenByParent.get(task.id);
+    if (children) {
+      for (const child of children.sort((a, b) => a.created_at - b.created_at)) {
+        if (!seen.has(child.id)) {
+          seen.add(child.id);
+          orderedTasks.push({ task: child, indent: true });
+        }
+      }
+    }
+  }
+  // Add orphan child tasks that weren't grouped
+  for (const task of recentTasks) {
+    if (!seen.has(task.id)) {
+      seen.add(task.id);
+      orderedTasks.push({ task, indent: !!task.source_task_id });
+    }
+  }
+
   return (
     <div className="game-panel p-5">
       <div className="mb-4 flex items-center justify-between">
@@ -248,7 +301,7 @@ export function DashboardMissionLog({
         </span>
       </div>
 
-      {recentTasks.length === 0 ? (
+      {orderedTasks.length === 0 ? (
         <div
           className="flex flex-col items-center justify-center gap-2 py-10 text-sm"
           style={{ color: "var(--th-text-muted)" }}
@@ -258,7 +311,7 @@ export function DashboardMissionLog({
         </div>
       ) : (
         <div className="space-y-2">
-          {recentTasks.map((task) => {
+          {orderedTasks.map(({ task, indent }) => {
             const statusInfo = STATUS_LABELS[task.status] ?? {
               color: "bg-slate-600/20 text-slate-200 border-slate-500/30",
               dot: "bg-slate-400",
@@ -267,47 +320,84 @@ export function DashboardMissionLog({
               task.assigned_agent ?? (task.assigned_agent_id ? agentMap.get(task.assigned_agent_id) : undefined);
             const leftBorder = STATUS_LEFT_BORDER[task.status] ?? "border-l-slate-500";
 
+            // Duration calculation
+            const hasDuration = task.started_at && task.completed_at && task.status === "done";
+            const duration = hasDuration ? formatDuration(task.started_at!, task.completed_at!, t) : null;
+
+            // XP badge for done tasks
+            const agentData = assignedAgent;
+            const childCount = childrenByParent.get(task.id)?.length ?? 0;
+
             return (
               <article
                 key={task.id}
-                className={`group grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-xl border border-white/[0.06] border-l-[3px] ${leftBorder} bg-white/[0.02] p-3 transition-all duration-200 hover:bg-white/[0.04] hover:translate-x-1`}
+                className={`group grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-xl border border-white/[0.06] border-l-[3px] ${leftBorder} bg-white/[0.02] p-3 transition-all duration-200 hover:bg-white/[0.04] hover:translate-x-1 ${indent ? "ml-6 border-l-violet-500/40" : ""}`}
               >
                 {assignedAgent ? (
-                  <AgentAvatar agent={assignedAgent} agents={agents} size={36} rounded="xl" />
+                  <AgentAvatar agent={assignedAgent} agents={agents} size={indent ? 28 : 36} rounded="xl" />
                 ) : (
                   <div
-                    className="flex h-9 w-9 items-center justify-center rounded-xl border text-base"
+                    className={`flex items-center justify-center rounded-xl border text-base ${indent ? "h-7 w-7" : "h-9 w-9"}`}
                     style={{
                       borderColor: "var(--th-border)",
                       background: "var(--th-bg-surface)",
                       color: "var(--th-text-muted)",
                     }}
                   >
-                    📄
+                    {indent ? "↳" : "📄"}
                   </div>
                 )}
 
                 <div className="min-w-0">
-                  <p
-                    className="truncate text-sm font-bold transition-colors group-hover:text-white"
-                    style={{ color: "var(--th-text-primary)" }}
-                  >
-                    {task.title}
-                  </p>
+                  <div className="flex items-center gap-1.5">
+                    {indent && (
+                      <span className="text-[9px]" style={{ color: "rgba(139,92,246,0.6)" }}>↳</span>
+                    )}
+                    <p
+                      className={`truncate font-bold transition-colors group-hover:text-white ${indent ? "text-xs" : "text-sm"}`}
+                      style={{ color: "var(--th-text-primary)" }}
+                    >
+                      {task.title}
+                    </p>
+                  </div>
                   <p className="mt-0.5 flex items-center gap-1.5 text-[10px]" style={{ color: "var(--th-text-muted)" }}>
                     <span className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${statusInfo.dot}`} />
                     {assignedAgent
                       ? localeName(language, assignedAgent)
                       : t({ ko: "미배정", en: "Unassigned", ja: "未割り当て", zh: "未分配", pt: "Não atribuído" })}
+                    {duration && (
+                      <>
+                        <span style={{ color: "var(--th-text-muted)", opacity: 0.4 }}>·</span>
+                        <span>⏱ {duration}</span>
+                      </>
+                    )}
+                    {!indent && childCount > 0 && (
+                      <>
+                        <span style={{ color: "var(--th-text-muted)", opacity: 0.4 }}>·</span>
+                        <span style={{ color: "#34d399" }}>
+                          {childCount} {t({ ko: "하위", en: "child", ja: "子", zh: "子", pt: "filha" })}{childCount > 1 ? "s" : ""}
+                        </span>
+                      </>
+                    )}
                   </p>
                 </div>
 
                 <div className="flex flex-col items-end gap-1">
-                  <span
-                    className={`rounded-md border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${statusInfo.color}`}
-                  >
-                    {taskStatusLabel(task.status, t)}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {task.status === "done" && agentData && agentData.stats_xp > 0 && (
+                      <span
+                        className="rounded-md px-1.5 py-0.5 text-[8px] font-black"
+                        style={{ background: "rgba(255,215,0,0.15)", color: "#fbbf24" }}
+                      >
+                        +XP
+                      </span>
+                    )}
+                    <span
+                      className={`rounded-md border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${statusInfo.color}`}
+                    >
+                      {taskStatusLabel(task.status, t)}
+                    </span>
+                  </div>
                   <span className="text-[9px] font-medium" style={{ color: "var(--th-text-muted)" }}>
                     {timeAgo(task.updated_at, localeTag)}
                   </span>

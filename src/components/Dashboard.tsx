@@ -202,6 +202,7 @@ export default function Dashboard({ stats, agents, tasks, companyName }: Dashboa
 
       <DashboardMissionLog
         recentTasks={recentTasks}
+        allTasks={tasks}
         agentMap={agentMap}
         agents={agents}
         language={language}
