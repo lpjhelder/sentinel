@@ -229,9 +229,9 @@ export function registerTaskCrudRoutes(deps: TaskCrudRouteDeps): void {
     INSERT INTO tasks (
       id, title, description, department_id, assigned_agent_id, project_id,
       status, priority, task_type, workflow_pack_key, workflow_meta_json, output_format,
-      project_path, base_branch, source_task_id, created_at, updated_at
+      project_path, base_branch, source_task_id, started_at, created_at, updated_at
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `,
     ).run(
       id,
@@ -257,6 +257,7 @@ export function registerTaskCrudRoutes(deps: TaskCrudRouteDeps): void {
       resolvedProjectPath,
       (body as any).base_branch ?? null,
       typeof (body as any).source_task_id === "string" ? (body as any).source_task_id : null,
+      ((body as any).status === "in_progress") ? t : null,
       t,
       t,
     );
@@ -483,9 +484,12 @@ export function registerTaskCrudRoutes(deps: TaskCrudRouteDeps): void {
       updates.push("completed_at = ?");
       params.push(nowMs());
     }
-    if ((body as any).status === "in_progress" && !("started_at" in (body as any))) {
-      updates.push("started_at = ?");
-      params.push(nowMs());
+    if ((body as any).status === "in_progress") {
+      const existingStarted = (existing as Record<string, unknown>).started_at;
+      if (!existingStarted && !("started_at" in (body as any))) {
+        updates.push("started_at = ?");
+        params.push(nowMs());
+      }
     }
 
     params.push(id);
