@@ -229,9 +229,9 @@ export function registerTaskCrudRoutes(deps: TaskCrudRouteDeps): void {
     INSERT INTO tasks (
       id, title, description, department_id, assigned_agent_id, project_id,
       status, priority, task_type, workflow_pack_key, workflow_meta_json, output_format,
-      project_path, base_branch, created_at, updated_at
+      project_path, base_branch, source_task_id, created_at, updated_at
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `,
     ).run(
       id,
@@ -256,6 +256,7 @@ export function registerTaskCrudRoutes(deps: TaskCrudRouteDeps): void {
       typeof (body as any).output_format === "string" ? (body as any).output_format : null,
       resolvedProjectPath,
       (body as any).base_branch ?? null,
+      typeof (body as any).source_task_id === "string" ? (body as any).source_task_id : null,
       t,
       t,
     );

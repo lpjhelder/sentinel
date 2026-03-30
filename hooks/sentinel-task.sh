@@ -4,7 +4,8 @@
 #
 # Usage:
 #   sentinel-task create "Title" [agent_name] [description]
-#   sentinel-task subtask <task_id> "Title" [agent_name] [description]
+#   sentinel-task child <parent_task_id> "Title" [agent_name] [description]  # task filha (aparece no board + linka agent)
+#   sentinel-task subtask <task_id> "Title" [agent_name] [description]       # subtask (checklist dentro da task)
 #   sentinel-task status <task_id> <status>           # inbox|planned|in_progress|review|done|cancelled
 #   sentinel-task substatus <subtask_id> <status>     # pending|in_progress|done|blocked
 #   sentinel-task find-agent <agent_name>             # returns agent_id
@@ -50,6 +51,39 @@ case "$CMD" in
     BODY="{\"title\":$(node -e "console.log(JSON.stringify('$TITLE'))")"
     BODY="$BODY,\"status\":\"planned\""
     BODY="$BODY,\"task_type\":\"development\""
+
+    if [ -n "$AGENT_NAME" ]; then
+      AGENT_JSON=$(resolve_agent "$AGENT_NAME")
+      if [ -n "$AGENT_JSON" ]; then
+        AID=$(echo "$AGENT_JSON" | node -e "try{console.log(JSON.parse(require('fs').readFileSync(0,'utf8')).id)}catch{}" 2>/dev/null)
+        DID=$(echo "$AGENT_JSON" | node -e "try{console.log(JSON.parse(require('fs').readFileSync(0,'utf8')).department_id)}catch{}" 2>/dev/null)
+        [ -n "$AID" ] && BODY="$BODY,\"assigned_agent_id\":\"$AID\""
+        [ -n "$DID" ] && BODY="$BODY,\"department_id\":\"$DID\""
+      fi
+    fi
+
+    if [ -n "$DESC" ]; then
+      BODY="$BODY,\"description\":$(node -e "console.log(JSON.stringify('$DESC'))")"
+    fi
+
+    BODY="{${BODY#\{}}"
+
+    curl -s --connect-timeout 2 --max-time 5 \
+      -X POST -H "$AUTH" -H "Content-Type: application/json" \
+      "$API/tasks" -d "$BODY" 2>/dev/null
+    ;;
+
+  child)
+    PARENT_ID="$2"
+    TITLE="$3"
+    AGENT_NAME="$4"
+    DESC="$5"
+    [ -z "$PARENT_ID" ] || [ -z "$TITLE" ] && { echo '{"error":"parent_id_and_title_required"}'; exit 1; }
+
+    BODY="{\"title\":$(node -e "console.log(JSON.stringify('$TITLE'))")"
+    BODY="$BODY,\"status\":\"planned\""
+    BODY="$BODY,\"task_type\":\"development\""
+    BODY="$BODY,\"source_task_id\":\"$PARENT_ID\""
 
     if [ -n "$AGENT_NAME" ]; then
       AGENT_JSON=$(resolve_agent "$AGENT_NAME")
