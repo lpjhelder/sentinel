@@ -4,9 +4,11 @@ import * as api from "../api";
 import type {
   Agent,
   CrossDeptDelivery,
+  Hiring,
   MeetingPresence,
   MeetingReviewDecision,
   Message,
+  Room,
   SubAgent,
   SubTask,
   Task,
@@ -59,6 +61,8 @@ interface UseRealtimeSyncParams {
       content: string;
     } | null>
   >;
+  setRooms: Dispatch<SetStateAction<Room[]>>;
+  setHirings: Dispatch<SetStateAction<Hiring[]>>;
 }
 
 export function useRealtimeSync({
@@ -82,6 +86,8 @@ export function useRealtimeSync({
   setSubtasks,
   setSubAgents,
   setStreamingMessage,
+  setRooms,
+  setHirings,
 }: UseRealtimeSyncParams): void {
   useEffect(() => {
     const unsubs = [
@@ -240,6 +246,27 @@ export function useRealtimeSync({
             MAX_CEO_OFFICE_CALLS,
           ),
         );
+      }),
+      on("room_created", () => {
+        api.getRooms().then(setRooms).catch(console.error);
+      }),
+      on("room_updated", () => {
+        api.getRooms().then(setRooms).catch(console.error);
+      }),
+      on("agent_moved", () => {
+        scheduleLiveSync(80);
+        api.getRooms().then(setRooms).catch(console.error);
+      }),
+      on("agent_hired", () => {
+        scheduleLiveSync(80);
+        api.getHirings().then(setHirings).catch(console.error);
+      }),
+      on("agent_released", () => {
+        scheduleLiveSync(80);
+        api.getHirings().then(setHirings).catch(console.error);
+      }),
+      on("hook_activity", () => {
+        // optional activity indicator — no-op for now
       }),
       on("subtask_update", (payload: unknown) => {
         const st = payload as SubTask;

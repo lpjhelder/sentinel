@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const ORIGINAL_ENV = { ...process.env };
 
 function createTestDb(options?: { messengerChannels?: unknown }): string {
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-empire-messenger-test-"));
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "sentinel-messenger-test-"));
   const dbPath = path.join(tmpDir, "test.sqlite");
   const db = new DatabaseSync(dbPath);
   try {
@@ -614,7 +614,7 @@ describe("gateway client", () => {
     });
 
     await expect(gateway.gatewayHttpInvoke({ tool: "message" })).rejects.toThrow(
-      "openclaw gateway integration has been removed",
+      "opensentinel gateway integration has been removed",
     );
   });
 });

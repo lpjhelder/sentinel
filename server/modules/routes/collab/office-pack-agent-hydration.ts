@@ -232,13 +232,14 @@ function ensureDepartmentExists(
       db.prepare(
         `
         INSERT INTO office_pack_departments (
-          workflow_pack_key, department_id, name, name_ko, name_ja, name_zh, icon, color, description, prompt, sort_order, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          workflow_pack_key, department_id, name, name_ko, name_ja, name_zh, name_pt, icon, color, description, prompt, sort_order, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(workflow_pack_key, department_id) DO UPDATE SET
           name = excluded.name,
           name_ko = excluded.name_ko,
           name_ja = excluded.name_ja,
           name_zh = excluded.name_zh,
+          name_pt = excluded.name_pt,
           icon = excluded.icon,
           color = excluded.color,
           description = excluded.description,
@@ -252,6 +253,7 @@ function ensureDepartmentExists(
         source.name_ko,
         source.name_ja,
         source.name_zh,
+        (source as any).name_pt || "",
         source.icon,
         source.color,
         source.description,
@@ -265,8 +267,8 @@ function ensureDepartmentExists(
         db.prepare(
           `
           INSERT OR IGNORE INTO departments (
-            id, name, name_ko, name_ja, name_zh, icon, color, description, prompt, sort_order, created_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            id, name, name_ko, name_ja, name_zh, name_pt, icon, color, description, prompt, sort_order, created_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
         ).run(
           source.id,
@@ -274,6 +276,7 @@ function ensureDepartmentExists(
           source.name_ko,
           source.name_ja,
           source.name_zh,
+          (source as any).name_pt || "",
           source.icon,
           source.color,
           source.description,
@@ -338,12 +341,12 @@ export function hydrateOfficePackAgentFromSettings(db: DbLike, agentId: string, 
       db.prepare(
         `
         INSERT OR IGNORE INTO agents (
-          id, name, name_ko, name_ja, name_zh, department_id, role,
+          id, name, name_ko, name_ja, name_zh, name_pt, department_id, role,
           workflow_pack_key,
           acts_as_planning_leader,
           cli_provider, avatar_emoji, sprite_number, personality, status, current_task_id,
           stats_tasks_done, stats_xp, created_at, cli_model, cli_reasoning_level
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'idle', NULL, 0, 0, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'idle', NULL, 0, 0, ?, ?, ?)
       `,
       ).run(
         found.agent.id,
@@ -351,6 +354,7 @@ export function hydrateOfficePackAgentFromSettings(db: DbLike, agentId: string, 
         found.agent.name_ko,
         found.agent.name_ja,
         found.agent.name_zh,
+        (found.agent as any).name_pt || "",
         deptId,
         found.agent.role,
         found.packKey,
@@ -367,11 +371,11 @@ export function hydrateOfficePackAgentFromSettings(db: DbLike, agentId: string, 
       db.prepare(
         `
         INSERT OR IGNORE INTO agents (
-          id, name, name_ko, name_ja, name_zh, department_id, role,
+          id, name, name_ko, name_ja, name_zh, name_pt, department_id, role,
           acts_as_planning_leader,
           cli_provider, avatar_emoji, sprite_number, personality, status, current_task_id,
           stats_tasks_done, stats_xp, created_at, cli_model, cli_reasoning_level
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'idle', NULL, 0, 0, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'idle', NULL, 0, 0, ?, ?, ?)
       `,
       ).run(
         found.agent.id,
@@ -379,6 +383,7 @@ export function hydrateOfficePackAgentFromSettings(db: DbLike, agentId: string, 
         found.agent.name_ko,
         found.agent.name_ja,
         found.agent.name_zh,
+        (found.agent as any).name_pt || "",
         deptId,
         found.agent.role,
         found.agent.acts_as_planning_leader,
@@ -414,17 +419,18 @@ function upsertOfficePackProfileAgent(
           .prepare(
             `
         INSERT INTO agents (
-          id, name, name_ko, name_ja, name_zh, department_id, role,
+          id, name, name_ko, name_ja, name_zh, name_pt, department_id, role,
           workflow_pack_key,
           acts_as_planning_leader,
           cli_provider, avatar_emoji, sprite_number, personality, status, current_task_id,
           stats_tasks_done, stats_xp, created_at, cli_model, cli_reasoning_level
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'idle', NULL, 0, 0, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'idle', NULL, 0, 0, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           name = excluded.name,
           name_ko = excluded.name_ko,
           name_ja = excluded.name_ja,
           name_zh = excluded.name_zh,
+          name_pt = excluded.name_pt,
           department_id = excluded.department_id,
           workflow_pack_key = excluded.workflow_pack_key,
           role = excluded.role,
@@ -443,6 +449,7 @@ function upsertOfficePackProfileAgent(
             agent.name_ko,
             agent.name_ja,
             agent.name_zh,
+            (agent as any).name_pt || "",
             deptId,
             agent.role,
             packKey,
@@ -459,16 +466,17 @@ function upsertOfficePackProfileAgent(
           .prepare(
             `
         INSERT INTO agents (
-          id, name, name_ko, name_ja, name_zh, department_id, role,
+          id, name, name_ko, name_ja, name_zh, name_pt, department_id, role,
           acts_as_planning_leader,
           cli_provider, avatar_emoji, sprite_number, personality, status, current_task_id,
           stats_tasks_done, stats_xp, created_at, cli_model, cli_reasoning_level
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'idle', NULL, 0, 0, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'idle', NULL, 0, 0, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           name = excluded.name,
           name_ko = excluded.name_ko,
           name_ja = excluded.name_ja,
           name_zh = excluded.name_zh,
+          name_pt = excluded.name_pt,
           department_id = excluded.department_id,
           role = excluded.role,
           acts_as_planning_leader = excluded.acts_as_planning_leader,
@@ -486,6 +494,7 @@ function upsertOfficePackProfileAgent(
             agent.name_ko,
             agent.name_ja,
             agent.name_zh,
+            (agent as any).name_pt || "",
             deptId,
             agent.role,
             agent.acts_as_planning_leader,

@@ -92,7 +92,11 @@ export function startLifecycle(ctx: RuntimeContext): void {
       }
     }
 
-    const candidates = allAgents.filter((a) => !isAgentInMeeting(a.id));
+    // Exclude agents with active tasks (current_task_id set) — they should not go on break
+    const workingAgentIds = new Set(
+      (db.prepare("SELECT id FROM agents WHERE current_task_id IS NOT NULL OR status = 'working'").all() as { id: string }[]).map((r) => r.id),
+    );
+    const candidates = allAgents.filter((a) => !isAgentInMeeting(a.id) && !workingAgentIds.has(a.id));
     if (candidates.length === 0) return;
 
     // Group by department
@@ -207,7 +211,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
 
       broadcast("agent_status", db.prepare("SELECT * FROM agents WHERE id = ?").get(row.agent_id));
       console.warn(
-        `[Claw-Empire] Recovery (${reason}): cleared stale working agent ${row.agent_id} (${row.agent_name || "unknown"}) -> ${row.current_task_id} (${staleReason})`,
+        `[Sentinel] Recovery (${reason}): cleared stale working agent ${row.agent_id} (${row.agent_name || "unknown"}) -> ${row.current_task_id} (${staleReason})`,
       );
     }
   }
@@ -354,7 +358,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
     try {
       reconcileCrossDeptSubtasks();
     } catch (err) {
-      console.error("[Claw-Empire] startup reconciliation failed:", err);
+      console.error("[Sentinel] startup reconciliation failed:", err);
     }
 
     recoverOrphanInProgressTasks("startup");
@@ -421,7 +425,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
       .map(([name]) => name);
 
     if (authenticated.length === 0) {
-      console.log("[Claw-Empire] Auto-assign skipped: no authenticated CLI providers");
+      console.log("[Sentinel] Auto-assign skipped: no authenticated CLI providers");
       return;
     }
 
@@ -445,10 +449,10 @@ export function startLifecycle(ctx: RuntimeContext): void {
 
       db.prepare("UPDATE agents SET cli_provider = ? WHERE id = ?").run(fallback, agent.id);
       broadcast("agent_status", db.prepare("SELECT * FROM agents WHERE id = ?").get(agent.id));
-      console.log(`[Claw-Empire] Auto-assigned ${agent.name}: ${prov || "none"} → ${fallback}`);
+      console.log(`[Sentinel] Auto-assigned ${agent.name}: ${prov || "none"} → ${fallback}`);
       count++;
     }
-    if (count > 0) console.log(`[Claw-Empire] Auto-assigned ${count} agent(s)`);
+    if (count > 0) console.log(`[Sentinel] Auto-assigned ${count} agent(s)`);
   }
 
   // Run rotation every 60 seconds, and once on startup after 5s
@@ -467,11 +471,11 @@ export function startLifecycle(ctx: RuntimeContext): void {
   // Start HTTP server + WebSocket
   // ---------------------------------------------------------------------------
   const server = app.listen(PORT, HOST, () => {
-    console.log(`[Claw-Empire] v${PKG_VERSION} listening on http://${HOST}:${PORT} (db: ${dbPath})`);
+    console.log(`[Sentinel] v${PKG_VERSION} listening on http://${HOST}:${PORT} (db: ${dbPath})`);
     if (isProduction) {
-      console.log(`[Claw-Empire] mode: production (serving UI from ${distDir})`);
+      console.log(`[Sentinel] mode: production (serving UI from ${distDir})`);
     } else {
-      console.log(`[Claw-Empire] mode: development (UI served by Vite on separate port)`);
+      console.log(`[Sentinel] mode: development (UI served by Vite on separate port)`);
     }
   });
 
@@ -504,7 +508,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
       return;
     }
     wsClients.add(ws);
-    console.log(`[Claw-Empire] WebSocket client connected (total: ${wsClients.size})`);
+    console.log(`[Sentinel] WebSocket client connected (total: ${wsClients.size})`);
 
     // Send initial state to the newly connected client
     ws.send(
@@ -512,7 +516,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
         type: "connected",
         payload: {
           version: PKG_VERSION,
-          app: "Claw-Empire",
+          app: "Sentinel",
         },
         ts: nowMs(),
       }),
@@ -520,7 +524,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
 
     ws.on("close", () => {
       wsClients.delete(ws);
-      console.log(`[Claw-Empire] WebSocket client disconnected (total: ${wsClients.size})`);
+      console.log(`[Sentinel] WebSocket client disconnected (total: ${wsClients.size})`);
     });
 
     ws.on("error", () => {

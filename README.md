@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/claw-empire.svg" width="80" alt="Claw-Empire" />
+  <img src="public/sentinel.svg" width="80" alt="Sentinel" />
 </p>
 
-<h1 align="center">Claw-Empire</h1>
+<h1 align="center">Sentinel</h1>
 
 <p align="center">
   <strong>Command Your AI Agent Empire from the CEO Desk</strong><br>
@@ -11,7 +11,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-2.0.4-blue" alt="Releases" />
-  <a href="https://github.com/GreenSheep01201/claw-empire/actions/workflows/ci.yml"><img src="https://github.com/GreenSheep01201/claw-empire/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
+  <a href="https://github.com/lpjhelder/sentinel/actions/workflows/ci.yml"><img src="https://github.com/lpjhelder/sentinel/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D22-brightgreen" alt="Node.js 22+" />
   <img src="https://img.shields.io/badge/license-Apache%202.0-orange" alt="License" />
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey" alt="Platform" />
@@ -22,8 +22,8 @@
   <a href="#quick-start">Quick Start</a> &middot;
   <a href="#ai-installation-guide">AI Install Guide</a> &middot;
   <a href="docs/releases/v2.0.4.md">Release Notes</a> &middot;
-  <a href="#openclaw-integration">OpenClaw</a> &middot;
-  <a href="#direct-messenger-without-openclaw">Direct Messenger</a> &middot;
+  <a href="#opensentinel-integration">OpenClaw</a> &middot;
+  <a href="#direct-messenger-without-opensentinel">Direct Messenger</a> &middot;
   <a href="#dollar-command-logic">$ Command</a> &middot;
   <a href="#features">Features</a> &middot;
   <a href="#screenshots">Screenshots</a> &middot;
@@ -43,11 +43,11 @@
 
 ---
 
-## What is Claw-Empire?
+## What is Sentinel?
 
-Claw-Empire transforms your AI coding assistants — connected via **CLI**, **OAuth**, or **direct API keys** — into a fully simulated **virtual software company**. You are the CEO. Your AI agents are the employees. Watch them collaborate across departments, hold meetings, deliver tasks, and level up — all visualized through a charming pixel-art office interface.
+Sentinel transforms your AI coding assistants — connected via **CLI**, **OAuth**, or **direct API keys** — into a fully simulated **virtual software company**. You are the CEO. Your AI agents are the employees. Watch them collaborate across departments, hold meetings, deliver tasks, and level up — all visualized through a charming pixel-art office interface.
 
-### Why Claw-Empire?
+### Why Sentinel?
 
 - **One interface, many AI agents** — Manage CLI, OAuth, and API-backed agents from a single dashboard
 - **Local-first & private** — All data stays on your machine. SQLite database, no cloud dependency
@@ -61,8 +61,8 @@ Claw-Empire transforms your AI coding assistants — connected via **CLI**, **OA
 > **Just paste this to your AI coding agent (Claude Code, Codex, Gemini CLI, etc.):**
 >
 > ```
-> Install Claw-Empire following the guide at:
-> https://github.com/GreenSheep01201/claw-empire
+> Install Sentinel following the guide at:
+> https://github.com/lpjhelder/sentinel
 > ```
 >
 > The AI will read this README and handle everything automatically.
@@ -178,10 +178,10 @@ Each office pack applies a different collaboration topology, naming seed, and wo
 Preview sample intro video output:
 
 <p align="center">
-  <video src="Sample_Img/claw-empire-intro.mp4" controls muted playsinline width="100%"></video>
+  <video src="Sample_Img/sentinel-intro.mp4" controls muted playsinline width="100%"></video>
 </p>
 
-- Direct file: [`Sample_Img/claw-empire-intro.mp4`](Sample_Img/claw-empire-intro.mp4)
+- Direct file: [`Sample_Img/sentinel-intro.mp4`](Sample_Img/sentinel-intro.mp4)
 
 ### PPT Sample Sources
 
@@ -261,8 +261,8 @@ git --version
 ### Step 1: Clone and run one-click setup
 
 ```bash
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/lpjhelder/sentinel.git
+cd sentinel
 git submodule update --init --recursive
 bash install.sh
 ```
@@ -270,8 +270,8 @@ bash install.sh
 Windows PowerShell:
 
 ```powershell
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/lpjhelder/sentinel.git
+cd sentinel
 git submodule update --init --recursive
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
@@ -285,8 +285,8 @@ macOS/Linux:
 [ -f .env ] && [ -f scripts/setup.mjs ] && echo "setup files ok"
 
 # AGENTS orchestration rules installed
-grep -R "BEGIN claw-empire orchestration rules" ~/.openclaw/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
-grep -R "INBOX_SECRET_DISCOVERY_V2" ~/.openclaw/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
+grep -R "BEGIN sentinel orchestration rules" ~/.opensentinel/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
+grep -R "INBOX_SECRET_DISCOVERY_V2" ~/.opensentinel/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
 
 # OpenClaw inbox requirements in .env
 grep -E '^(INBOX_WEBHOOK_SECRET|OPENCLAW_CONFIG)=' .env || true
@@ -296,8 +296,8 @@ Windows PowerShell:
 
 ```powershell
 if ((Test-Path .\.env) -and (Test-Path .\scripts\setup.mjs)) { "setup files ok" }
-$agentCandidates = @("$env:USERPROFILE\.openclaw\workspace\AGENTS.md", ".\AGENTS.md")
-$agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "BEGIN claw-empire orchestration rules" } }
+$agentCandidates = @("$env:USERPROFILE\.opensentinel\workspace\AGENTS.md", ".\AGENTS.md")
+$agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "BEGIN sentinel orchestration rules" } }
 $agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "INBOX_SECRET_DISCOVERY_V2" } }
 
 # OpenClaw inbox requirements in .env
@@ -341,11 +341,11 @@ Expected:
 - `401` when the header is missing/mismatched.
 - `503` when `INBOX_WEBHOOK_SECRET` is not configured on the server.
 
-<a id="direct-messenger-without-openclaw"></a>
+<a id="direct-messenger-without-opensentinel"></a>
 
 ### Step 5: Direct messenger setup (no OpenClaw required)
 
-You can run messenger channels directly from Claw-Empire without OpenClaw.
+You can run messenger channels directly from Sentinel without OpenClaw.
 
 1. Open `Settings > Channel Messages`.
 2. Click `Add Chat`.
@@ -408,8 +408,8 @@ docker compose up -d --build
 ### 3) Verify
 
 ```bash
-docker ps --filter name=claw-empire
-docker logs -f claw-empire
+docker ps --filter name=sentinel
+docker logs -f sentinel
 ```
 
 Open: `http://127.0.0.1:8790`
@@ -419,8 +419,8 @@ Open: `http://127.0.0.1:8790`
 ```bash
 # requires token with package write scope
 echo "<GITHUB_TOKEN_WITH_PACKAGES_WRITE>" | docker login ghcr.io -u <github-user> --password-stdin
-docker tag claw-empire-claw-empire:latest ghcr.io/<github-user>/claw-empire:latest
-docker push ghcr.io/<github-user>/claw-empire:latest
+docker tag sentinel-sentinel:latest ghcr.io/<github-user>/sentinel:latest
+docker push ghcr.io/<github-user>/sentinel:latest
 ```
 
 ### Prerequisites
@@ -435,24 +435,24 @@ docker push ghcr.io/<github-user>/claw-empire:latest
 
 | Platform                 | Command                                                                                                                                |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **macOS / Linux**        | `git clone https://github.com/GreenSheep01201/claw-empire.git && cd claw-empire && bash install.sh`                                    |
-| **Windows (PowerShell)** | `git clone https://github.com/GreenSheep01201/claw-empire.git; cd claw-empire; powershell -ExecutionPolicy Bypass -File .\install.ps1` |
+| **macOS / Linux**        | `git clone https://github.com/lpjhelder/sentinel.git && cd sentinel && bash install.sh`                                    |
+| **Windows (PowerShell)** | `git clone https://github.com/lpjhelder/sentinel.git; cd sentinel; powershell -ExecutionPolicy Bypass -File .\install.ps1` |
 
 If the repo is already cloned:
 
 | Platform                 | Command                                                                                                          |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| **macOS / Linux**        | `git submodule update --init --recursive && bash scripts/openclaw-setup.sh`                                      |
-| **Windows (PowerShell)** | `git submodule update --init --recursive; powershell -ExecutionPolicy Bypass -File .\scripts\openclaw-setup.ps1` |
+| **macOS / Linux**        | `git submodule update --init --recursive && bash scripts/opensentinel-setup.sh`                                      |
+| **Windows (PowerShell)** | `git submodule update --init --recursive; powershell -ExecutionPolicy Bypass -File .\scripts\opensentinel-setup.ps1` |
 
 ### OpenClaw `.env` Requirements (for `/api/inbox`)
 
 Set both values in `.env` before sending chat webhooks:
 
 - `INBOX_WEBHOOK_SECRET=<long-random-secret>`
-- `OPENCLAW_CONFIG=<absolute-path-to-openclaw.json>` (unquoted preferred)
+- `OPENCLAW_CONFIG=<absolute-path-to-opensentinel.json>` (unquoted preferred)
 
-`scripts/openclaw-setup.sh` / `scripts/openclaw-setup.ps1` now auto-generate `INBOX_WEBHOOK_SECRET` when it is missing.
+`scripts/opensentinel-setup.sh` / `scripts/opensentinel-setup.ps1` now auto-generate `INBOX_WEBHOOK_SECRET` when it is missing.
 Initial install via `bash install.sh` / `install.ps1` already goes through these setup scripts, so this is applied from day one.
 For existing clones that only run `git pull`, `pnpm dev*` / `pnpm start*` now auto-apply this once when needed and then persist `CLAW_MIGRATION_V1_0_5_DONE=1` to prevent repeated execution.
 
@@ -468,8 +468,8 @@ For existing clones that only run `git pull`, `pnpm dev*` / `pnpm start*` now au
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/lpjhelder/sentinel.git
+cd sentinel
 
 # 2. Enable pnpm via corepack
 corepack enable
@@ -489,7 +489,7 @@ node -e "
   fs.writeFileSync(p, content.replace('__CHANGE_ME__', crypto.randomBytes(32).toString('hex')));
 "
 
-# 6. Setup AGENTS.md orchestration rules (teaches your AI agent to be a Claw-Empire project manager)
+# 6. Setup AGENTS.md orchestration rules (teaches your AI agent to be a Sentinel project manager)
 pnpm setup -- --port 8790
 
 # 7. Start the development server
@@ -503,8 +503,8 @@ pnpm dev:local
 
 ```powershell
 # 1. Clone the repository
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/lpjhelder/sentinel.git
+cd sentinel
 
 # 2. Enable pnpm via corepack
 corepack enable
@@ -518,7 +518,7 @@ Copy-Item .env.example .env
 # 5. Generate a random encryption secret
 node -e "const fs=require('fs');const crypto=require('crypto');const p='.env';const c=fs.readFileSync(p,'utf8');fs.writeFileSync(p,c.replace('__CHANGE_ME__',crypto.randomBytes(32).toString('hex')))"
 
-# 6. Setup AGENTS.md orchestration rules (teaches your AI agent to be a Claw-Empire project manager)
+# 6. Setup AGENTS.md orchestration rules (teaches your AI agent to be a Sentinel project manager)
 pnpm setup -- --port 8790
 
 # 7. Start the development server
@@ -539,7 +539,7 @@ Open your browser:
 The `pnpm setup` command injects **CEO directive orchestration rules** into your AI agent's `AGENTS.md` file. This teaches your AI coding agent (Claude Code, Codex, etc.) how to:
 
 - Interpret `$` prefix **CEO directives** for priority task delegation
-- Call the Claw-Empire REST API to create tasks, assign agents, and report status
+- Call the Sentinel REST API to create tasks, assign agents, and report status
 - Work within isolated git worktrees for safe parallel development
 
 ```bash
@@ -553,11 +553,11 @@ pnpm setup -- --agents-path /path/to/your/AGENTS.md
 pnpm setup -- --port 8790
 ```
 
-<a id="openclaw-integration"></a>
+<a id="opensentinel-integration"></a>
 
 ### OpenClaw Integration Setup (Telegram/WhatsApp/Discord/Google Chat/Slack/Signal/iMessage)
 
-`install.sh` / `install.ps1` (or `scripts/openclaw-setup.*`) will auto-detect and write `OPENCLAW_CONFIG` when possible.
+`install.sh` / `install.ps1` (or `scripts/opensentinel-setup.*`) will auto-detect and write `OPENCLAW_CONFIG` when possible.
 
 Recommended `.env` format: absolute path for `OPENCLAW_CONFIG` (unquoted preferred).
 `v1.0.5` also normalizes surrounding quotes and leading `~` at runtime for compatibility.
@@ -566,19 +566,19 @@ Default config paths:
 
 | OS                | Path                                    |
 | ----------------- | --------------------------------------- |
-| **macOS / Linux** | `~/.openclaw/openclaw.json`             |
-| **Windows**       | `%USERPROFILE%\.openclaw\openclaw.json` |
+| **macOS / Linux** | `~/.opensentinel/opensentinel.json`             |
+| **Windows**       | `%USERPROFILE%\.opensentinel\opensentinel.json` |
 
 Manual commands:
 
 ```bash
 # macOS / Linux
-bash scripts/openclaw-setup.sh --openclaw-config ~/.openclaw/openclaw.json
+bash scripts/opensentinel-setup.sh --opensentinel-config ~/.opensentinel/opensentinel.json
 ```
 
 ```powershell
 # Windows PowerShell
-powershell -ExecutionPolicy Bypass -File .\scripts\openclaw-setup.ps1 -OpenClawConfig "$env:USERPROFILE\.openclaw\openclaw.json"
+powershell -ExecutionPolicy Bypass -File .\scripts\opensentinel-setup.ps1 -OpenClawConfig "$env:USERPROFILE\.opensentinel\opensentinel.json"
 ```
 
 Verify messenger sessions:
@@ -591,7 +591,7 @@ curl -s http://127.0.0.1:8790/api/gateway/targets
 
 ### `$` Command -> OpenClaw Chat Delegation Logic
 
-When a chat message starts with `$`, Claw-Empire handles it as a CEO directive:
+When a chat message starts with `$`, Sentinel handles it as a CEO directive:
 
 1. Orchestrator asks whether to hold a team-leader meeting first.
 2. Orchestrator asks for project path/context (`project_path` or `project_context`).
@@ -617,7 +617,7 @@ Without meeting:
 curl -X POST http://127.0.0.1:8790/api/inbox \
   -H "content-type: application/json" \
   -H "x-inbox-secret: $INBOX_WEBHOOK_SECRET" \
-  -d '{"source":"telegram","author":"ceo","text":"$Hotfix production login bug immediately","skipPlannedMeeting":true,"project_context":"existing climpire project"}'
+  -d '{"source":"telegram","author":"ceo","text":"$Hotfix production login bug immediately","skipPlannedMeeting":true,"project_context":"existing sentinel project"}'
 ```
 
 ---
@@ -634,8 +634,8 @@ Copy `.env.example` to `.env`. All secrets stay local — never commit `.env`.
 | `HOST`                                 | No                       | Bind address (default: `127.0.0.1`)                                                                                                          |
 | `API_AUTH_TOKEN`                       | Recommended              | Bearer token for non-loopback API/WebSocket access                                                                                           |
 | `INBOX_WEBHOOK_SECRET`                 | **Yes for `/api/inbox`** | Shared secret required in `x-inbox-secret` header                                                                                            |
-| `OPENCLAW_CONFIG`                      | Recommended for OpenClaw | Absolute path to `openclaw.json` used for gateway target discovery/chat relay                                                                |
-| `DB_PATH`                              | No                       | SQLite database path (default: `./claw-empire.sqlite`)                                                                                       |
+| `OPENCLAW_CONFIG`                      | Recommended for OpenClaw | Absolute path to `opensentinel.json` used for gateway target discovery/chat relay                                                                |
+| `DB_PATH`                              | No                       | SQLite database path (default: `./sentinel.sqlite`)                                                                                       |
 | `LOGS_DIR`                             | No                       | Log directory (default: `./logs`)                                                                                                            |
 | `OAUTH_GITHUB_CLIENT_ID`               | No                       | GitHub OAuth App client ID                                                                                                                   |
 | `OAUTH_GITHUB_CLIENT_SECRET`           | No                       | GitHub OAuth App client secret                                                                                                               |
@@ -644,7 +644,7 @@ Copy `.env.example` to `.env`. All secrets stay local — never commit `.env`.
 | `OPENAI_API_KEY`                       | No                       | OpenAI API key (for Codex)                                                                                                                   |
 | `REVIEW_MEETING_ONESHOT_TIMEOUT_MS`    | No                       | One-shot meeting timeout in milliseconds (default `65000`; backward-compatible: values `<= 600` are treated as seconds)                      |
 | `UPDATE_CHECK_ENABLED`                 | No                       | Enable in-app update check banner (`1` default, set `0` to disable)                                                                          |
-| `UPDATE_CHECK_REPO`                    | No                       | GitHub repo slug used for update checks (default: `GreenSheep01201/claw-empire`)                                                             |
+| `UPDATE_CHECK_REPO`                    | No                       | GitHub repo slug used for update checks (default: `lpjhelder/sentinel`)                                                             |
 | `UPDATE_CHECK_TTL_MS`                  | No                       | Update-check cache TTL in milliseconds (default: `1800000`)                                                                                  |
 | `UPDATE_CHECK_TIMEOUT_MS`              | No                       | GitHub request timeout in milliseconds (default: `4000`)                                                                                     |
 | `AUTO_UPDATE_ENABLED`                  | No                       | Default auto-update value when `settings.autoUpdateEnabled` is missing (`0` default)                                                         |
@@ -732,7 +732,7 @@ QA_API_AUTH_TOKEN="<API_AUTH_TOKEN>" pnpm run test:qa:project-path
 
 ### In-App Update Banner
 
-When a newer release is published on GitHub, Claw-Empire shows a top banner in the UI with pull instructions and a release-note link.
+When a newer release is published on GitHub, Sentinel shows a top banner in the UI with pull instructions and a release-note link.
 
 - Windows PowerShell: `git pull; pnpm install`
 - macOS/Linux shell: `git pull && pnpm install`
@@ -794,7 +794,7 @@ Notes:
 - Direct API presets use the provider endpoint model IDs such as `glm-5`, `kimi-k2.5`, and `minimax-m2.5`. They do **not** use OpenCode CLI model IDs like `opencode-go/<model-id>`.
 - Bailian Coding Plan keys are intended for the interactive coding tool flow. Review the provider documentation before reusing those keys in other environments.
 
-Claw-Empire supports three provider paths:
+Sentinel supports three provider paths:
 
 - **CLI tools** — install local coding CLIs and run tasks through local processes
 - **OAuth accounts** — connect supported providers (for example GitHub/Google-backed flows) via secure token exchange
@@ -820,7 +820,7 @@ Skills learn/unlearn automation is currently designed for CLI-capable providers.
 ## Project Structure
 
 ```
-claw-empire/
+sentinel/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml             # PR CI (Unicode guard, format, lint, tests)
@@ -846,13 +846,13 @@ claw-empire/
 ├── scripts/
 │   ├── setup.mjs             # environment/bootstrap setup
 │   ├── auto-apply-v1.0.5.mjs # startup migration helper
-│   ├── openclaw-setup.sh     # one-click setup (macOS/Linux)
-│   ├── openclaw-setup.ps1    # one-click setup (Windows PowerShell)
+│   ├── opensentinel-setup.sh     # one-click setup (macOS/Linux)
+│   ├── opensentinel-setup.ps1    # one-click setup (Windows PowerShell)
 │   ├── prepare-e2e-runtime.mjs
 │   ├── preflight-public.sh   # pre-release security checks
 │   └── generate-architecture-report.mjs
-├── install.sh                # wrapper for scripts/openclaw-setup.sh
-├── install.ps1               # wrapper for scripts/openclaw-setup.ps1
+├── install.sh                # wrapper for scripts/opensentinel-setup.sh
+├── install.ps1               # wrapper for scripts/opensentinel-setup.ps1
 ├── docs/                     # design & architecture docs
 ├── AGENTS.md                 # local agent/orchestration rules
 ├── CONTRIBUTING.md           # branch/PR/review policy
@@ -865,7 +865,7 @@ claw-empire/
 
 ## Security
 
-Claw-Empire is designed with security in mind:
+Sentinel is designed with security in mind:
 
 - **Local-first architecture** — All data stored locally in SQLite; no external cloud services required
 - **Encrypted OAuth + messenger tokens** — User-specific OAuth tokens and direct messenger channel tokens are stored **server-side only** in SQLite, encrypted at rest using AES-256-GCM with `OAUTH_ENCRYPTION_SECRET` (`SESSION_SECRET` fallback). The browser never receives refresh tokens
@@ -912,6 +912,6 @@ Full policy: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 **Built with pixels and passion.**
 
-_Claw-Empire — Where AI agents come to work._
+_Sentinel — Where AI agents come to work._
 
 </div>

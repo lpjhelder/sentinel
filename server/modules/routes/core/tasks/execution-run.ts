@@ -316,7 +316,7 @@ export function registerTaskRunRoute(deps: TaskRunRouteDeps): void {
     }
     const agentCwd = worktreePath;
 
-    appendTaskLog(id, "system", `Git worktree created: ${worktreePath} (branch: climpire/${id.slice(0, 8)})`);
+    appendTaskLog(id, "system", `Git worktree created: ${worktreePath} (branch: sentinel/${id.slice(0, 8)})`);
 
     const projectContext = generateProjectContext(projectPath);
     const recentChanges = getRecentChanges(projectPath, id);
@@ -475,7 +475,7 @@ Whenever you complete a subtask, report it in this format:
         agent.personality ? `Personality: ${agent.personality}` : "",
         deptConstraint,
         departmentPromptBlock,
-        `NOTE: You are working in an isolated Git worktree branch (climpire/${id.slice(0, 8)}). Commit your changes normally.`,
+        `NOTE: You are working in an isolated Git worktree branch (sentinel/${id.slice(0, 8)}). Commit your changes normally.`,
         interruptPromptBlock,
         subtaskInstruction,
         subModelHint,
@@ -521,10 +521,10 @@ Whenever you complete a subtask, report it in this format:
       const assigneeName = getAgentDisplayName(agent as unknown as AgentRow, taskLang);
       const worktreeNote = pickL(
         l(
-          [` (격리 브랜치: climpire/${id.slice(0, 8)})`],
-          [` (isolated branch: climpire/${id.slice(0, 8)})`],
-          [` (分離ブランチ: climpire/${id.slice(0, 8)})`],
-          [`（隔离分支: climpire/${id.slice(0, 8)}）`],
+          [` (격리 브랜치: sentinel/${id.slice(0, 8)})`],
+          [` (isolated branch: sentinel/${id.slice(0, 8)})`],
+          [` (分離ブランチ: sentinel/${id.slice(0, 8)})`],
+          [`（隔离分支: sentinel/${id.slice(0, 8)}）`],
         ),
         taskLang,
       );
@@ -578,10 +578,10 @@ Whenever you complete a subtask, report it in this format:
       const assigneeName = getAgentDisplayName(agent as unknown as AgentRow, taskLang);
       const worktreeNote = pickL(
         l(
-          [` (격리 브랜치: climpire/${id.slice(0, 8)})`],
-          [` (isolated branch: climpire/${id.slice(0, 8)})`],
-          [` (分離ブランチ: climpire/${id.slice(0, 8)})`],
-          [`（隔离分支: climpire/${id.slice(0, 8)}）`],
+          [` (격리 브랜치: sentinel/${id.slice(0, 8)})`],
+          [` (isolated branch: sentinel/${id.slice(0, 8)})`],
+          [` (分離ブランチ: sentinel/${id.slice(0, 8)})`],
+          [`（隔离分支: sentinel/${id.slice(0, 8)}）`],
         ),
         taskLang,
       );
@@ -628,10 +628,10 @@ Whenever you complete a subtask, report it in this format:
     const assigneeName = getAgentDisplayName(agent as unknown as AgentRow, taskLang);
     const worktreeNote = pickL(
       l(
-        [` (격리 브랜치: climpire/${id.slice(0, 8)})`],
-        [` (isolated branch: climpire/${id.slice(0, 8)})`],
-        [` (分離ブランチ: climpire/${id.slice(0, 8)})`],
-        [`（隔离分支: climpire/${id.slice(0, 8)}）`],
+        [` (격리 브랜치: sentinel/${id.slice(0, 8)})`],
+        [` (isolated branch: sentinel/${id.slice(0, 8)})`],
+        [` (分離ブランチ: sentinel/${id.slice(0, 8)})`],
+        [`（隔离分支: sentinel/${id.slice(0, 8)}）`],
       ),
       taskLang,
     );

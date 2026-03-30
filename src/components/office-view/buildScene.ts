@@ -16,6 +16,7 @@ import type { BuildOfficeSceneContext } from "./buildScene-types";
 import { buildCeoAndHallway } from "./buildScene-ceo-hallway";
 import { buildDepartmentRooms } from "./buildScene-departments";
 import { buildBreakRoom } from "./buildScene-break-room";
+import { buildProjectRooms, getProjectRoomGridRows } from "./buildScene-rooms";
 import { buildFinalLayers } from "./buildScene-final-layers";
 
 export function buildOfficeScene(context: BuildOfficeSceneContext): void {
@@ -91,6 +92,8 @@ export function buildOfficeScene(context: BuildOfficeSceneContext): void {
     agents,
     tasks,
     subAgents,
+    rooms: activeRooms,
+    hirings: activeHirings,
     unreadAgentIds: unread,
     customDeptThemes: customThemes,
   } = dataRef.current;
@@ -139,7 +142,13 @@ export function buildOfficeScene(context: BuildOfficeSceneContext): void {
   const roomW = Math.max(baseRoomW, Math.floor(totalRoomSpace / gridCols));
   const roomH = Math.max(170, agentRows * SLOT_H + 44);
   const deptStartY = CEO_ZONE_H + HALLWAY_H;
-  const breakRoomY = deptStartY + gridRows * (roomH + roomGap) + BREAK_ROOM_GAP;
+
+  const projectRoomGridRows = getProjectRoomGridRows(activeRooms ?? [], gridCols);
+  const PROJECT_ROOM_GAP = 24;
+  const projectStartY = deptStartY + gridRows * (roomH + roomGap) + (projectRoomGridRows > 0 ? PROJECT_ROOM_GAP : 0);
+  const projectZoneH = projectRoomGridRows > 0 ? projectRoomGridRows * (roomH + roomGap) : 0;
+
+  const breakRoomY = projectStartY + projectZoneH + BREAK_ROOM_GAP;
   const totalH = breakRoomY + BREAK_ROOM_H + 30;
   const roomStartX = (OFFICE_W - (gridCols * roomW + (gridCols - 1) * roomGap)) / 2;
   totalHRef.current = totalH;
@@ -194,6 +203,37 @@ export function buildOfficeScene(context: BuildOfficeSceneContext): void {
     nextSubSnapshot,
   });
   subCloneSnapshotRef.current = nextSubSnapshot;
+
+  if (activeRooms && activeRooms.length > 0) {
+    buildProjectRooms({
+      app,
+      textures,
+      activeRooms,
+      agents,
+      tasks,
+      subAgents,
+      hirings: activeHirings ?? [],
+      activeLocale,
+      isDark,
+      gridCols,
+      roomStartX,
+      roomW,
+      roomH,
+      roomGap,
+      projectStartY,
+      spriteMap,
+      cbRef,
+      roomRectsRef,
+      agentPosRef,
+      animItemsRef,
+      subCloneAnimItemsRef,
+      subCloneBurstParticlesRef,
+      wallClocksRef,
+      removedSubBurstsByParent,
+      addedWorkingSubIds,
+      nextSubSnapshot,
+    });
+  }
 
   buildBreakRoom({
     app,

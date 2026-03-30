@@ -12,7 +12,7 @@ type ReportPptToolAvailability = {
 };
 
 const REPORT_CLAUDE_PRIORITY_DEPTS = ["planning", "dev", "design", "qa", "operations"] as const;
-const REPORT_PPT_TOOL_REPO = "https://github.com/GreenSheep01201/ppt_team_agent";
+const REPORT_PPT_TOOL_REPO = "https://github.com/lpjhelder/ppt_team_agent";
 const REPORT_PPT_TOOL_DIR = "tools/ppt_team_agent";
 const REPORT_PPT_DESIGN_SKILL = `${REPORT_PPT_TOOL_DIR}/.claude/skills/design-skill/SKILL.md`;
 const REPORT_PPT_PPTX_SKILL = `${REPORT_PPT_TOOL_DIR}/.claude/skills/pptx-skill/SKILL.md`;

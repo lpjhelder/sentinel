@@ -1,5 +1,5 @@
 /**
- * Claw-Empire Introduction Presentation Generator
+ * Sentinel Introduction Presentation Generator
  * Outputs: docs/reports/2026-02-20T12-11-report-deck.pptx
  */
 import PptxGenJS from "pptxgenjs";
@@ -27,9 +27,9 @@ const C = {
 
 const pptx = new PptxGenJS();
 pptx.author = "Clio (Planning Lead)";
-pptx.company = "Claw-Empire";
-pptx.subject = "Claw-Empire Introduction";
-pptx.title = "Claw-Empire — AI Agent Office Simulator";
+pptx.company = "Sentinel";
+pptx.subject = "Sentinel Introduction";
+pptx.title = "Sentinel — AI Agent Office Simulator";
 
 pptx.defineSlideMaster({
   title: "MASTER",
@@ -38,7 +38,7 @@ pptx.defineSlideMaster({
     { rect: { x: 0, y: "92%", w: "100%", h: "8%", fill: { color: C.bgLight } } },
     {
       text: {
-        text: "Claw-Empire",
+        text: "Sentinel",
         options: { x: 0.4, y: "93%", w: 3, h: 0.4, fontSize: 9, color: C.textDim, fontFace: "Arial" },
       },
     },
@@ -129,7 +129,7 @@ function addTitle(slide, title, opts = {}) {
     ],
     { x: 0.8, y: 4.3, w: 8, h: 0.4, fontFace: "Arial" },
   );
-  s.addText("github.com/GreenSheep01201/claw-empire", {
+  s.addText("github.com/lpjhelder/sentinel", {
     x: 0.8,
     y: 4.8,
     w: 8,
@@ -137,7 +137,7 @@ function addTitle(slide, title, opts = {}) {
     fontSize: 11,
     fontFace: "Arial",
     color: C.textDim,
-    hyperlink: { url: "https://github.com/GreenSheep01201/claw-empire" },
+    hyperlink: { url: "https://github.com/lpjhelder/sentinel" },
   });
 }
 
@@ -993,7 +993,7 @@ function addTitle(slide, title, opts = {}) {
     rectRadius: 0.04,
   });
   s.addText(
-    "Webhook endpoint: POST /api/inbox  |  Secret: x-inbox-secret header  |  Config: ~/.openclaw/openclaw.json",
+    "Webhook endpoint: POST /api/inbox  |  Secret: x-inbox-secret header  |  Config: ~/.opensentinel/opensentinel.json",
     {
       x: 0.6,
       y: 4.65,
@@ -1270,7 +1270,7 @@ function addTitle(slide, title, opts = {}) {
   });
 
   const links = [
-    ["GitHub", "github.com/GreenSheep01201/claw-empire"],
+    ["GitHub", "github.com/lpjhelder/sentinel"],
     ["License", "Apache 2.0"],
     ["Version", "v1.0.8 (2026-02-20)"],
     ["Platform", "macOS / Linux / Windows"],

@@ -159,7 +159,7 @@ export function createMessageIdempotencyTools(deps: MessageIdempotencyDeps) {
       try {
         const result = fn();
         if (attempt > 0) {
-          console.warn(`[Claw-Empire] SQLite busy recovered: op=${operation}, retries=${attempt}`);
+          console.warn(`[Sentinel] SQLite busy recovered: op=${operation}, retries=${attempt}`);
         }
         return result;
       } catch (err) {
@@ -169,7 +169,7 @@ export function createMessageIdempotencyTools(deps: MessageIdempotencyDeps) {
         }
         const waitMs = sqliteBusyBackoffDelayMs(attempt);
         console.warn(
-          `[Claw-Empire] SQLite busy: op=${operation}, attempt=${attempt + 1}/${SQLITE_BUSY_RETRY_MAX_ATTEMPTS + 1}, ` +
+          `[Sentinel] SQLite busy: op=${operation}, attempt=${attempt + 1}/${SQLITE_BUSY_RETRY_MAX_ATTEMPTS + 1}, ` +
             `retry_in=${waitMs}ms`,
         );
         if (waitMs > 0) await sleepMs(waitMs);

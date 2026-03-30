@@ -9,9 +9,9 @@ const tempDirs: string[] = [];
 const scriptPath = path.resolve(process.cwd(), "scripts", "cleanup-staff.mjs");
 
 function createDb(): { dbPath: string; db: DatabaseSync } {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-cleanup-staff-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sentinel-cleanup-staff-"));
   tempDirs.push(dir);
-  const dbPath = path.join(dir, "claw-empire.sqlite");
+  const dbPath = path.join(dir, "sentinel.sqlite");
   const db = new DatabaseSync(dbPath);
   db.exec(`
     CREATE TABLE agents (

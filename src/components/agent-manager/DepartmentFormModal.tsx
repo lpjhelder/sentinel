@@ -31,6 +31,7 @@ export default function DepartmentFormModal({
       name_ko: string;
       name_ja: string | null;
       name_zh: string | null;
+      name_pt: string | null;
       icon: string;
       color: string;
       description: string | null;
@@ -51,6 +52,7 @@ export default function DepartmentFormModal({
         name_ko: department.name_ko || "",
         name_ja: department.name_ja || "",
         name_zh: department.name_zh || "",
+        name_pt: (department as any).name_pt || "",
         icon: department.icon,
         color: department.color,
         description: department.description || "",
@@ -86,6 +88,7 @@ export default function DepartmentFormModal({
         name_ko: form.name_ko.trim(),
         name_ja: form.name_ja.trim() || null,
         name_zh: form.name_zh.trim() || null,
+        name_pt: form.name_pt.trim() || null,
         icon: form.icon,
         color: form.color,
         description: form.description.trim() || null,
@@ -105,6 +108,7 @@ export default function DepartmentFormModal({
             name_ko: payload.name_ko,
             name_ja: payload.name_ja,
             name_zh: payload.name_zh,
+            name_pt: payload.name_pt,
             icon: payload.icon,
             color: payload.color,
             description: payload.description,
@@ -139,6 +143,7 @@ export default function DepartmentFormModal({
             name_ko: payload.name_ko,
             name_ja: payload.name_ja ?? "",
             name_zh: payload.name_zh ?? "",
+            name_pt: payload.name_pt ?? "",
             icon: payload.icon,
             color: payload.color,
             description: payload.description ?? undefined,
@@ -295,7 +300,7 @@ export default function DepartmentFormModal({
           {locale.startsWith("ja") && (
             <div>
               <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                {t({ ko: "일본어 이름", en: "Japanese Name", ja: "日本語名", zh: "日语名" })}
+                {t({ ko: "일본어 이름", en: "Japanese Name", ja: "日本語名", zh: "日语名", pt: "Nome em Japonês" })}
               </label>
               <input
                 type="text"
@@ -310,13 +315,28 @@ export default function DepartmentFormModal({
           {locale.startsWith("zh") && (
             <div>
               <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                {t({ ko: "중국어 이름", en: "Chinese Name", ja: "中国語名", zh: "中文名" })}
+                {t({ ko: "중국어 이름", en: "Chinese Name", ja: "中国語名", zh: "中文名", pt: "Nome em Chinês" })}
               </label>
               <input
                 type="text"
                 value={form.name_zh}
                 onChange={(e) => setForm({ ...form, name_zh: e.target.value })}
                 placeholder="开发部"
+                className={inputCls}
+                style={inputStyle}
+              />
+            </div>
+          )}
+          {locale.startsWith("pt") && (
+            <div>
+              <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
+                {t({ ko: "포르투갈어 이름", en: "Portuguese Name", ja: "ポルトガル語名", zh: "葡萄牙语名", pt: "Nome em Português" })}
+              </label>
+              <input
+                type="text"
+                value={form.name_pt}
+                onChange={(e) => setForm({ ...form, name_pt: e.target.value })}
+                placeholder="Desenvolvimento"
                 className={inputCls}
                 style={inputStyle}
               />

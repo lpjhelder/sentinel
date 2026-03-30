@@ -1,8 +1,8 @@
 import type { Agent, AgentRole, CliProvider, Department, RoomTheme, WorkflowPackKey } from "../types";
 
-export type UiLanguageLike = "ko" | "en" | "ja" | "zh";
+export type UiLanguageLike = "ko" | "en" | "ja" | "zh" | "pt";
 
-type Localized = { ko: string; en: string; ja: string; zh: string };
+type Localized = { ko: string; en: string; ja: string; zh: string; pt?: string };
 type DeptPreset = {
   name: Localized;
   icon: string;
@@ -42,6 +42,7 @@ export type OfficePackStarterAgentDraft = {
   name_ko: string;
   name_ja: string;
   name_zh: string;
+  name_pt: string;
   department_id: string | null;
   seed_order_in_department: number;
   role: AgentRole;
@@ -467,6 +468,8 @@ function pickText(locale: UiLanguageLike, text: Localized): string {
       return text.ja || text.en;
     case "zh":
       return text.zh || text.en;
+    case "pt":
+      return text.pt || text.en;
     case "en":
     default:
       return text.en;
@@ -477,12 +480,13 @@ function localizedNumberedName(
   locale: UiLanguageLike,
   prefix: Localized,
   order: number,
-): { name: string; name_ko: string; name_ja: string; name_zh: string } {
+): { name: string; name_ko: string; name_ja: string; name_zh: string; name_pt: string } {
   return {
     name: `${prefix.en} ${order}`,
     name_ko: `${prefix.ko} ${order}`,
     name_ja: `${prefix.ja} ${order}`,
     name_zh: `${prefix.zh} ${order}`,
+    name_pt: `${prefix.pt || prefix.en} ${order}`,
   };
 }
 
@@ -491,7 +495,7 @@ function localizedStaffDisplayName(params: {
   deptId: string;
   order: number;
   fallbackPrefix: Localized;
-}): { name: string; name_ko: string; name_ja: string; name_zh: string } {
+}): { name: string; name_ko: string; name_ja: string; name_zh: string; name_pt: string } {
   const { packKey, deptId, order, fallbackPrefix } = params;
   const pool = DEPARTMENT_PERSON_NAME_POOL[deptId];
   if (!pool || pool.length === 0) {
@@ -506,6 +510,7 @@ function localizedStaffDisplayName(params: {
     name_ko: `${base.ko}${suffix}`,
     name_ja: `${base.ja}${suffix}`,
     name_zh: `${base.zh}${suffix}`,
+    name_pt: `${base.pt || base.en}${suffix}`,
   };
 }
 
@@ -571,12 +576,19 @@ function buildSeedPersonality(params: {
       junior: "初级成员",
       intern: "实习成员",
     },
+    pt: {
+      team_leader: "líder de equipe",
+      senior: "membro sênior",
+      junior: "membro júnior",
+      intern: "estagiário",
+    },
   };
   const focusByLocale: Record<UiLanguageLike, string> = {
     ko: params.defaultPrefix.ko?.trim() || `${params.departmentName.ko} 담당`,
     en: params.defaultPrefix.en?.trim() || `${params.departmentName.en} coverage`,
     ja: params.defaultPrefix.ja?.trim() || `${params.departmentName.ja}担当`,
     zh: params.defaultPrefix.zh?.trim() || `${params.departmentName.zh}职责`,
+    pt: params.defaultPrefix.pt?.trim() || `${params.departmentName.pt || params.departmentName.en} responsável`,
   };
   const roleLabel = roleLabelMap[locale][params.role];
   const focus = focusByLocale[locale];
@@ -584,6 +596,7 @@ function buildSeedPersonality(params: {
   if (locale === "ko") return `${toneText} ${focus} 역할의 ${roleLabel}입니다.`;
   if (locale === "ja") return `${toneText} ${focus}を担当する${roleLabel}として動きます。`;
   if (locale === "zh") return `${toneText} 作为负责${focus}的${roleLabel}推进工作。`;
+  if (locale === "pt") return `${toneText} Atua como ${roleLabel} focado em ${focus}.`;
   return `${toneText} Serves as a ${roleLabel} focused on ${focus}.`;
 }
 
@@ -598,6 +611,7 @@ function buildPackDepartmentDescription(params: {
   if (locale === "ko") return `${deptName}입니다. ${summary} 목표를 중심으로 협업합니다.`;
   if (locale === "ja") return `${deptName}です。${summary}の目標達成に向けて連携します。`;
   if (locale === "zh") return `${deptName}团队。围绕${summary}目标协作推进。`;
+  if (locale === "pt") return `Equipe ${deptName}. Colabora para alcançar o objetivo de ${summary.toLowerCase()}.`;
   return `${deptName} team. Collaborates to deliver the ${summary.toLowerCase()} goal.`;
 }
 
@@ -617,6 +631,9 @@ function buildPackDepartmentPrompt(params: {
   }
   if (locale === "zh") {
     return `[部门职责] ${deptName}\n[执行基准] ${summary}\n请将请求拆分为可执行步骤，并清晰提供依据与产出物。`;
+  }
+  if (locale === "pt") {
+    return `[Papel do Departamento] ${deptName}\n[Padrão de Execução] ${summary}\nDivida as solicitações em etapas acionáveis e apresente claramente a justificativa e os entregáveis.`;
   }
   return `[Department Role] ${deptName}\n[Execution Standard] ${summary}\nBreak requests into actionable steps and clearly provide rationale and deliverables.`;
 }
@@ -680,6 +697,7 @@ export function buildOfficePackPresentation(params: {
       name_ko: deptPreset.name.ko,
       name_ja: deptPreset.name.ja,
       name_zh: deptPreset.name.zh,
+      name_pt: deptPreset.name.pt || deptPreset.name.en,
       description: buildPackDepartmentDescription({
         locale,
         packSummary: preset.summary,
@@ -758,11 +776,13 @@ export function buildOfficePackStarterAgents(params: {
     const baseNameKo = department?.name_ko ?? baseName;
     const baseNameJa = department?.name_ja ?? baseName;
     const baseNameZh = department?.name_zh ?? baseName;
+    const baseNamePt = (department as any)?.name_pt ?? baseName;
     return {
       ko: `${baseNameKo} 팀원`,
       en: `${baseName} Member`,
       ja: `${baseNameJa} メンバー`,
       zh: `${baseNameZh} 成员`,
+      pt: `${baseNamePt} Membro`,
     };
   };
 

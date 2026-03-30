@@ -3,8 +3,10 @@ import { bootstrapSession, del, patch, post, request } from "./core";
 import type {
   Agent,
   Department,
+  Hiring,
   MeetingPresence,
   Project,
+  Room,
   SubTask,
   Task,
   TaskLog,
@@ -43,6 +45,7 @@ export async function createDepartment(data: {
   name_ko?: string;
   name_ja?: string;
   name_zh?: string;
+  name_pt?: string;
   icon?: string;
   color?: string;
   description?: string;
@@ -62,7 +65,7 @@ export async function updateDepartment(
   data: Partial<
     Pick<
       Department,
-      "name" | "name_ko" | "name_ja" | "name_zh" | "icon" | "color" | "description" | "prompt" | "sort_order"
+      "name" | "name_ko" | "name_ja" | "name_zh" | "name_pt" | "icon" | "color" | "description" | "prompt" | "sort_order"
     >
   > & { workflow_pack_key?: WorkflowPackKey },
 ): Promise<void> {
@@ -481,4 +484,16 @@ export async function deleteProject(id: string): Promise<void> {
 
 export async function getProjectDetail(id: string): Promise<ProjectDetailResponse> {
   return request(`/api/projects/${id}`);
+}
+
+// Rooms
+export async function getRooms(): Promise<Room[]> {
+  const j = await request<{ rooms: Room[] }>("/api/rooms");
+  return j.rooms;
+}
+
+// Hirings
+export async function getHirings(): Promise<Hiring[]> {
+  const j = await request<{ hirings: Hiring[] }>("/api/hirings");
+  return j.hirings;
 }

@@ -16,6 +16,7 @@ export interface FormData {
   name_ko: string;
   name_ja: string;
   name_zh: string;
+  name_pt: string;
   department_id: string;
   role: import("../../types").AgentRole;
   cli_provider: import("../../types").CliProvider;
@@ -30,6 +31,7 @@ export interface DeptForm {
   name_ko: string;
   name_ja: string;
   name_zh: string;
+  name_pt: string;
   icon: string;
   color: string;
   description: string;

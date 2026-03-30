@@ -14,7 +14,7 @@ export type DepartmentRouteDeps = Pick<
 export function registerDepartmentRoutes(deps: DepartmentRouteDeps): void {
   const { app, db, broadcast, normalizeTextField, runInTransaction } = deps;
 
-  const PROTECTED_DEPARTMENT_IDS = new Set(["planning", "dev", "design", "qa", "devsecops", "operations"]);
+  const PROTECTED_DEPARTMENT_IDS = new Set(["analyze", "generate", "evaluate", "humanize", "deliver"]);
   const hasAgentWorkflowPackColumn = (() => {
     try {
       const cols = db.prepare("PRAGMA table_info(agents)").all() as Array<{ name?: unknown }>;
@@ -172,6 +172,7 @@ export function registerDepartmentRoutes(deps: DepartmentRouteDeps): void {
       const nameKo = normalizeTextField((body as any).name_ko) ?? "";
       const nameJa = normalizeTextField((body as any).name_ja) ?? "";
       const nameZh = normalizeTextField((body as any).name_zh) ?? "";
+      const namePt = normalizeTextField((body as any).name_pt) ?? "";
       const icon = normalizeTextField((body as any).icon) ?? "📁";
       const colorInput = normalizeTextField((body as any).color);
       const color = colorInput && /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(colorInput) ? colorInput : "#6b7280";
@@ -189,11 +190,11 @@ export function registerDepartmentRoutes(deps: DepartmentRouteDeps): void {
       try {
         if (packKey === DEFAULT_WORKFLOW_PACK_KEY) {
           db.prepare(
-            "INSERT INTO departments (id, name, name_ko, name_ja, name_zh, icon, color, description, prompt, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          ).run(id, name, nameKo, nameJa, nameZh, icon, color, description || null, prompt || null, maxOrder + 1);
+            "INSERT INTO departments (id, name, name_ko, name_ja, name_zh, name_pt, icon, color, description, prompt, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          ).run(id, name, nameKo, nameJa, nameZh, namePt, icon, color, description || null, prompt || null, maxOrder + 1);
         } else {
           db.prepare(
-            "INSERT INTO office_pack_departments (workflow_pack_key, department_id, name, name_ko, name_ja, name_zh, icon, color, description, prompt, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO office_pack_departments (workflow_pack_key, department_id, name, name_ko, name_ja, name_zh, name_pt, icon, color, description, prompt, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
           ).run(
             packKey,
             id,
@@ -201,6 +202,7 @@ export function registerDepartmentRoutes(deps: DepartmentRouteDeps): void {
             nameKo,
             nameJa,
             nameZh,
+            namePt,
             icon,
             color,
             description || null,
@@ -288,6 +290,10 @@ export function registerDepartmentRoutes(deps: DepartmentRouteDeps): void {
       if ((body as any).name_zh !== undefined) {
         sets.push("name_zh = ?");
         vals.push(normalizeTextField((body as any).name_zh) ?? "");
+      }
+      if ((body as any).name_pt !== undefined) {
+        sets.push("name_pt = ?");
+        vals.push(normalizeTextField((body as any).name_pt) ?? "");
       }
       if ((body as any).icon !== undefined) {
         const value = normalizeTextField((body as any).icon);

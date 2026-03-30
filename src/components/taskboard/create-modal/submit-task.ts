@@ -298,7 +298,7 @@ export async function submitTaskWithProjectHandling(
               ? `このパスは既に '${existingProjectName}' で使用中です。既存プロジェクトを選択してください。`
               : "このパスは既存プロジェクトで使用中です。既存プロジェクトを選択してください。",
             zh: existingProjectName
-              ? `该路径已被‘${existingProjectName}’使用，请选择已有项目。`
+              ? `该路径已被'${existingProjectName}'使用，请选择已有项目。`
               : "该路径已被现有项目使用，请选择已有项目。",
           }),
         });

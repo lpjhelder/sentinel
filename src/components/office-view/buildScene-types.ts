@@ -1,6 +1,6 @@
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 import type { Application, AnimatedSprite, Container, Graphics, Sprite, Text, Texture } from "pixi.js";
-import type { Agent, Department, SubAgent, Task } from "../../types";
+import type { Agent, Department, Hiring, Room, SubAgent, Task } from "../../types";
 import type { ThemeMode } from "../../ThemeContext";
 import type { Delivery, RoomRect, SubCloneBurstParticle, WallClockVisual } from "./model";
 import type { SupportedLocale } from "./themes-locale";
@@ -10,6 +10,8 @@ export interface DataSnapshot {
   agents: Agent[];
   tasks: Task[];
   subAgents: SubAgent[];
+  rooms?: Room[];
+  hirings?: Hiring[];
   unreadAgentIds?: Set<string>;
   meetingPresence?: Array<{ agent_id: string; until: number }>;
   customDeptThemes?: Record<string, { floor1: number; floor2: number; wall: number; accent: number }>;

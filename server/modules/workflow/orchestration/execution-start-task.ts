@@ -168,7 +168,7 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
       return;
     }
     const agentCwd = worktreePath;
-    appendTaskLog(taskId, "system", `Git worktree created: ${worktreePath} (branch: climpire/${taskId.slice(0, 8)})`);
+    appendTaskLog(taskId, "system", `Git worktree created: ${worktreePath} (branch: sentinel/${taskId.slice(0, 8)})`);
     const logFilePath = path.join(logsDir, `${taskId}.log`);
     const roleLabels: Record<string, string> = {
       team_leader: "Team Leader",
@@ -236,7 +236,7 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
         execAgent.personality ? `Personality: ${execAgent.personality}` : "",
         deptConstraint,
         deptPromptBlock,
-        `NOTE: You are working in an isolated Git worktree branch (climpire/${taskId.slice(0, 8)}). Commit your changes normally.`,
+        `NOTE: You are working in an isolated Git worktree branch (sentinel/${taskId.slice(0, 8)}). Commit your changes normally.`,
         interruptPromptBlock,
         continuationInstruction,
         runInstruction,
@@ -309,10 +309,10 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
 
     const worktreeNote = pickL(
       l(
-        [` (격리 브랜치: climpire/${taskId.slice(0, 8)})`],
-        [` (isolated branch: climpire/${taskId.slice(0, 8)})`],
-        [` (分離ブランチ: climpire/${taskId.slice(0, 8)})`],
-        [`（隔离分支: climpire/${taskId.slice(0, 8)}）`],
+        [` (격리 브랜치: sentinel/${taskId.slice(0, 8)})`],
+        [` (isolated branch: sentinel/${taskId.slice(0, 8)})`],
+        [` (分離ブランチ: sentinel/${taskId.slice(0, 8)})`],
+        [`（隔离分支: sentinel/${taskId.slice(0, 8)}）`],
       ),
       taskLang,
     );

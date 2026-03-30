@@ -1,0 +1,46 @@
+# Agent Office — NAS Deployment
+# Usage: docker compose -f docker-compose.nas.yml up -d
+# Rebuild: docker compose -f docker-compose.nas.yml up -d --build
+
+services:
+  agent-office:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_UID: 10001
+        APP_GID: 10001
+    container_name: agent-office
+    restart: unless-stopped
+    env_file:
+      - .env.nas
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "8790"
+      DB_PATH: /app/data/agent-office.sqlite
+      LOGS_DIR: /app/data/logs
+    ports:
+      - "8790:8790"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/data/logs
+    working_dir: /app
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8790/api/health').then(r=>{if(!r.ok)throw 1}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - agent-office-net
+
+networks:
+  agent-office-net:
+    driver: bridge

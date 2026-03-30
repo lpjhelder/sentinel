@@ -16,7 +16,8 @@ function setupDb(): DatabaseSync {
       name TEXT NOT NULL,
       name_ko TEXT NOT NULL DEFAULT '',
       name_ja TEXT NOT NULL DEFAULT '',
-      name_zh TEXT NOT NULL DEFAULT ''
+      name_zh TEXT NOT NULL DEFAULT '',
+      name_pt TEXT NOT NULL DEFAULT ''
     );
   `);
   return db;

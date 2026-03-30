@@ -3,16 +3,16 @@ import { parseSafeRestartCommand } from "./update-auto-command.ts";
 
 describe("parseSafeRestartCommand", () => {
   it("parses safe commands", () => {
-    expect(parseSafeRestartCommand("pm2 restart claw-empire")).toEqual({
+    expect(parseSafeRestartCommand("pm2 restart sentinel")).toEqual({
       cmd: "pm2",
-      args: ["restart", "claw-empire"],
+      args: ["restart", "sentinel"],
     });
-    expect(parseSafeRestartCommand('"/usr/local/bin/openclaw" gateway restart')).toEqual({
-      cmd: "/usr/local/bin/openclaw",
+    expect(parseSafeRestartCommand('"/usr/local/bin/opensentinel" gateway restart')).toEqual({
+      cmd: "/usr/local/bin/opensentinel",
       args: ["gateway", "restart"],
     });
-    expect(parseSafeRestartCommand('openclaw "some\\"arg" plain')).toEqual({
-      cmd: "openclaw",
+    expect(parseSafeRestartCommand('opensentinel "some\\"arg" plain')).toEqual({
+      cmd: "opensentinel",
       args: ['some"arg', "plain"],
     });
   });

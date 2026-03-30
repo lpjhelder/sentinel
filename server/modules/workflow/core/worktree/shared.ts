@@ -80,8 +80,8 @@ const AUTO_COMMIT_ALLOWED_UNTRACKED_BASENAMES = new Set([
 ]);
 const AUTO_COMMIT_BLOCKED_DIR_SEGMENTS = new Set([
   ".git",
-  ".climpire",
-  ".climpire-worktrees",
+  ".sentinel",
+  ".sentinel-worktrees",
   "node_modules",
   "dist",
   "build",
@@ -261,9 +261,9 @@ export function autoCommitWorktreePendingChanges(
       "git",
       [
         "-c",
-        "user.name=Claw-Empire",
+        "user.name=Sentinel",
         "-c",
-        "user.email=claw-empire@local",
+        "user.email=sentinel@local",
         "commit",
         "-m",
         `chore: auto-commit pending task changes (${taskId.slice(0, 8)})`,

@@ -24,7 +24,7 @@ export default function ClassroomOverlay({ t, show, skillName, providers, agents
           </div>
 
           <div className="classroom-claw-teacher">
-            <img src="/claw-empire.png" alt="Teacher" />
+            <img src="/sentinel.png" alt="Teacher" />
             <span className="classroom-chalk-pointer">✏️</span>
           </div>
 

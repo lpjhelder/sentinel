@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Claw-Empire setup script
+ * Sentinel setup script
  *
  * Prepends CEO directive + orchestration rules to the user's AGENTS.md.
  * This is an UPDATE, not an OVERWRITE — existing content is preserved.
@@ -18,8 +18,8 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATE_PATH = path.join(__dirname, "..", "templates", "AGENTS-empire.md");
-const START_MARKER = "<!-- BEGIN claw-empire orchestration rules -->";
-const END_MARKER = "<!-- END claw-empire orchestration rules -->";
+const START_MARKER = "<!-- BEGIN sentinel orchestration rules -->";
+const END_MARKER = "<!-- END sentinel orchestration rules -->";
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -48,11 +48,11 @@ function detectPort() {
 }
 
 function resolveWorkspaceDir() {
-  // Try reading workspace from openclaw.json
-  const openclawJson = path.join(os.homedir(), ".openclaw", "openclaw.json");
-  if (fs.existsSync(openclawJson)) {
+  // Try reading workspace from opensentinel.json
+  const opensentinelJson = path.join(os.homedir(), ".opensentinel", "opensentinel.json");
+  if (fs.existsSync(opensentinelJson)) {
     try {
-      const cfg = JSON.parse(fs.readFileSync(openclawJson, "utf8"));
+      const cfg = JSON.parse(fs.readFileSync(opensentinelJson, "utf8"));
       const w = cfg?.agents?.defaults?.workspace?.trim();
       if (w) {
         const resolved = w.replace(/^~/, os.homedir());
@@ -66,16 +66,16 @@ function resolveWorkspaceDir() {
   // Check OPENCLAW_PROFILE
   const profile = process.env.OPENCLAW_PROFILE?.trim();
   if (profile && profile.toLowerCase() !== "default") {
-    const profdir = path.join(os.homedir(), ".openclaw", `workspace-${profile}`);
+    const profdir = path.join(os.homedir(), ".opensentinel", `workspace-${profile}`);
     if (fs.existsSync(profdir)) return profdir;
   }
 
-  return path.join(os.homedir(), ".openclaw", "workspace");
+  return path.join(os.homedir(), ".opensentinel", "workspace");
 }
 
 function findAgentsPath() {
   const projectAgentsPath = path.join(process.cwd(), "AGENTS.md");
-  // Default target: current project root (claw-empire users first).
+  // Default target: current project root (sentinel users first).
   // OpenClaw workspace targeting should be explicit via --agents-path.
   return projectAgentsPath;
 }
@@ -88,9 +88,9 @@ function main() {
   let templateContent = fs.readFileSync(TEMPLATE_PATH, "utf8");
   templateContent = templateContent.replace(/__PORT__/g, port);
 
-  console.log(`[Claw-Empire] Setting up orchestration rules`);
-  console.log(`[Claw-Empire] Target: ${agentsPath}`);
-  console.log(`[Claw-Empire] Port: ${port}`);
+  console.log(`[Sentinel] Setting up orchestration rules`);
+  console.log(`[Sentinel] Target: ${agentsPath}`);
+  console.log(`[Sentinel] Port: ${port}`);
 
   // Read existing content
   let existingContent = "";
@@ -106,8 +106,8 @@ function main() {
     const after = existingContent.slice(endIdx);
     const newContent = before + templateContent + after;
     fs.writeFileSync(agentsPath, newContent, "utf8");
-    console.log(`[Claw-Empire] Updated existing orchestration rules in ${agentsPath}`);
-    console.log(`[Claw-Empire] Done!`);
+    console.log(`[Sentinel] Updated existing orchestration rules in ${agentsPath}`);
+    console.log(`[Sentinel] Done!`);
     return;
   }
 
@@ -119,9 +119,9 @@ function main() {
   fs.mkdirSync(dir, { recursive: true });
 
   fs.writeFileSync(agentsPath, newContent, "utf8");
-  console.log(`[Claw-Empire] Orchestration rules added to top of ${agentsPath}`);
-  console.log(`[Claw-Empire] Your existing AGENTS.md content is preserved below.`);
-  console.log(`[Claw-Empire] Done!`);
+  console.log(`[Sentinel] Orchestration rules added to top of ${agentsPath}`);
+  console.log(`[Sentinel] Your existing AGENTS.md content is preserved below.`);
+  console.log(`[Sentinel] Done!`);
 }
 
 main();

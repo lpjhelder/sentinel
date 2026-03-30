@@ -31,7 +31,10 @@ import {
 import { registerAgentRoutes } from "./core/agents/index.ts";
 import { registerDepartmentRoutes } from "./core/departments.ts";
 import { registerGitHubRoutes } from "./core/github-routes.ts";
+import { registerHiringRoutes } from "./core/hiring.ts";
+import { registerHookRoutes } from "./hooks.ts";
 import { registerProjectRoutes } from "./core/projects.ts";
+import { registerRoomRoutes } from "./core/rooms.ts";
 import { registerTaskCrudRoutes } from "./core/tasks/crud.ts";
 import { registerTaskExecutionRoutes } from "./core/tasks/execution.ts";
 import { registerTaskSubtaskRoutes } from "./core/tasks/subtasks.ts";
@@ -451,6 +454,33 @@ export function registerRoutesPartA(ctx: RuntimeContext): Record<string, never> 
   });
 
   registerGitHubRoutes({
+    app,
+    db,
+    broadcast,
+  });
+
+  // ---------------------------------------------------------------------------
+  // Rooms
+  // ---------------------------------------------------------------------------
+  registerRoomRoutes({
+    app,
+    db,
+    broadcast,
+  });
+
+  // ---------------------------------------------------------------------------
+  // Hiring
+  // ---------------------------------------------------------------------------
+  registerHiringRoutes({
+    app,
+    db,
+    broadcast,
+  });
+
+  // ---------------------------------------------------------------------------
+  // Hooks
+  // ---------------------------------------------------------------------------
+  registerHookRoutes({
     app,
     db,
     broadcast,

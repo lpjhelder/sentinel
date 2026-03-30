@@ -2,8 +2,8 @@ import { createContext, createElement, useCallback, useContext, useEffect, useMe
 import type { ReactNode } from "react";
 
 export type UiLanguage = "ko" | "en" | "ja" | "zh" | "pt";
-export const LANGUAGE_STORAGE_KEY = "climpire.language";
-export const LANGUAGE_USER_SET_STORAGE_KEY = "climpire.language.user_set";
+export const LANGUAGE_STORAGE_KEY = "sentinel.language";
+export const LANGUAGE_USER_SET_STORAGE_KEY = "sentinel.language.user_set";
 
 export type LangText = {
   ko: string;
@@ -150,10 +150,10 @@ export function useI18n(languageOverride?: string | null): I18nContextValue {
       setRuntimeLanguage(detectRuntimeLanguage());
     };
     window.addEventListener("storage", sync);
-    window.addEventListener("climpire-language-change", sync as EventListener);
+    window.addEventListener("sentinel-language-change", sync as EventListener);
     return () => {
       window.removeEventListener("storage", sync);
-      window.removeEventListener("climpire-language-change", sync as EventListener);
+      window.removeEventListener("sentinel-language-change", sync as EventListener);
     };
   }, [context.__fromProvider]);
 

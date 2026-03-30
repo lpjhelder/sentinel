@@ -68,7 +68,7 @@ async function waitForTaskDeletion(request: APIRequestContext, taskIds: string[]
 function deleteSubtasksFromLocalE2EDb(subtaskIds: string[], errors: string[]): void {
   if (subtaskIds.length === 0) return;
 
-  const dbPath = path.resolve(process.cwd(), ".tmp", "e2e-runtime", "claw-empire.e2e.sqlite");
+  const dbPath = path.resolve(process.cwd(), ".tmp", "e2e-runtime", "sentinel.e2e.sqlite");
   if (!fs.existsSync(dbPath)) return;
 
   let db: DatabaseSync | null = null;

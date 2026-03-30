@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 
-const CHAIN_SEED = (process.env.SECURITY_AUDIT_CHAIN_SEED || "").trim() || "claw-empire-security-audit-v1";
+const CHAIN_SEED = (process.env.SECURITY_AUDIT_CHAIN_SEED || "").trim() || "sentinel-security-audit-v1";
 const CHAIN_KEY = process.env.SECURITY_AUDIT_CHAIN_KEY || "";
 const logsDir = process.env.LOGS_DIR || path.join(process.cwd(), "logs");
 const targetPath = process.argv[2] ? path.resolve(process.argv[2]) : path.join(logsDir, "security-audit.ndjson");

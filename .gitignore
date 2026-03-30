@@ -37,8 +37,8 @@ docs/reports/*
 !docs/reports/PPT_Sample.pptx
 docs/.bkit-*
 docs/.pdca-*
-.climpire-worktrees/
-.climpire/
+.sentinel-worktrees/
+.sentinel/
 
 # IDE / Editor / AI
 .vscode/

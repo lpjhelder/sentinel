@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Claw-Empire API",
+    "title": "Sentinel API",
     "version": "1.2.4",
-    "description": "Baseline OpenAPI contract for commonly used Claw-Empire endpoints."
+    "description": "Baseline OpenAPI contract for commonly used Sentinel endpoints."
   },
   "servers": [
     {
@@ -5346,9 +5346,9 @@
               },
               "example": {
                 "owner": "openai",
-                "repo": "climpire",
+                "repo": "sentinel",
                 "branch": "main",
-                "target_path": "/workspace/climpire"
+                "target_path": "/workspace/sentinel"
               }
             }
           }
@@ -5365,7 +5365,7 @@
                 },
                 "example": {
                   "clone_id": "clone_001",
-                  "target_path": "/workspace/climpire"
+                  "target_path": "/workspace/sentinel"
                 }
               }
             }
@@ -6156,8 +6156,8 @@
                 "example": {
                   "ok": true,
                   "version": "1.2.4",
-                  "app": "Claw-Empire",
-                  "dbPath": "/workspace/climpire.sqlite"
+                  "app": "Sentinel",
+                  "dbPath": "/workspace/sentinel.sqlite"
                 }
               }
             }
@@ -7001,7 +7001,7 @@
                       "id": "123456789012345678",
                       "name": "ops-alert",
                       "guildId": "987654321098765432",
-                      "guildName": "Claw Empire",
+                      "guildName": "Sentinel",
                       "type": 0
                     }
                   ]
@@ -8826,7 +8826,7 @@
                 "example": {
                   "openapi": "3.0.3",
                   "info": {
-                    "title": "Claw-Empire API"
+                    "title": "Sentinel API"
                   }
                 }
               }

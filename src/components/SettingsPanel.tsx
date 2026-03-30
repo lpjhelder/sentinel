@@ -113,7 +113,7 @@ export default function SettingsPanel({
     setForm(settings as LocalSettings);
     const syncedLocale = normalizeLanguage((settings as LocalSettings).language);
     window.localStorage.setItem(LANGUAGE_STORAGE_KEY, syncedLocale);
-    window.dispatchEvent(new Event("climpire-language-change"));
+    window.dispatchEvent(new Event("sentinel-language-change"));
   }, [settings]);
 
   useEffect(() => {
@@ -170,7 +170,7 @@ export default function SettingsPanel({
   function handleSave() {
     const nextLocale = normalizeLanguage(form.language);
     window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLocale);
-    window.dispatchEvent(new Event("climpire-language-change"));
+    window.dispatchEvent(new Event("sentinel-language-change"));
     persistSettings(form);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -211,6 +211,7 @@ export default function SettingsPanel({
                 en: "Code expired. Please try again.",
                 ja: "コードの有効期限が切れました。再試行してください。",
                 zh: "代码已过期，请重试。",
+                pt: "Código expirado. Tente novamente.",
               }),
             );
             return;
@@ -231,12 +232,13 @@ export default function SettingsPanel({
               setDeviceStatus(result.status);
               setDeviceError(
                 result.status === "expired"
-                  ? t({ ko: "코드가 만료되었습니다", en: "Code expired", ja: "コードの期限切れ", zh: "代码已过期" })
+                  ? t({ ko: "코드가 만료되었습니다", en: "Code expired", ja: "コードの期限切れ", zh: "代码已过期", pt: "Código expirado" })
                   : t({
                       ko: "인증이 거부되었습니다",
                       en: "Authentication denied",
                       ja: "認証が拒否されました",
                       zh: "认证被拒绝",
+                      pt: "Autenticação negada",
                     }),
               );
               return;
@@ -247,7 +249,7 @@ export default function SettingsPanel({
               pollTimerRef.current = null;
               setDeviceStatus("error");
               setDeviceError(
-                result.error || t({ ko: "알 수 없는 오류", en: "Unknown error", ja: "不明なエラー", zh: "未知错误" }),
+                result.error || t({ ko: "알 수 없는 오류", en: "Unknown error", ja: "不明なエラー", zh: "未知错误", pt: "Erro desconhecido" }),
               );
               return;
             }
@@ -373,6 +375,7 @@ export default function SettingsPanel({
             en: "Delete this OAuth account?",
             ja: "この OAuth アカウントを削除しますか？",
             zh: "要删除此 OAuth 账号吗？",
+            pt: "Excluir esta conta OAuth?",
           }),
         )
       ) {
@@ -395,7 +398,7 @@ export default function SettingsPanel({
   return (
     <div className="mx-auto max-w-2xl space-y-4 sm:space-y-6">
       <h2 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--th-text-heading)" }}>
-        ⚙️ {t({ ko: "설정", en: "Settings", ja: "設定", zh: "设置" })}
+        ⚙️ {t({ ko: "설정", en: "Settings", ja: "設定", zh: "设置", pt: "Configurações" })}
       </h2>
 
       <SettingsTabNav tab={tab} setTab={setTab} t={t} />

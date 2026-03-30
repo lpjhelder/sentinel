@@ -4,12 +4,12 @@ coverage
 test-results
 playwright-report
 pnpm-lock.yaml
-claw-empire.sqlite
-claw-empire.sqlite-shm
-claw-empire.sqlite-wal
+sentinel.sqlite
+sentinel.sqlite-shm
+sentinel.sqlite-wal
 logs
-.climpire
-.climpire-worktrees
+.sentinel
+.sentinel-worktrees
 tools/playwright-mcp
 tools/ppt_team_agent
 docs/reports/Sample_Slides

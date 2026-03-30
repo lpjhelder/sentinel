@@ -1,4 +1,4 @@
-# Contributing to Claw-Empire
+# Contributing to Sentinel
 
 Thanks for contributing.
 

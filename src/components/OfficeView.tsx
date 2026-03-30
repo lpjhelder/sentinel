@@ -39,6 +39,8 @@ export default function OfficeView({
   agents,
   tasks,
   subAgents,
+  rooms,
+  hirings,
   meetingPresence,
   activeMeetingTaskId,
   unreadAgentIds,
@@ -132,7 +134,7 @@ export default function OfficeView({
 
   // Latest data via refs (avoids stale closures)
   const dataRef = useRef({ departments, agents, tasks, subAgents, unreadAgentIds, meetingPresence, customDeptThemes });
-  dataRef.current = { departments, agents, tasks, subAgents, unreadAgentIds, meetingPresence, customDeptThemes };
+  dataRef.current = { departments, agents, tasks, subAgents, rooms, hirings, unreadAgentIds, meetingPresence, customDeptThemes };
   const cbRef = useRef({ onSelectAgent, onSelectDepartment });
   cbRef.current = { onSelectAgent, onSelectDepartment };
   const activeMeetingTaskIdRef = useRef<string | null>(activeMeetingTaskId ?? null);

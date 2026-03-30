@@ -9,6 +9,7 @@ export interface Department {
   name_ko: string;
   name_ja?: string | null;
   name_zh?: string | null;
+  name_pt?: string | null;
   icon: string;
   color: string;
   description: string | null;
@@ -24,12 +25,15 @@ export type AgentStatus = "idle" | "working" | "break" | "offline";
 export type CliProvider = "claude" | "codex" | "gemini" | "opencode" | "kimi" | "copilot" | "antigravity" | "api";
 export type MeetingReviewDecision = "reviewing" | "approved" | "hold";
 
+export type AgentType = "lead_senior" | "hired_senior";
+
 export interface Agent {
   id: string;
   name: string;
   name_ko: string;
   name_ja?: string | null;
   name_zh?: string | null;
+  name_pt?: string | null;
   department_id: string | null;
   workflow_pack_key?: WorkflowPackKey | null;
   department?: Department;
@@ -46,6 +50,8 @@ export interface Agent {
   personality: string | null;
   status: AgentStatus;
   current_task_id: string | null;
+  current_room_id?: string | null;
+  agent_type?: AgentType | null;
   stats_tasks_done: number;
   stats_xp: number;
   created_at: number;
@@ -84,6 +90,41 @@ export interface CeoOfficeCall {
   taskId?: string;
   instant?: boolean;
   holdUntil?: number;
+}
+
+// Room
+export type RoomStatus = "active" | "archived" | "completed";
+export type RoomType = "break_room" | "project" | "meeting";
+
+export interface Room {
+  id: string;
+  name: string;
+  room_type: RoomType;
+  project_id: string | null;
+  task_id: string | null;
+  status: RoomStatus;
+  created_by_agent_id: string | null;
+  max_capacity: number;
+  agent_count?: number;
+  agents?: Agent[];
+  created_at: number;
+  closed_at: number | null;
+}
+
+// Hiring
+export type HiringStatus = "active" | "completed" | "released";
+
+export interface Hiring {
+  id: string;
+  leader_agent_id: string;
+  hired_agent_id: string;
+  hired_name?: string;
+  leader_name?: string;
+  room_id: string;
+  task_id: string | null;
+  status: HiringStatus;
+  hired_at: number;
+  released_at: number | null;
 }
 
 // Task
@@ -286,6 +327,12 @@ export type WSEventType =
   | "ceo_office_call"
   | "chat_stream"
   | "task_report"
+  | "room_created"
+  | "room_updated"
+  | "agent_moved"
+  | "agent_hired"
+  | "agent_released"
+  | "hook_activity"
   | "connected";
 
 export interface WSEvent {
@@ -382,7 +429,7 @@ export interface CompanySettings {
 }
 
 export const DEFAULT_SETTINGS: CompanySettings = {
-  companyName: "Claw-Empire",
+  companyName: "Sentinel",
   ceoName: "CEO",
   autoAssign: true,
   yoloMode: false,

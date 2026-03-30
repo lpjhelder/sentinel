@@ -4,7 +4,7 @@ import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 import * as api from "../api";
 import type { DecisionInboxItem } from "../components/chat/decision-inbox";
 import { detectBrowserLanguage } from "../i18n";
-import type { Agent, CompanySettings, CompanyStats, Department, MeetingPresence, SubTask, Task } from "../types";
+import type { Agent, CompanySettings, CompanyStats, Department, Hiring, MeetingPresence, Room, SubTask, Task } from "../types";
 import { DEFAULT_SETTINGS } from "../types";
 import { ROOM_THEMES_STORAGE_KEY } from "./constants";
 import { mapWorkflowDecisionItemsRaw } from "./decision-inbox";
@@ -35,6 +35,8 @@ type UseAppBootstrapDataParams = {
   setMeetingPresence: Dispatch<SetStateAction<MeetingPresence[]>>;
   setDecisionInboxItems: Dispatch<SetStateAction<DecisionInboxItem[]>>;
   setCustomRoomThemes: Dispatch<SetStateAction<RoomThemeMap>>;
+  setRooms: Dispatch<SetStateAction<Room[]>>;
+  setHirings: Dispatch<SetStateAction<Hiring[]>>;
   setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -50,6 +52,8 @@ export function useAppBootstrapData({
   setMeetingPresence,
   setDecisionInboxItems,
   setCustomRoomThemes,
+  setRooms,
+  setHirings,
   setLoading,
 }: UseAppBootstrapDataParams): void {
   const fetchAll = useCallback(async () => {
@@ -59,7 +63,7 @@ export function useAppBootstrapData({
       const sett = await api.getSettings();
       const activePackKey = normalizeOfficeWorkflowPack(sett.officeWorkflowPack ?? "development");
       const includeSeedAgents = activePackKey !== "development";
-      const [depts, ags, tks, sts, subs, presence, decisionItems] = await Promise.all([
+      const [depts, ags, tks, sts, subs, presence, decisionItems, fetchedRooms, fetchedHirings] = await Promise.all([
         api.getDepartments({ workflowPackKey: activePackKey }),
         api.getAgents({ includeSeed: includeSeedAgents }),
         api.getTasks(),
@@ -67,6 +71,8 @@ export function useAppBootstrapData({
         api.getActiveSubtasks(),
         api.getMeetingPresence().catch(() => []),
         api.getDecisionInbox().catch(() => []),
+        api.getRooms().catch(() => [] as Room[]),
+        api.getHirings().catch(() => [] as Hiring[]),
       ]);
       setDepartments(depts);
       setAgents(ags);
@@ -113,6 +119,8 @@ export function useAppBootstrapData({
       setSubtasks(subs);
       setMeetingPresence(presence);
       setDecisionInboxItems(mapWorkflowDecisionItemsRaw(decisionItems ?? []));
+      setRooms(fetchedRooms);
+      setHirings(fetchedHirings);
     } catch (error) {
       console.error("Failed to fetch data:", error);
     } finally {
@@ -125,8 +133,10 @@ export function useAppBootstrapData({
     setCustomRoomThemes,
     setDecisionInboxItems,
     setDepartments,
+    setHirings,
     setLoading,
     setMeetingPresence,
+    setRooms,
     setSettings,
     setStats,
     setSubtasks,

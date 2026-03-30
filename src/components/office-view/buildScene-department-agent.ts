@@ -25,6 +25,7 @@ interface RenderDeskAgentAndSubClonesParams {
   deskY: number;
   charFeetY: number;
   isWorking: boolean;
+  isWaiting?: boolean;
   isOffline: boolean;
   cbRef: MutableRefObject<CallbackSnapshot>;
   animItemsRef: MutableRefObject<AnimItem[]>;
@@ -46,6 +47,7 @@ export function renderDeskAgentAndSubClones({
   deskY,
   charFeetY,
   isWorking,
+  isWaiting,
   isOffline,
   cbRef,
   animItemsRef,
@@ -86,7 +88,8 @@ export function renderDeskAgentAndSubClones({
   }
   room.addChild(charContainer);
 
-  const deskG = drawDesk(room, ax - DESK_W / 2, deskY, isWorking);
+  const deskScreenState = isWorking ? "working" : isWaiting ? "waiting" : "idle";
+  const deskG = drawDesk(room, ax - DESK_W / 2, deskY, deskScreenState);
 
   const bedW = TARGET_CHAR_H + 20;
   const bedH = 36;

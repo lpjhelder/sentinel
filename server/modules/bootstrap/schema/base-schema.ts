@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS departments (
   name_ko TEXT NOT NULL,
   name_ja TEXT NOT NULL DEFAULT '',
   name_zh TEXT NOT NULL DEFAULT '',
+  name_pt TEXT NOT NULL DEFAULT '',
   icon TEXT NOT NULL,
   color TEXT NOT NULL,
   description TEXT,
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS office_pack_departments (
   name_ko TEXT NOT NULL,
   name_ja TEXT NOT NULL DEFAULT '',
   name_zh TEXT NOT NULL DEFAULT '',
+  name_pt TEXT NOT NULL DEFAULT '',
   icon TEXT NOT NULL,
   color TEXT NOT NULL,
   description TEXT,
@@ -40,6 +42,7 @@ CREATE TABLE IF NOT EXISTS agents (
   name_ko TEXT NOT NULL DEFAULT '',
   name_ja TEXT NOT NULL DEFAULT '',
   name_zh TEXT NOT NULL DEFAULT '',
+  name_pt TEXT NOT NULL DEFAULT '',
   department_id TEXT REFERENCES departments(id),
   workflow_pack_key TEXT NOT NULL DEFAULT 'development',
   role TEXT NOT NULL CHECK(role IN ('team_leader','senior','junior','intern')),
@@ -374,6 +377,30 @@ CREATE TABLE IF NOT EXISTS api_providers (
   models_cached_at INTEGER,
   created_at INTEGER DEFAULT (unixepoch()*1000),
   updated_at INTEGER DEFAULT (unixepoch()*1000)
+);
+
+CREATE TABLE IF NOT EXISTS rooms (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  room_type TEXT NOT NULL DEFAULT 'project' CHECK(room_type IN ('break_room','project','meeting')),
+  project_id TEXT,
+  task_id TEXT,
+  status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','archived','completed')),
+  created_by_agent_id TEXT,
+  max_capacity INTEGER DEFAULT 8,
+  created_at INTEGER DEFAULT (unixepoch()*1000),
+  closed_at INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS agent_hirings (
+  id TEXT PRIMARY KEY,
+  leader_agent_id TEXT NOT NULL,
+  hired_agent_id TEXT NOT NULL,
+  room_id TEXT NOT NULL,
+  task_id TEXT,
+  status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','completed','released')),
+  hired_at INTEGER DEFAULT (unixepoch()*1000),
+  released_at INTEGER
 );
 `);
 }

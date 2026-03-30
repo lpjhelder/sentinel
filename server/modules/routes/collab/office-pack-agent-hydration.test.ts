@@ -21,6 +21,7 @@ function createDb(): DatabaseSync {
       name_ko TEXT NOT NULL,
       name_ja TEXT NOT NULL DEFAULT '',
       name_zh TEXT NOT NULL DEFAULT '',
+      name_pt TEXT NOT NULL DEFAULT '',
       icon TEXT NOT NULL DEFAULT '🏢',
       color TEXT NOT NULL DEFAULT '#64748b',
       description TEXT,
@@ -50,6 +51,7 @@ function createDb(): DatabaseSync {
       sprite_number INTEGER,
       name_ja TEXT NOT NULL DEFAULT '',
       name_zh TEXT NOT NULL DEFAULT '',
+      name_pt TEXT NOT NULL DEFAULT '',
       cli_model TEXT,
       cli_reasoning_level TEXT,
       FOREIGN KEY (department_id) REFERENCES departments(id)

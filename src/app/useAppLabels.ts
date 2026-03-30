@@ -27,11 +27,11 @@ export function useAppLabels({
 }: UseAppLabelsParams) {
   const uiLanguage = normalizeLanguage(settings.language);
   const loadingTitle = pickLang(uiLanguage, {
-    ko: "Claw-Empire 로딩 중...",
-    en: "Loading Claw-Empire...",
-    ja: "Claw-Empireを読み込み中...",
-    zh: "Claw-Empire 加载中...",
-    pt: "Carregando Claw-Empire...",
+    ko: "Sentinel 로딩 중...",
+    en: "Loading Sentinel...",
+    ja: "Sentinelを読み込み中...",
+    zh: "Sentinel 加载中...",
+    pt: "Carregando Sentinel...",
   });
   const loadingSubtitle = pickLang(uiLanguage, {
     ko: "AI 에이전트 제국을 준비하고 있습니다",
@@ -181,10 +181,10 @@ export function useAppLabels({
         current_version: updateStatus?.current_version ?? "1.1.0",
         latest_version: updateStatus?.latest_version ?? "1.1.1-test",
         update_available: true,
-        release_url: updateStatus?.release_url ?? "https://github.com/GreenSheep01201/claw-empire/releases/latest",
+        release_url: updateStatus?.release_url ?? "https://github.com/lpjhelder/sentinel/releases/latest",
         checked_at: Date.now(),
         enabled: true,
-        repo: updateStatus?.repo ?? "GreenSheep01201/claw-empire",
+        repo: updateStatus?.repo ?? "lpjhelder/sentinel",
         error: null,
       }
     : updateStatus;
@@ -196,7 +196,7 @@ export function useAppLabels({
   );
   const updateReleaseUrl =
     effectiveUpdateStatus?.release_url ??
-    `https://github.com/${effectiveUpdateStatus?.repo ?? "GreenSheep01201/claw-empire"}/releases/latest`;
+    `https://github.com/${effectiveUpdateStatus?.repo ?? "lpjhelder/sentinel"}/releases/latest`;
   const updateTitle = updateBannerVisible
     ? pickLang(uiLanguage, {
         ko: `새 버전 v${effectiveUpdateStatus?.latest_version} 사용 가능 (현재 v${effectiveUpdateStatus?.current_version}).`,

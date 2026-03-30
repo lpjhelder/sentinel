@@ -1,4 +1,4 @@
-# Claw-Empire UI/UX Design Guide
+# Sentinel UI/UX Design Guide
 
 > **Theme:** "Cute but Efficient Empire"
 > **Goal:** Manage a chaotic AI empire with a smile.
@@ -7,7 +7,7 @@
 
 ## 1. Design Philosophy
 
-Claw-Empire combines the **seriousness of a CLI dashboard** with the **charm of a pixel-art simulation**.
+Sentinel combines the **seriousness of a CLI dashboard** with the **charm of a pixel-art simulation**.
 The interface should feel like a powerful command center ("The CEO's Desk") but populated by lively, autonomous agents.
 
 -   **Dark & Glassy:** Deep slate backgrounds (`slate-950`) with translucent glass panels (`backdrop-blur`).

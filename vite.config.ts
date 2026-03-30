@@ -59,7 +59,7 @@ export default defineConfig({
   server: {
     allowedHosts: [".ts.net"],
     watch: {
-      ignored: ["**/.climpire-worktrees/**"],
+      ignored: ["**/.sentinel-worktrees/**"],
     },
     proxy: {
       "/api": {

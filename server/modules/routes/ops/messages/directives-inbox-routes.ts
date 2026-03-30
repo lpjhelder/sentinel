@@ -64,15 +64,15 @@ function buildSessionResetAck(text: string): string {
 const buildAgentUpgradeRequiredPayload = () => {
   const repoRoot = process.cwd();
   const installerPaths = {
-    mac_linux: path.join(repoRoot, "scripts", "openclaw-setup.sh"),
-    windows_powershell: path.join(repoRoot, "scripts", "openclaw-setup.ps1"),
+    mac_linux: path.join(repoRoot, "scripts", "opensentinel-setup.sh"),
+    windows_powershell: path.join(repoRoot, "scripts", "opensentinel-setup.ps1"),
     agents_template: path.join(repoRoot, "templates", "AGENTS-empire.md"),
   };
-  const agentsTargetPath = path.join(os.homedir(), ".openclaw", "workspace", "AGENTS.md");
+  const agentsTargetPath = path.join(os.homedir(), ".opensentinel", "workspace", "AGENTS.md");
   const installCommands = {
-    mac_linux: "bash scripts/openclaw-setup.sh",
-    windows_powershell: "powershell -ExecutionPolicy Bypass -File .\\scripts\\openclaw-setup.ps1",
-    agents_only: "pnpm setup -- --agents-path ~/.openclaw/workspace/AGENTS.md",
+    mac_linux: "bash scripts/opensentinel-setup.sh",
+    windows_powershell: "powershell -ExecutionPolicy Bypass -File .\\scripts\\opensentinel-setup.ps1",
+    agents_only: "pnpm setup -- --agents-path ~/.opensentinel/workspace/AGENTS.md",
   };
   const absoluteInstallCommands = {
     mac_linux: `bash "${installerPaths.mac_linux}"`,
@@ -89,7 +89,7 @@ const buildAgentUpgradeRequiredPayload = () => {
     message_ko: `OpenClaw AGENTS가 구버전입니다(HTTP 428). 설치 경로: ${installerPaths.mac_linux} (또는 ${installerPaths.windows_powershell}), 대상 AGENTS: ${agentsTargetPath}. 지금 제가 직접 설치해드릴까요?`,
     required_agent_rules_version: 2,
     required_action: "install_latest_agents_rules",
-    installer_files: ["scripts/openclaw-setup.sh", "scripts/openclaw-setup.ps1", "templates/AGENTS-empire.md"],
+    installer_files: ["scripts/opensentinel-setup.sh", "scripts/opensentinel-setup.ps1", "templates/AGENTS-empire.md"],
     installer_absolute_paths: installerPaths,
     agents_target_path: agentsTargetPath,
     install_commands: installCommands,
@@ -518,7 +518,7 @@ export function registerDirectiveAndInboxRoutes(
     const shouldRouteToSessionAgent = Boolean(sessionRoute && routedAgent);
     if (sessionRoute && !routedAgent) {
       console.warn(
-        `[Claw-Empire] inbox session route ignored: mapped agent not found (agent_id=${sessionRoute.agentId}, channel=${sessionRoute.channel}, target=${sessionRoute.targetId})`,
+        `[Sentinel] inbox session route ignored: mapped agent not found (agent_id=${sessionRoute.agentId}, channel=${sessionRoute.channel}, target=${sessionRoute.targetId})`,
       );
     }
     if (!isDirective && !shouldRouteToSessionAgent) {

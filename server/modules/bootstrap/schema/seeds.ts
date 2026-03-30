@@ -11,68 +11,76 @@ export function applyDefaultSeeds(db: DbLike): void {
 
   if (deptCount === 0) {
     const insertDept = db.prepare(
-      "INSERT INTO departments (id, name, name_ko, name_ja, name_zh, icon, color, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO departments (id, name, name_ko, name_ja, name_zh, name_pt, icon, color, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
     );
-    // Workflow order: 기획 → 개발 → 디자인 → QA → 인프라보안 → 운영
-    insertDept.run("planning", "Planning", "기획팀", "企画チーム", "企划组", "📊", "#f59e0b", 1);
-    insertDept.run("dev", "Development", "개발팀", "開発チーム", "开发组", "💻", "#3b82f6", 2);
-    insertDept.run("design", "Design", "디자인팀", "デザインチーム", "设计组", "🎨", "#8b5cf6", 3);
-    insertDept.run("qa", "QA/QC", "품질관리팀", "品質管理チーム", "质量管理组", "🔍", "#ef4444", 4);
-    insertDept.run(
-      "devsecops",
-      "DevSecOps",
-      "인프라보안팀",
-      "インフラセキュリティチーム",
-      "基础安全组",
-      "🛡️",
-      "#f97316",
-      5,
-    );
-    insertDept.run("operations", "Operations", "운영팀", "運営チーム", "运营组", "⚙️", "#10b981", 6);
-    console.log("[Claw-Empire] Seeded default departments");
+    // Pipeline IA: Analyze → Generate → Evaluate → Humanize → Deliver
+    insertDept.run("analyze", "Analyze", "분석팀", "分析チーム", "分析组", "Análise", "🧠", "#f59e0b", 1);
+    insertDept.run("generate", "Generate", "생성팀", "生成チーム", "生成组", "Geração", "💻", "#3b82f6", 2);
+    insertDept.run("evaluate", "Evaluate", "검증팀", "検証チーム", "验证组", "Avaliação", "🔍", "#ef4444", 3);
+    insertDept.run("humanize", "Humanize", "사용자경험팀", "UXチーム", "用户体验组", "Humanização", "✨", "#8b5cf6", 4);
+    insertDept.run("deliver", "Deliver", "배포팀", "デリバリーチーム", "交付组", "Entrega", "🚀", "#10b981", 5);
+    console.log("[Sentinel] Seeded default departments");
   }
 
   const agentCount = (db.prepare("SELECT COUNT(*) as cnt FROM agents").get() as { cnt: number }).cnt;
 
   if (agentCount === 0) {
     const insertAgent = db.prepare(
-      `INSERT INTO agents (id, name, name_ko, department_id, role, cli_provider, avatar_emoji, personality)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO agents (id, name, name_ko, department_id, role, cli_provider, avatar_emoji, personality, sprite_number, agent_type, specialty, acts_as_planning_leader)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     );
-    // Development (3)
-    insertAgent.run(randomUUID(), "Aria", "아리아", "dev", "team_leader", "claude", "👩‍💻", "꼼꼼한 시니어 개발자");
-    insertAgent.run(randomUUID(), "Bolt", "볼트", "dev", "senior", "codex", "⚡", "빠른 코딩 전문가");
-    insertAgent.run(randomUUID(), "Nova", "노바", "dev", "junior", "copilot", "🌟", "창의적인 주니어");
-    // Design (2)
-    insertAgent.run(randomUUID(), "Pixel", "픽셀", "design", "team_leader", "claude", "🎨", "디자인 리더");
-    insertAgent.run(randomUUID(), "Luna", "루나", "design", "junior", "gemini", "🌙", "감성적인 UI 디자이너");
-    // Planning (2)
-    insertAgent.run(randomUUID(), "Sage", "세이지", "planning", "team_leader", "codex", "🧠", "전략 분석가");
-    insertAgent.run(randomUUID(), "Clio", "클리오", "planning", "senior", "claude", "📝", "데이터 기반 기획자");
-    // Operations (2)
-    insertAgent.run(randomUUID(), "Atlas", "아틀라스", "operations", "team_leader", "claude", "🗺️", "운영의 달인");
-    insertAgent.run(randomUUID(), "Turbo", "터보", "operations", "senior", "codex", "🚀", "자동화 전문가");
-    // QA/QC (2)
-    insertAgent.run(randomUUID(), "Hawk", "호크", "qa", "team_leader", "claude", "🦅", "날카로운 품질 감시자");
-    insertAgent.run(randomUUID(), "Lint", "린트", "qa", "senior", "codex", "🔬", "꼼꼼한 테스트 전문가");
-    // DevSecOps (2)
-    insertAgent.run(randomUUID(), "Vault", "볼트S", "devsecops", "team_leader", "claude", "🛡️", "보안 아키텍트");
-    insertAgent.run(randomUUID(), "Pipe", "파이프", "devsecops", "senior", "codex", "🔧", "CI/CD 파이프라인 전문가");
-    // QA Junior (1)
-    insertAgent.run(randomUUID(), "DORO", "도로롱", "qa", "junior", "gemini", "🩷", "꼼꼼한 품질관리 주니어");
-    console.log("[Claw-Empire] Seeded default agents");
+    const defaultAgents: Array<{ name: string; department_id: string; role: string; avatar_emoji: string; specialty: string; personality: string; acts_as_planning_leader: number }> = [
+      // ANALYZE (3) — Compreender o problema, projetar solução
+      { name: 'Architect', department_id: 'analyze', role: 'team_leader', avatar_emoji: '\u{1F3D7}\u{FE0F}', specialty: 'architecture', personality: 'Tech Lead e Arquiteto de Software. Analisa design, define padroes, avalia trade-offs.', acts_as_planning_leader: 1 },
+      { name: 'API Designer', department_id: 'analyze', role: 'team_leader', avatar_emoji: '\u{1F50C}', specialty: 'api-design', personality: 'API Designer senior. REST/GraphQL, OpenAPI, versionamento.', acts_as_planning_leader: 0 },
+      { name: 'Reviewer', department_id: 'analyze', role: 'team_leader', avatar_emoji: '\u{1F50D}', specialty: 'review', personality: 'Code Reviewer senior. Revisa qualidade, seguranca e consistencia.', acts_as_planning_leader: 0 },
+      // GENERATE (3) — Produzir código/artefatos
+      { name: 'Developer', department_id: 'generate', role: 'team_leader', avatar_emoji: '\u{1F468}\u{200D}\u{1F4BB}', specialty: 'fullstack', personality: 'Dev Full-Stack senior. Implementa features, corrige bugs, escreve codigo limpo.', acts_as_planning_leader: 0 },
+      { name: 'DBA', department_id: 'generate', role: 'team_leader', avatar_emoji: '\u{1F5C4}\u{FE0F}', specialty: 'database', personality: 'Database Engineer senior. Modelagem, queries, indexes, migrations.', acts_as_planning_leader: 0 },
+      { name: 'Mobile', department_id: 'generate', role: 'team_leader', avatar_emoji: '\u{1F4F1}', specialty: 'mobile', personality: 'Mobile Specialist. React Native, offline-first, push.', acts_as_planning_leader: 0 },
+      // EVALUATE (3) — Validar qualidade e segurança
+      { name: 'Tester', department_id: 'evaluate', role: 'team_leader', avatar_emoji: '\u{1F9EA}', specialty: 'testing', personality: 'QA Engineer senior. Escreve testes unitarios, integracao e e2e.', acts_as_planning_leader: 0 },
+      { name: 'Security', department_id: 'evaluate', role: 'team_leader', avatar_emoji: '\u{1F6E1}\u{FE0F}', specialty: 'security', personality: 'Security Engineer. OWASP Top 10, pentest, hardening.', acts_as_planning_leader: 0 },
+      { name: 'Performance', department_id: 'evaluate', role: 'team_leader', avatar_emoji: '\u{26A1}', specialty: 'performance', personality: 'Performance Engineer. Profiling, load testing, otimizacao.', acts_as_planning_leader: 0 },
+      // HUMANIZE (3) — Otimizar pra humanos
+      { name: 'UX Writer', department_id: 'humanize', role: 'team_leader', avatar_emoji: '\u{270D}\u{FE0F}', specialty: 'ux-writing', personality: 'UX Writer senior. Microcopy, mensagens de erro, tom de voz.', acts_as_planning_leader: 0 },
+      { name: 'Accessibility', department_id: 'humanize', role: 'team_leader', avatar_emoji: '\u{267F}', specialty: 'accessibility', personality: 'Accessibility Engineer. WCAG 2.1, ARIA, contraste.', acts_as_planning_leader: 0 },
+      { name: 'i18n', department_id: 'humanize', role: 'team_leader', avatar_emoji: '\u{1F310}', specialty: 'internationalization', personality: 'i18n Engineer. Traducao, locale, formatacao.', acts_as_planning_leader: 0 },
+      // DELIVER (4) — Entregar e observar
+      { name: 'DevOps', department_id: 'deliver', role: 'team_leader', avatar_emoji: '\u{2699}\u{FE0F}', specialty: 'infrastructure', personality: 'DevOps/SRE Engineer. CI/CD, Docker, deploy, monitoramento.', acts_as_planning_leader: 0 },
+      { name: 'Monitoring', department_id: 'deliver', role: 'team_leader', avatar_emoji: '\u{1F4CA}', specialty: 'observability', personality: 'Observability Engineer. Logs, metricas, alertas, tracing.', acts_as_planning_leader: 0 },
+      { name: 'Release Manager', department_id: 'deliver', role: 'team_leader', avatar_emoji: '\u{1F3F7}\u{FE0F}', specialty: 'release', personality: 'Git/Release Manager. Branching, versioning, changelogs.', acts_as_planning_leader: 0 },
+      { name: 'Docs', department_id: 'deliver', role: 'team_leader', avatar_emoji: '\u{1F4DD}', specialty: 'documentation', personality: 'Technical Writer. API docs, README, onboarding, ADRs.', acts_as_planning_leader: 0 },
+    ];
+
+    defaultAgents.forEach((agent, index) => {
+      insertAgent.run(
+        randomUUID(),
+        agent.name,
+        '',
+        agent.department_id,
+        agent.role,
+        'claude',
+        agent.avatar_emoji,
+        agent.personality,
+        index + 1,
+        'lead_senior',
+        agent.specialty,
+        agent.acts_as_planning_leader,
+      );
+    });
+    console.log("[Sentinel] Seeded 16 Lead Senior agents");
   }
 
   // Seed default settings if none exist
   {
     const defaultRoomThemes = {
       ceoOffice: { accent: 0xa77d0c, floor1: 0xe5d9b9, floor2: 0xdfd0a8, wall: 0x998243 },
-      planning: { accent: 0xd4a85a, floor1: 0xf0e1c5, floor2: 0xeddaba, wall: 0xae9871 },
-      dev: { accent: 0x5a9fd4, floor1: 0xd8e8f5, floor2: 0xcce1f2, wall: 0x6c96b7 },
-      design: { accent: 0x9a6fc4, floor1: 0xe8def2, floor2: 0xe1d4ee, wall: 0x9378ad },
-      qa: { accent: 0xd46a6a, floor1: 0xf0cbcb, floor2: 0xedc0c0, wall: 0xae7979 },
-      devsecops: { accent: 0xd4885a, floor1: 0xf0d5c5, floor2: 0xedcdba, wall: 0xae8871 },
-      operations: { accent: 0x5ac48a, floor1: 0xd0eede, floor2: 0xc4ead5, wall: 0x6eaa89 },
+      analyze: { accent: 0xd4a85a, floor1: 0xf0e1c5, floor2: 0xeddaba, wall: 0xae9871 },
+      generate: { accent: 0x5a9fd4, floor1: 0xd8e8f5, floor2: 0xcce1f2, wall: 0x6c96b7 },
+      evaluate: { accent: 0xd46a6a, floor1: 0xf0cbcb, floor2: 0xedc0c0, wall: 0xae7979 },
+      humanize: { accent: 0x9a6fc4, floor1: 0xe8def2, floor2: 0xe1d4ee, wall: 0x9378ad },
+      deliver: { accent: 0x5ac48a, floor1: 0xd0eede, floor2: 0xc4ead5, wall: 0x6eaa89 },
       breakRoom: { accent: 0xf0c878, floor1: 0xf7e2b7, floor2: 0xf6dead, wall: 0xa99c83 },
     };
 
@@ -80,7 +88,7 @@ export function applyDefaultSeeds(db: DbLike): void {
     const isLegacySettingsInstall = settingsCount > 0;
     if (settingsCount === 0) {
       const insertSetting = db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)");
-      insertSetting.run("companyName", "Claw-Empire");
+      insertSetting.run("companyName", "Sentinel");
       insertSetting.run("ceoName", "CEO");
       insertSetting.run("autoAssign", "true");
       insertSetting.run("yoloMode", "false");
@@ -106,7 +114,7 @@ export function applyDefaultSeeds(db: DbLike): void {
         }),
       );
       insertSetting.run("roomThemes", JSON.stringify(defaultRoomThemes));
-      console.log("[Claw-Empire] Seeded default settings");
+      console.log("[Sentinel] Seeded default settings");
     }
 
     const hasLanguageSetting = db.prepare("SELECT 1 FROM settings WHERE key = 'language' LIMIT 1").get() as
@@ -189,13 +197,16 @@ export function applyDefaultSeeds(db: DbLike): void {
     } catch {
       /* noop */
     }
-    const DEPT_ORDER: Record<string, number> = { planning: 1, dev: 2, design: 3, qa: 4, devsecops: 5, operations: 6 };
+    const DEPT_ORDER: Record<string, number> = { analyze: 1, generate: 2, evaluate: 3, humanize: 4, deliver: 5 };
 
     const insertDeptIfMissing = db.prepare(
       "INSERT OR IGNORE INTO departments (id, name, name_ko, icon, color, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
     );
-    insertDeptIfMissing.run("qa", "QA/QC", "품질관리팀", "🔍", "#ef4444", 4);
-    insertDeptIfMissing.run("devsecops", "DevSecOps", "인프라보안팀", "🛡️", "#f97316", 5);
+    insertDeptIfMissing.run("analyze", "Analyze", "분석팀", "🧠", "#f59e0b", 1);
+    insertDeptIfMissing.run("generate", "Generate", "생성팀", "💻", "#3b82f6", 2);
+    insertDeptIfMissing.run("evaluate", "Evaluate", "검증팀", "🔍", "#ef4444", 3);
+    insertDeptIfMissing.run("humanize", "Humanize", "사용자경험팀", "✨", "#8b5cf6", 4);
+    insertDeptIfMissing.run("deliver", "Deliver", "배포팀", "🚀", "#10b981", 5);
 
     const updateOrder = db.prepare("UPDATE departments SET sort_order = ? WHERE id = ?");
     for (const [id, order] of Object.entries(DEPT_ORDER)) {
@@ -224,7 +235,7 @@ export function applyDefaultSeeds(db: DbLike): void {
     try {
       db.exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_departments_sort_order ON departments(sort_order)");
     } catch (err) {
-      console.warn("[Claw-Empire] Failed to recreate idx_departments_sort_order:", err);
+      console.warn("[Sentinel] Failed to recreate idx_departments_sort_order:", err);
     }
 
     const insertAgentIfMissing = db.prepare(
@@ -239,30 +250,39 @@ export function applyDefaultSeeds(db: DbLike): void {
 
     const newAgents: [string, string, string, string, string, string, string][] = [
       // [name, name_ko, dept, role, provider, emoji, personality]
-      ["Luna", "루나", "design", "junior", "gemini", "🌙", "감성적인 UI 디자이너"],
-      ["Clio", "클리오", "planning", "senior", "claude", "📝", "데이터 기반 기획자"],
-      ["Turbo", "터보", "operations", "senior", "codex", "🚀", "자동화 전문가"],
-      ["Hawk", "호크", "qa", "team_leader", "claude", "🦅", "날카로운 품질 감시자"],
-      ["Lint", "린트", "qa", "senior", "opencode", "🔬", "꼼꼼한 테스트 전문가"],
-      ["Vault", "볼트S", "devsecops", "team_leader", "claude", "🛡️", "보안 아키텍트"],
-      ["Pipe", "파이프", "devsecops", "senior", "codex", "🔧", "CI/CD 파이프라인 전문가"],
+      ["Architect", "", "analyze", "team_leader", "claude", "\u{1F3D7}\u{FE0F}", "Tech Lead e Arquiteto de Software"],
+      ["API Designer", "", "analyze", "team_leader", "claude", "\u{1F50C}", "API Designer senior"],
+      ["Reviewer", "", "analyze", "team_leader", "claude", "\u{1F50D}", "Code Reviewer senior"],
+      ["Developer", "", "generate", "team_leader", "claude", "\u{1F468}\u{200D}\u{1F4BB}", "Dev Full-Stack senior"],
+      ["DBA", "", "generate", "team_leader", "claude", "\u{1F5C4}\u{FE0F}", "Database Engineer senior"],
+      ["Mobile", "", "generate", "team_leader", "claude", "\u{1F4F1}", "Mobile Specialist"],
+      ["Tester", "", "evaluate", "team_leader", "claude", "\u{1F9EA}", "QA Engineer senior"],
+      ["Security", "", "evaluate", "team_leader", "claude", "\u{1F6E1}\u{FE0F}", "Security Engineer"],
+      ["Performance", "", "evaluate", "team_leader", "claude", "\u{26A1}", "Performance Engineer"],
+      ["UX Writer", "", "humanize", "team_leader", "claude", "\u{270D}\u{FE0F}", "UX Writer senior"],
+      ["Accessibility", "", "humanize", "team_leader", "claude", "\u{267F}", "Accessibility Engineer"],
+      ["i18n", "", "humanize", "team_leader", "claude", "\u{1F310}", "i18n Engineer"],
+      ["DevOps", "", "deliver", "team_leader", "claude", "\u{2699}\u{FE0F}", "DevOps/SRE Engineer"],
+      ["Monitoring", "", "deliver", "team_leader", "claude", "\u{1F4CA}", "Observability Engineer"],
+      ["Release Manager", "", "deliver", "team_leader", "claude", "\u{1F3F7}\u{FE0F}", "Git/Release Manager"],
+      ["Docs", "", "deliver", "team_leader", "claude", "\u{1F4DD}", "Technical Writer"],
     ];
 
     let added = 0;
     for (const [name, nameKo, dept, role, provider, emoji, personality] of newAgents) {
       if (!existingNames.has(name)) {
         if (!existingDeptIds.has(dept)) {
-          console.warn(`[Claw-Empire] Skip adding agent "${name}": missing department "${dept}"`);
+          console.warn(`[Sentinel] Skip adding agent "${name}": missing department "${dept}"`);
           continue;
         }
         try {
           insertAgentIfMissing.run(randomUUID(), name, nameKo, dept, role, provider, emoji, personality);
           added++;
         } catch (err) {
-          console.warn(`[Claw-Empire] Skip adding agent "${name}":`, err);
+          console.warn(`[Sentinel] Skip adding agent "${name}":`, err);
         }
       }
     }
-    if (added > 0) console.log(`[Claw-Empire] Added ${added} new agents`);
+    if (added > 0) console.log(`[Sentinel] Added ${added} new Lead Senior agents`);
   }
 }

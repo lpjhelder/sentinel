@@ -1,0 +1,25 @@
+[Unit]
+Description=Sentinel service
+Documentation=https://github.com/lpjhelder/sentinel
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=%h/sentinel
+EnvironmentFile=-%h/sentinel/deploy/.env.production
+ExecStartPre=/usr/bin/env bash -lc 'mkdir -p %h/sentinel/logs'
+ExecStart=/usr/bin/env bash -lc 'cd %h/sentinel && pnpm run start'
+Restart=on-failure
+RestartSec=10
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+StandardOutput=append:%h/sentinel/logs/sentinel.log
+StandardError=append:%h/sentinel/logs/sentinel.err
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

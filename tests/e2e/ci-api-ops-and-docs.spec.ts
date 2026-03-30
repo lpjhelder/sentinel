@@ -303,7 +303,7 @@ test.describe("CI API ops and docs coverage", () => {
     const seed = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
     const projectsRoot = path.resolve("..");
     const repoName = path.basename(process.cwd());
-    const candidateProjectPath = path.join(projectsRoot, "climpire-ci-path-check", seed);
+    const candidateProjectPath = path.join(projectsRoot, "sentinel-ci-path-check", seed);
 
     await establishApiSession(request);
 
@@ -511,7 +511,7 @@ test.describe("CI API ops and docs coverage", () => {
       expect(Number.isInteger(runRes.pid)).toBe(true);
       expect(runRes.pid).not.toBe(0);
       expect(runRes.worktree).toBe(true);
-      expect(runRes.cwd).toContain(`${path.sep}.climpire-worktrees${path.sep}`);
+      expect(runRes.cwd).toContain(`${path.sep}.sentinel-worktrees${path.sep}`);
 
       const terminalAfterRun = await waitForTerminalMarker(request, taskId, "RUN start", 20_000);
       expect(
@@ -557,7 +557,7 @@ test.describe("CI API ops and docs coverage", () => {
 
     const swaggerUi = await request.get("/api/docs");
     expect(swaggerUi.ok()).toBe(true);
-    await expect(swaggerUi.text()).resolves.toContain("Claw-Empire API Docs");
+    await expect(swaggerUi.text()).resolves.toContain("Sentinel API Docs");
 
     const openapi = await expectOkJson<{
       openapi: string;

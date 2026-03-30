@@ -297,6 +297,7 @@ export function registerAgentCrudRoutes(ctx: RuntimeContext): void {
       const name_ko = typeof body.name_ko === "string" ? body.name_ko.trim() : "";
       const name_ja = typeof body.name_ja === "string" ? body.name_ja.trim() : "";
       const name_zh = typeof body.name_zh === "string" ? body.name_zh.trim() : "";
+      const name_pt = typeof body.name_pt === "string" ? body.name_pt.trim() : "";
       if (!name) return res.status(400).json({ error: "name_required" });
       const requestedPackKey = parseWorkflowPackKey(body.workflow_pack_key);
       if (body.workflow_pack_key !== undefined && body.workflow_pack_key !== null && !requestedPackKey) {
@@ -333,14 +334,15 @@ export function registerAgentCrudRoutes(ctx: RuntimeContext): void {
       try {
         if (hasAgentWorkflowPackColumn) {
           db.prepare(
-            `INSERT INTO agents (id, name, name_ko, name_ja, name_zh, department_id, workflow_pack_key, role, cli_provider, avatar_emoji, sprite_number, personality)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO agents (id, name, name_ko, name_ja, name_zh, name_pt, department_id, workflow_pack_key, role, cli_provider, avatar_emoji, sprite_number, personality)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           ).run(
             id,
             name,
             name_ko,
             name_ja,
             name_zh,
+            name_pt,
             department_id,
             workflowPackKey,
             role,
@@ -351,14 +353,15 @@ export function registerAgentCrudRoutes(ctx: RuntimeContext): void {
           );
         } else {
           db.prepare(
-            `INSERT INTO agents (id, name, name_ko, name_ja, name_zh, department_id, role, cli_provider, avatar_emoji, sprite_number, personality)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO agents (id, name, name_ko, name_ja, name_zh, name_pt, department_id, role, cli_provider, avatar_emoji, sprite_number, personality)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           ).run(
             id,
             name,
             name_ko,
             name_ja,
             name_zh,
+            name_pt,
             department_id,
             role,
             cli_provider,
@@ -568,6 +571,7 @@ export function registerAgentCrudRoutes(ctx: RuntimeContext): void {
       "name_ko",
       "name_ja",
       "name_zh",
+      "name_pt",
       "department_id",
       ...(hasAgentWorkflowPackColumn ? (["workflow_pack_key"] as const) : []),
       "role",

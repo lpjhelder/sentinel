@@ -9,6 +9,7 @@ export type DepartmentScopedRow = {
   name_ko: string;
   name_ja: string;
   name_zh: string;
+  name_pt: string;
   icon: string;
   color: string;
   description: string | null;
@@ -74,6 +75,7 @@ function mapPackDepartmentRow(row: Record<string, unknown> | undefined): Departm
     name_ko: normalizeText(row.name_ko) || normalizeText(row.name) || id,
     name_ja: normalizeText(row.name_ja),
     name_zh: normalizeText(row.name_zh),
+    name_pt: normalizeText(row.name_pt),
     icon: normalizeText(row.icon) || "🏢",
     color: normalizeText(row.color) || "#64748b",
     description: normalizeText(row.description) || null,
@@ -93,6 +95,7 @@ function mapBaseDepartmentRow(row: Record<string, unknown> | undefined): Departm
     name_ko: normalizeText(row.name_ko) || normalizeText(row.name) || id,
     name_ja: normalizeText(row.name_ja),
     name_zh: normalizeText(row.name_zh),
+    name_pt: normalizeText(row.name_pt),
     icon: normalizeText(row.icon) || "🏢",
     color: normalizeText(row.color) || "#64748b",
     description: normalizeText(row.description) || null,
@@ -117,7 +120,7 @@ export function getDepartmentForPack(
         .prepare(
           `
             SELECT
-              workflow_pack_key, department_id, name, name_ko, name_ja, name_zh,
+              workflow_pack_key, department_id, name, name_ko, name_ja, name_zh, name_pt,
               icon, color, description, prompt, sort_order, created_at
             FROM office_pack_departments
             WHERE workflow_pack_key = ? AND department_id = ?
@@ -136,7 +139,7 @@ export function getDepartmentForPack(
     const baseRow = db
       .prepare(
         `
-          SELECT id, name, name_ko, name_ja, name_zh, icon, color, description, prompt, sort_order, created_at
+          SELECT id, name, name_ko, name_ja, name_zh, name_pt, icon, color, description, prompt, sort_order, created_at
           FROM departments
           WHERE id = ?
           LIMIT 1
@@ -157,7 +160,7 @@ export function listDepartmentsForPack(db: DbLike, packKeyInput: unknown): Depar
         .prepare(
           `
             SELECT
-              workflow_pack_key, department_id, name, name_ko, name_ja, name_zh,
+              workflow_pack_key, department_id, name, name_ko, name_ja, name_zh, name_pt,
               icon, color, description, prompt, sort_order, created_at
             FROM office_pack_departments
             WHERE workflow_pack_key = ?
@@ -177,7 +180,7 @@ export function listDepartmentsForPack(db: DbLike, packKeyInput: unknown): Depar
     const baseRows = db
       .prepare(
         `
-          SELECT id, name, name_ko, name_ja, name_zh, icon, color, description, prompt, sort_order, created_at
+          SELECT id, name, name_ko, name_ja, name_zh, name_pt, icon, color, description, prompt, sort_order, created_at
           FROM departments
           ORDER BY sort_order ASC, id ASC
         `,

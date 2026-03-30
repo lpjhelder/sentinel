@@ -132,6 +132,28 @@ export function applyTaskSchemaMigrations(db: DbLike): void {
     /* already exists */
   }
 
+  // Agent Office: new columns for agent hiring system
+  try {
+    db.exec("ALTER TABLE agents ADD COLUMN current_room_id TEXT");
+  } catch {
+    /* already exists */
+  }
+  try {
+    db.exec("ALTER TABLE agents ADD COLUMN agent_type TEXT NOT NULL DEFAULT 'lead_senior'");
+  } catch {
+    /* already exists */
+  }
+  try {
+    db.exec("ALTER TABLE agents ADD COLUMN specialty TEXT");
+  } catch {
+    /* already exists */
+  }
+  try {
+    db.exec("ALTER TABLE agents ADD COLUMN hired_by_agent_id TEXT");
+  } catch {
+    /* already exists */
+  }
+
   ensureOfficePackScopedDepartmentSchema(db);
 
   migrateMessagesDirectiveType(db);
@@ -228,14 +250,15 @@ function ensureOfficePackScopedDepartmentSchema(db: DbLike): void {
   const upsertPackDepartment = db.prepare(
     `
       INSERT INTO office_pack_departments (
-        workflow_pack_key, department_id, name, name_ko, name_ja, name_zh,
+        workflow_pack_key, department_id, name, name_ko, name_ja, name_zh, name_pt,
         icon, color, description, prompt, sort_order, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(workflow_pack_key, department_id) DO UPDATE SET
         name = excluded.name,
         name_ko = excluded.name_ko,
         name_ja = excluded.name_ja,
         name_zh = excluded.name_zh,
+        name_pt = excluded.name_pt,
         icon = excluded.icon,
         color = excluded.color,
         description = excluded.description,
@@ -263,6 +286,7 @@ function ensureOfficePackScopedDepartmentSchema(db: DbLike): void {
         const nameKo = normalizeText(department.name_ko) || name;
         const nameJa = normalizeText(department.name_ja);
         const nameZh = normalizeText(department.name_zh);
+        const namePt = normalizeText(department.name_pt);
         const icon = normalizeText(department.icon) || "🏢";
         const color = normalizeText(department.color) || "#64748b";
         const description = normalizeText(department.description) || null;
@@ -280,6 +304,7 @@ function ensureOfficePackScopedDepartmentSchema(db: DbLike): void {
             nameKo,
             nameJa,
             nameZh,
+            namePt,
             icon,
             color,
             description,
@@ -320,7 +345,7 @@ function migrateMessagesDirectiveType(db: DbLike): void {
   const ddl = (row?.sql ?? "").toLowerCase();
   if (ddl.includes("'directive'")) return;
 
-  console.log("[Claw-Empire] Migrating messages.message_type CHECK to include 'directive'");
+  console.log("[Sentinel] Migrating messages.message_type CHECK to include 'directive'");
   const oldTable = "messages_directive_migration_old";
   db.exec("PRAGMA foreign_keys = OFF");
   try {
@@ -381,7 +406,7 @@ function migrateLegacyTasksStatusSchema(db: DbLike): void {
   const ddl = (row?.sql ?? "").toLowerCase();
   if (ddl.includes("'collaborating'") && ddl.includes("'pending'")) return;
 
-  console.log("[Claw-Empire] Migrating legacy tasks.status CHECK constraint");
+  console.log("[Sentinel] Migrating legacy tasks.status CHECK constraint");
   const newTable = "tasks_status_migration_new";
   db.exec("PRAGMA foreign_keys = OFF");
   try {
@@ -475,7 +500,7 @@ function repairLegacyTaskForeignKeys(db: DbLike): void {
   ).cnt;
   if (refCount === 0) return;
 
-  console.log("[Claw-Empire] Repairing legacy foreign keys to tasks_legacy_status_migration");
+  console.log("[Sentinel] Repairing legacy foreign keys to tasks_legacy_status_migration");
   const messagesOld = "messages_fkfix_old";
   const taskLogsOld = "task_logs_fkfix_old";
   const subtasksOld = "subtasks_fkfix_old";

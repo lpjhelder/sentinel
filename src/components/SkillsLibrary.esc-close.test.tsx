@@ -28,8 +28,8 @@ const startSkillLearningMock = vi.mocked(startSkillLearning);
 const getAvailableLearnedSkillsMock = vi.mocked(getAvailableLearnedSkills);
 const getCustomSkillsMock = vi.mocked(getCustomSkills);
 const unlearnSkillMock = vi.mocked(unlearnSkill);
-const LANGUAGE_STORAGE_KEY = "climpire.language";
-type TestLocale = "ko" | "en" | "ja" | "zh";
+const LANGUAGE_STORAGE_KEY = "sentinel.language";
+type TestLocale = "ko" | "en" | "ja" | "zh" | "pt";
 
 const UI_TEXT: Record<
   TestLocale,

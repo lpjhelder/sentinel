@@ -84,6 +84,11 @@ export function initializeOAuthRuntime(deps: OAuthRuntimeDeps): OAuthRuntimeHelp
     /* already exists */
   }
   try {
+    db.exec("ALTER TABLE agents ADD COLUMN name_pt TEXT NOT NULL DEFAULT ''");
+  } catch {
+    /* already exists */
+  }
+  try {
     db.exec("ALTER TABLE agents ADD COLUMN acts_as_planning_leader INTEGER NOT NULL DEFAULT 0");
   } catch {
     /* already exists */
@@ -96,6 +101,11 @@ export function initializeOAuthRuntime(deps: OAuthRuntimeDeps): OAuthRuntimeHelp
   }
   try {
     db.exec("ALTER TABLE departments ADD COLUMN name_zh TEXT NOT NULL DEFAULT ''");
+  } catch {
+    /* already exists */
+  }
+  try {
+    db.exec("ALTER TABLE departments ADD COLUMN name_pt TEXT NOT NULL DEFAULT ''");
   } catch {
     /* already exists */
   }
@@ -113,6 +123,24 @@ export function initializeOAuthRuntime(deps: OAuthRuntimeDeps): OAuthRuntimeHelp
     UPDATE departments SET name_ja = '品質管理チーム',          name_zh = '质量管理组' WHERE id = 'qa' AND (name_ja = '' OR name_ja IS NULL);
     UPDATE departments SET name_ja = 'インフラセキュリティチーム', name_zh = '基础安全组' WHERE id = 'devsecops' AND (name_ja = '' OR name_ja IS NULL);
     UPDATE departments SET name_ja = '運営チーム',              name_zh = '运营组'    WHERE id = 'operations' AND (name_ja = '' OR name_ja IS NULL);
+  `);
+  } catch {
+    /* already backfilled */
+  }
+  // 부서 포르투갈어 이름 백필
+  try {
+    db.exec(`
+    UPDATE departments SET name_pt = 'Análise'           WHERE id = 'analyze' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Geração'           WHERE id = 'generate' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Avaliação'         WHERE id = 'evaluate' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Humanização'       WHERE id = 'humanize' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Entrega'           WHERE id = 'deliver' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Planejamento'      WHERE id = 'planning' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Desenvolvimento'   WHERE id = 'dev' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Design'            WHERE id = 'design' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Qualidade'         WHERE id = 'qa' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'DevSecOps'         WHERE id = 'devsecops' AND (name_pt = '' OR name_pt IS NULL);
+    UPDATE departments SET name_pt = 'Operações'         WHERE id = 'operations' AND (name_pt = '' OR name_pt IS NULL);
   `);
   } catch {
     /* already backfilled */
@@ -140,6 +168,7 @@ export function initializeOAuthRuntime(deps: OAuthRuntimeDeps): OAuthRuntimeHelp
           name_ko TEXT NOT NULL DEFAULT '',
           name_ja TEXT NOT NULL DEFAULT '',
           name_zh TEXT NOT NULL DEFAULT '',
+          name_pt TEXT NOT NULL DEFAULT '',
           department_id TEXT REFERENCES departments(id),
           workflow_pack_key TEXT NOT NULL DEFAULT 'development',
           role TEXT NOT NULL CHECK(role IN ('team_leader','senior','junior','intern')),
@@ -160,7 +189,7 @@ export function initializeOAuthRuntime(deps: OAuthRuntimeDeps): OAuthRuntimeHelp
           created_at INTEGER DEFAULT (unixepoch()*1000)
         );
         INSERT INTO agents_new (
-          id, name, name_ko, name_ja, name_zh, department_id, workflow_pack_key,
+          id, name, name_ko, name_ja, name_zh, name_pt, department_id, workflow_pack_key,
           role, acts_as_planning_leader, cli_provider, oauth_account_id,
           api_provider_id, api_model, cli_model, cli_reasoning_level,
           avatar_emoji, sprite_number, personality, status, current_task_id,
@@ -172,6 +201,7 @@ export function initializeOAuthRuntime(deps: OAuthRuntimeDeps): OAuthRuntimeHelp
           name_ko,
           name_ja,
           name_zh,
+          COALESCE(name_pt, ''),
           department_id,
           ${workflowPackExpr},
           role,

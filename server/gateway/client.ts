@@ -160,7 +160,7 @@ function readPersistedMessengerChannels(): PersistedMessengerChannels | null {
     }
     return parsed as PersistedMessengerChannels;
   } catch (err) {
-    console.warn(`[Claw-Empire] failed to load messenger channels settings: ${String(err)}`);
+    console.warn(`[Sentinel] failed to load messenger channels settings: ${String(err)}`);
     return null;
   } finally {
     try {
@@ -923,7 +923,7 @@ function queueWake(params: { key: string; text: string; debounceMs?: number }) {
   }
 
   void sendMessengerWake(params.text).catch((err) => {
-    console.warn(`[Claw-Empire] messenger notification failed (${params.key}): ${String(err)}`);
+    console.warn(`[Sentinel] messenger notification failed (${params.key}): ${String(err)}`);
   });
 }
 
@@ -989,5 +989,5 @@ export async function gatewayHttpInvoke(_req: {
   action?: string;
   args?: Record<string, any>;
 }): Promise<any> {
-  throw new Error("openclaw gateway integration has been removed; use direct messenger transports");
+  throw new Error("opensentinel gateway integration has been removed; use direct messenger transports");
 }

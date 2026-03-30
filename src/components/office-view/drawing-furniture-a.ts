@@ -3,7 +3,10 @@ import { DESK_H, DESK_W, TARGET_CHAR_H } from "./model";
 import { blendColor } from "./drawing-core";
 import { OFFICE_PASTEL } from "./themes-locale";
 
-function drawDesk(parent: Container, dx: number, dy: number, working: boolean): Graphics {
+type DeskScreenState = "working" | "idle" | "waiting";
+
+function drawDesk(parent: Container, dx: number, dy: number, working: boolean | DeskScreenState): Graphics {
+  const screenState: DeskScreenState = typeof working === "string" ? working : working ? "working" : "idle";
   const g = new Graphics();
   // Shadow (softer, multi-layer)
   g.ellipse(dx + DESK_W / 2, dy + DESK_H + 4, DESK_W / 2 + 6, 6).fill({ color: 0x000000, alpha: 0.06 });
@@ -92,8 +95,9 @@ function drawDesk(parent: Container, dx: number, dy: number, working: boolean): 
   g.roundRect(mx, my, 20, 13, 2).fill(0x3e4858);
   g.roundRect(mx, my, 20, 13, 2).stroke({ width: 0.6, color: 0x5a6678 });
   // Screen
-  g.roundRect(mx + 1.5, my + 1, 17, 10, 1).fill(working ? 0x89c8b9 : 0x1e2836);
-  if (working) {
+  const screenColors = { working: 0x89c8b9, idle: 0x1e2836, waiting: 0x4a3a10 };
+  g.roundRect(mx + 1.5, my + 1, 17, 10, 1).fill(screenColors[screenState]);
+  if (screenState === "working") {
     // Code lines on screen (colorful IDE look)
     const codeColors = [0xe1fff8, 0xf8d876, 0xa8d8ea, 0xf0b8c8];
     for (let i = 0; i < 4; i++) {
@@ -107,6 +111,17 @@ function drawDesk(parent: Container, dx: number, dy: number, working: boolean): 
     g.rect(mx + 4, my + 2.5, 0.5, 1.5).fill({ color: 0xffffff, alpha: 0.5 });
     // Screen glow on desk
     g.ellipse(mx + 10, my + 15, 12, 3).fill({ color: 0xa3ded1, alpha: 0.06 });
+  } else if (screenState === "waiting") {
+    // Waiting: amber loading indicator (hourglass/spinner look)
+    g.circle(mx + 10, my + 6, 3).stroke({ width: 0.8, color: 0xf4c95b, alpha: 0.7 });
+    g.moveTo(mx + 10, my + 3.5).lineTo(mx + 10, my + 6).stroke({ width: 0.6, color: 0xf4c95b, alpha: 0.8 });
+    g.moveTo(mx + 10, my + 6).lineTo(mx + 12, my + 6).stroke({ width: 0.6, color: 0xf4c95b, alpha: 0.8 });
+    // "..." dots
+    g.circle(mx + 5, my + 9, 0.5).fill({ color: 0xf4c95b, alpha: 0.5 });
+    g.circle(mx + 8, my + 9, 0.5).fill({ color: 0xf4c95b, alpha: 0.5 });
+    g.circle(mx + 11, my + 9, 0.5).fill({ color: 0xf4c95b, alpha: 0.5 });
+    // Amber glow on desk
+    g.ellipse(mx + 10, my + 15, 12, 3).fill({ color: 0xf4c95b, alpha: 0.04 });
   } else {
     // Screensaver: tiny stars on dark screen
     g.circle(mx + 5, my + 4, 0.5).fill({ color: 0xffffff, alpha: 0.15 });
@@ -334,4 +349,4 @@ function drawWhiteboard(parent: Container, x: number, y: number) {
   parent.addChild(g);
 }
 
-export { drawDesk, drawChair, drawPlant, drawWhiteboard };
+export { drawDesk, drawChair, drawPlant, drawWhiteboard, type DeskScreenState };

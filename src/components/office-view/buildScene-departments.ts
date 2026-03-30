@@ -30,7 +30,7 @@ import {
   drawWallClock,
   drawWindow,
 } from "./drawing-core";
-import { drawChair, drawDesk, drawPlant, drawWhiteboard } from "./drawing-furniture-a";
+import { drawChair, drawDesk, drawPlant, drawWhiteboard, type DeskScreenState } from "./drawing-furniture-a";
 import { drawBookshelf } from "./drawing-furniture-b";
 import { renderDeskAgentAndSubClones } from "./buildScene-department-agent";
 
@@ -168,6 +168,7 @@ export function buildDepartmentRooms({
       const ax = rx + ROOM_PAD + acol * SLOT_W + SLOT_W / 2;
       const ay = ry + 38 + arow * SLOT_H;
       const isWorking = agent.status === "working";
+      const isWaiting = !isWorking && agent.status !== "offline" && agent.status !== "break" && !!agent.current_task_id;
       const isOffline = agent.status === "offline";
       const isBreak = agent.status === "break";
 
@@ -178,6 +179,28 @@ export function buildDepartmentRooms({
       agentPosRef.current.set(agent.id, { x: ax, y: deskY });
 
       renderAgentHeader(room, ax, nameY, agent, theme.accent, unread, activeLocale);
+
+      if (agent.agent_type === "hired_senior") {
+        const hiredLabel = pickLocale(activeLocale, LOCALE_TEXT.hiredBadge);
+        const hiredText = new Text({
+          text: hiredLabel,
+          style: new TextStyle({
+            fontSize: 6,
+            fill: 0xffffff,
+            fontWeight: "bold",
+            fontFamily: "system-ui, sans-serif",
+          }),
+        });
+        hiredText.anchor.set(0.5, 0.5);
+        const hiredW = hiredText.width + 6;
+        const hiredBg = new Graphics();
+        hiredBg.roundRect(ax - hiredW / 2, nameY + 23, hiredW, 9, 2).fill({ color: 0xd97706, alpha: 0.9 });
+        hiredBg.roundRect(ax - hiredW / 2, nameY + 23, hiredW, 9, 2).stroke({ width: 0.6, color: 0xfbbf24, alpha: 0.5 });
+        room.addChild(hiredBg);
+        hiredText.position.set(ax, nameY + 27.5);
+        room.addChild(hiredText);
+      }
+
       drawChair(room, ax, charFeetY - TARGET_CHAR_H * 0.18, theme.accent);
 
       const removedBursts = removedSubBurstsByParent.get(agent.id);
@@ -202,6 +225,7 @@ export function buildDepartmentRooms({
           deskY,
           charFeetY,
           isWorking,
+          isWaiting,
           isOffline,
           cbRef,
           animItemsRef,

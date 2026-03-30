@@ -59,7 +59,9 @@ export function buildBreakRoom({
   wallClocksRef,
   agentPosRef,
 }: BuildBreakRoomParams): void {
-  const breakAgents = agents.filter((agent) => agent.status === "break");
+  const breakAgents = agents.filter(
+    (agent) => agent.status === "break" && !agent.current_room_id && agent.agent_type !== "hired_senior",
+  );
   breakAnimItemsRef.current = [];
   breakBubblesRef.current = [];
 

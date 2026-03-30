@@ -28,7 +28,7 @@ flowchart LR
     BE0["server/index.ts"]
     BE1["Express REST (/api/*)"]
     BE2["WebSocket broadcast"]
-    BE3["SQLite (claw-empire.sqlite)"]
+    BE3["SQLite (sentinel.sqlite)"]
     BE4["CLI/HTTP agents + logs + worktrees"]
     BE0 --> BE1
     BE0 --> BE2
@@ -70,7 +70,7 @@ flowchart LR
   Run --> Proc["CLI process / HTTP provider"]
   Proc --> Log["logs/*.log + task_logs"]
   Log --> WS
-  REST --> Git[".climpire-worktrees + git ops"]
+  REST --> Git[".sentinel-worktrees + git ops"]
   REST --> OAuth["oauth_credentials"]
 ```
 

@@ -43,7 +43,7 @@ parse() {
   " 2>/dev/null
 }
 
-# Map agent type/name → Claw-Empire agent name
+# Map agent type/name → Sentinel agent name
 map_agent() {
   local raw="$1"
   local lower

@@ -145,7 +145,7 @@ export function createHttpAgentTools(deps: CreateHttpAgentToolsDeps) {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
-            "Editor-Version": "climpire/1.0.0",
+            "Editor-Version": "sentinel/1.0.0",
             "Copilot-Integration-Id": "vscode-chat",
           },
           body: JSON.stringify({
@@ -375,7 +375,7 @@ export function createHttpAgentTools(deps: CreateHttpAgentToolsDeps) {
           const msg = normalizeStreamChunk(`[${agent}] Error: ${err.message}\n`);
           safeWrite(msg);
           broadcast("cli_output", { task_id: taskId, stream: "stderr", data: msg });
-          console.error(`[Claw-Empire] HTTP agent error (${agent}, task ${taskId}): ${err.message}`);
+          console.error(`[Sentinel] HTTP agent error (${agent}, task ${taskId}): ${err.message}`);
         } else {
           const msg = normalizeStreamChunk(`[${agent}] Aborted by user\n`);
           safeWrite(msg);

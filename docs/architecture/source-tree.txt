@@ -1,4 +1,4 @@
-climpire
+sentinel
 ├── docs/
 │   ├── architecture/
 │   │   ├── architecture.json
@@ -11,7 +11,7 @@ climpire
 │   └── DESIGN.md
 ├── public/
 │   ├── public/sprites/ (61 sprite files)
-│   └── climpire.svg
+│   └── sentinel.svg
 ├── scripts/
 │   └── generate-architecture-report.mjs
 ├── server/

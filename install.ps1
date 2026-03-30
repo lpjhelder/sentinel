@@ -6,7 +6,7 @@ param(
 )
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$target = Join-Path $scriptDir "scripts/openclaw-setup.ps1"
+$target = Join-Path $scriptDir "scripts/opensentinel-setup.ps1"
 
 $forward = @()
 if ($AgentsPath) { $forward += @("-AgentsPath", $AgentsPath) }

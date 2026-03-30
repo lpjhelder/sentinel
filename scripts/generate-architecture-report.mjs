@@ -10,7 +10,7 @@ const outputDir = path.join(repoRoot, "docs", "architecture");
 const CODE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"]);
 const RESOLVE_EXTENSIONS = [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".json"];
 
-const SKIP_DIRS = new Set([".git", "node_modules", "dist", "logs", ".climpire-worktrees"]);
+const SKIP_DIRS = new Set([".git", "node_modules", "dist", "logs", ".sentinel-worktrees"]);
 
 function toPosix(p) {
   return p.split(path.sep).join("/");
@@ -310,7 +310,7 @@ function roleRank(role) {
 }
 
 function readOrgData() {
-  const dbPath = path.join(repoRoot, "claw-empire.sqlite");
+  const dbPath = path.join(repoRoot, "sentinel.sqlite");
   if (!fs.existsSync(dbPath)) return [];
 
   let db;
@@ -533,7 +533,7 @@ flowchart LR
   subgraph Backend
     B1["server/index.ts"] --> B2["Express REST API"]
     B1 --> B3["WebSocket Server"]
-    B1 --> B4["SQLite (claw-empire.sqlite)"]
+    B1 --> B4["SQLite (sentinel.sqlite)"]
     B1 --> B5["Git Worktree + CLI Process"]
   end
 

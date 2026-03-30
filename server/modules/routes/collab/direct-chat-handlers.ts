@@ -123,12 +123,12 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
                 [
                   recentLines.length > 0
                     ? `기존 프로젝트를 선택해주세요. 최근 프로젝트 ${RECENT_EXISTING_PROJECT_LIMIT}개입니다.\n${recentLines.join("\n")}\n번호(1-${recentLines.length}) 또는 프로젝트 이름/절대경로를 보내주세요.`
-                    : "기존 프로젝트 목록이 비어 있습니다. 프로젝트 절대경로(예: /Users/classys/Projects/climpire) 또는 기존 프로젝트 이름을 보내주세요.",
+                    : "기존 프로젝트 목록이 비어 있습니다. 프로젝트 절대경로(예: /Users/classys/Projects/sentinel) 또는 기존 프로젝트 이름을 보내주세요.",
                 ],
                 [
                   recentLines.length > 0
                     ? `Choose an existing project. Recent ${RECENT_EXISTING_PROJECT_LIMIT} projects:\n${recentLines.join("\n")}\nSend a number (1-${recentLines.length}) or project name/absolute path.`
-                    : "No recent existing projects found. Send an absolute project path (e.g. /Users/classys/Projects/climpire) or an existing project name.",
+                    : "No recent existing projects found. Send an absolute project path (e.g. /Users/classys/Projects/sentinel) or an existing project name.",
                 ],
                 [
                   recentLines.length > 0
@@ -318,10 +318,10 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           if (!newProjectName) {
             const askNameAgain = pickL(
               l(
-                ["신규 프로젝트 이름을 다시 알려주세요. 예: climpire-redesign"],
-                ["Please provide the new project name again. Example: climpire-redesign"],
-                ["新規プロジェクト名をもう一度送ってください。例: climpire-redesign"],
-                ["请重新提供新项目名称。例如：climpire-redesign"],
+                ["신규 프로젝트 이름을 다시 알려주세요. 예: sentinel-redesign"],
+                ["Please provide the new project name again. Example: sentinel-redesign"],
+                ["新規プロジェクト名をもう一度送ってください。例: sentinel-redesign"],
+                ["请重新提供新项目名称。例如：sentinel-redesign"],
               ),
               lang,
             );
@@ -344,10 +344,10 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           });
           const askNewPath = pickL(
             l(
-              ["신규 프로젝트 절대경로를 보내주세요. 예: /Users/classys/Projects/climpire-redesign"],
-              ["Send the new project's absolute path. Example: /Users/classys/Projects/climpire-redesign"],
-              ["新規プロジェクトの絶対パスを送ってください。例: /Users/classys/Projects/climpire-redesign"],
-              ["请发送新项目绝对路径。例如：/Users/classys/Projects/climpire-redesign"],
+              ["신규 프로젝트 절대경로를 보내주세요. 예: /Users/classys/Projects/sentinel-redesign"],
+              ["Send the new project's absolute path. Example: /Users/classys/Projects/sentinel-redesign"],
+              ["新規プロジェクトの絶対パスを送ってください。例: /Users/classys/Projects/sentinel-redesign"],
+              ["请发送新项目绝对路径。例如：/Users/classys/Projects/sentinel-redesign"],
             ),
             lang,
           );
@@ -367,10 +367,10 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           if (!providedPath) {
             const askPathAgain = pickL(
               l(
-                ["절대경로 형식으로 다시 보내주세요. 예: /Users/classys/Projects/climpire-redesign"],
-                ["Please send it again as an absolute path. Example: /Users/classys/Projects/climpire-redesign"],
-                ["絶対パス形式で再送してください。例: /Users/classys/Projects/climpire-redesign"],
-                ["请用绝对路径格式重新发送。例如：/Users/classys/Projects/climpire-redesign"],
+                ["절대경로 형식으로 다시 보내주세요. 예: /Users/classys/Projects/sentinel-redesign"],
+                ["Please send it again as an absolute path. Example: /Users/classys/Projects/sentinel-redesign"],
+                ["絶対パス形式で再送してください。例: /Users/classys/Projects/sentinel-redesign"],
+                ["请用绝对路径格式重新发送。例如：/Users/classys/Projects/sentinel-redesign"],
               ),
               lang,
             );

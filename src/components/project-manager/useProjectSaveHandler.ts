@@ -163,7 +163,7 @@ export function useProjectSaveHandler({
                 ? `このパスは既に '${existingProjectName}' に登録されています。(${existingProjectPath || "path"})`
                 : "このパスは既に別のプロジェクトに登録されています。",
               zh: existingProjectName
-                ? `该路径已被‘${existingProjectName}’注册。(${existingProjectPath || "path"})`
+                ? `该路径已被'${existingProjectName}'注册。(${existingProjectPath || "path"})`
                 : "该路径已被其他项目注册。",
             }),
           });

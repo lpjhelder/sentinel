@@ -33,6 +33,8 @@ describe("i18n helpers", () => {
     expect(normalizeLanguage("en_US")).toBe("en");
     expect(normalizeLanguage("ja-JP")).toBe("ja");
     expect(normalizeLanguage("zh-CN")).toBe("zh");
+    expect(normalizeLanguage("pt-BR")).toBe("pt");
+    expect(normalizeLanguage("pt")).toBe("pt");
     expect(normalizeLanguage("fr-FR")).toBe("en");
     expect(normalizeLanguage(undefined)).toBe("en");
   });
@@ -57,6 +59,8 @@ describe("i18n helpers", () => {
     expect(pickLang("ko", text)).toBe("안녕하세요");
     expect(pickLang("ja", text)).toBe("hello");
     expect(pickLang("zh", text)).toBe("hello");
+    expect(pickLang("pt", text)).toBe("hello");
+    expect(pickLang("pt", { ko: "안녕", en: "hello", pt: "olá" })).toBe("olá");
 
     expect(
       localeName("ko", {
@@ -75,6 +79,20 @@ describe("i18n helpers", () => {
     expect(localeFromLanguage("en")).toBe("en-US");
     expect(localeFromLanguage("ja")).toBe("ja-JP");
     expect(localeFromLanguage("zh")).toBe("zh-CN");
+    expect(localeFromLanguage("pt")).toBe("pt-BR");
+
+    expect(
+      localeName("pt", {
+        name: "Planning",
+        name_pt: "Planejamento",
+      }),
+    ).toBe("Planejamento");
+    expect(
+      localeName("pt", {
+        name: "Planning",
+        name_pt: "",
+      }),
+    ).toBe("Planning");
   });
 
   it("useI18n은 override 언어가 있으면 Provider 언어보다 override를 우선한다", () => {

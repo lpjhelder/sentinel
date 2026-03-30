@@ -1,18 +1,18 @@
 services:
-  claw-empire:
+  sentinel:
     build:
       context: .
       dockerfile: Dockerfile
       args:
         APP_UID: 10001
         APP_GID: 10001
-    container_name: claw-empire
+    container_name: sentinel
     restart: unless-stopped
     env_file:
       - .env.docker
       - .env.docker.private
     environment:
-      DB_PATH: /app/data/claw-empire.sqlite
+      DB_PATH: /app/data/sentinel.sqlite
       LOGS_DIR: /app/data/logs
     ports:
       - "8790:8790"

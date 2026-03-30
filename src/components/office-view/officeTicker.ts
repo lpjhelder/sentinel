@@ -247,6 +247,16 @@ export function runOfficeTickerStep(ctx: OfficeTickerContext): void {
       }
     }
 
+    // Waiting state: pulse the desk screen amber (blink effect)
+    if (status === "idle" && deskG) {
+      const agentData = ctx.dataRef.current.agents?.find((a: any) => a.id === agentId);
+      if (agentData?.current_task_id) {
+        // Agent has a task but is idle = waiting. Pulse the desk opacity.
+        const blink = 0.6 + Math.sin(tick * 0.12) * 0.4;
+        deskG.alpha = blink;
+      }
+    }
+
     if (cliProvider) {
       const usage = ctx.cliUsageRef.current?.[cliProvider];
       const maxUtil = usage?.windows?.reduce((max, window) => Math.max(max, window.utilization), 0) ?? 0;

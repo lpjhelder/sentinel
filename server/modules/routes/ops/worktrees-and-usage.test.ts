@@ -44,8 +44,8 @@ function initRepo(basePrefix: string): string {
     runGit(dir, ["init"]);
     runGit(dir, ["checkout", "-B", "main"]);
   }
-  runGit(dir, ["config", "user.name", "Claw-Empire Test"]);
-  runGit(dir, ["config", "user.email", "claw-empire-test@example.local"]);
+  runGit(dir, ["config", "user.name", "Sentinel Test"]);
+  runGit(dir, ["config", "user.email", "sentinel-test@example.local"]);
   fs.writeFileSync(path.join(dir, "README.md"), "seed\n", "utf8");
   runGit(dir, ["add", "."]);
   runGit(dir, ["commit", "-m", "seed"]);
@@ -125,7 +125,7 @@ describe("worktree verify-commit route", () => {
   });
 
   it("커밋 없이 변경만 있으면 dirty_without_commit 판정을 돌려준다", () => {
-    const repo = initRepo("climpire-verify-dirty-");
+    const repo = initRepo("sentinel-verify-dirty-");
     tempDirs.push(repo);
     const taskId = "verify-dirty-0000-0000-0000-000000000000";
     const taskWorktrees = new Map<string, { worktreePath: string; branchName: string; projectPath: string }>();
@@ -158,7 +158,7 @@ describe("worktree verify-commit route", () => {
   });
 
   it("커밋된 코드 변경이 있으면 ok 판정을 돌려준다", () => {
-    const repo = initRepo("climpire-verify-ok-");
+    const repo = initRepo("sentinel-verify-ok-");
     tempDirs.push(repo);
     const taskId = "verify-okay-0000-0000-0000-000000000000";
     const taskWorktrees = new Map<string, { worktreePath: string; branchName: string; projectPath: string }>();
@@ -197,7 +197,7 @@ describe("worktree verify-commit route", () => {
   });
 
   it("수동 merge 전에 최종 브랜치 검증 통과 로그를 남긴다", () => {
-    const repo = initRepo("climpire-verify-merge-");
+    const repo = initRepo("sentinel-verify-merge-");
     tempDirs.push(repo);
     const taskId = "verify-merge-0000-0000-0000-000000000000";
     const taskWorktrees = new Map<string, { worktreePath: string; branchName: string; projectPath: string }>();

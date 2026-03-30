@@ -1,0 +1,38 @@
+{
+  "$comment": "Claude Code hooks template for Agent Office integration. Copy the 'hooks' section into your .claude/settings.json. Set AGENT_OFFICE_URL and AGENT_OFFICE_TOKEN in your environment.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "HOOK_TYPE=PreToolUse TOOL_NAME=$TOOL_NAME AGENT_NAME=$AGENT_NAME /path/to/hooks/agent-office-hook.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "HOOK_TYPE=PostToolUse TOOL_NAME=$TOOL_NAME AGENT_NAME=$AGENT_NAME /path/to/hooks/agent-office-hook.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "HOOK_TYPE=Stop AGENT_NAME=$AGENT_NAME /path/to/hooks/agent-office-hook.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -189,7 +189,7 @@ export default function AgentFormModal({
             {locale.startsWith("ja") && (
               <div>
                 <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                  {t({ ko: "일본어 이름", en: "Japanese Name", ja: "日本語名", zh: "日语名" })}
+                  {t({ ko: "일본어 이름", en: "Japanese Name", ja: "日本語名", zh: "日语名", pt: "Nome em Japonês" })}
                 </label>
                 <input
                   type="text"
@@ -204,13 +204,28 @@ export default function AgentFormModal({
             {locale.startsWith("zh") && (
               <div>
                 <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                  {t({ ko: "중국어 이름", en: "Chinese Name", ja: "中国語名", zh: "中文名" })}
+                  {t({ ko: "중국어 이름", en: "Chinese Name", ja: "中国語名", zh: "中文名", pt: "Nome em Chinês" })}
                 </label>
                 <input
                   type="text"
                   value={form.name_zh}
                   onChange={(e) => setForm({ ...form, name_zh: e.target.value })}
                   placeholder="多罗隆"
+                  className={inputCls}
+                  style={inputStyle}
+                />
+              </div>
+            )}
+            {locale.startsWith("pt") && (
+              <div>
+                <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
+                  {t({ ko: "포르투갈어 이름", en: "Portuguese Name", ja: "ポルトガル語名", zh: "葡萄牙语名", pt: "Nome em Português" })}
+                </label>
+                <input
+                  type="text"
+                  value={form.name_pt}
+                  onChange={(e) => setForm({ ...form, name_pt: e.target.value })}
+                  placeholder="Desenvolvedor"
                   className={inputCls}
                   style={inputStyle}
                 />

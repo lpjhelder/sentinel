@@ -1,7 +1,7 @@
-<!-- BEGIN claw-empire orchestration rules -->
-# Claw-Empire Orchestration Rules
+<!-- BEGIN sentinel orchestration rules -->
+# Sentinel Orchestration Rules
 
-> This section was added by Claw-Empire setup (`pnpm setup`).
+> This section was added by Sentinel setup (`pnpm setup`).
 > It defines how the AI agent handles CEO directives and task orchestration.
 > Place this at the TOP of your AGENTS.md so it takes priority.
 
@@ -88,7 +88,7 @@ These rules are additive and do NOT delete existing orchestration rules below.
 
 ## CEO Directive (`$` prefix)
 
-**Messages starting with `$` are Claw-Empire CEO Directives.**
+**Messages starting with `$` are Sentinel CEO Directives.**
 
 When receiving a message that **starts with `$`**:
 
@@ -241,7 +241,7 @@ Only treat as success when API status is `200` (and response body indicates succ
 ### Step 5: Confirm
 
 If API status is `200`, reply with **only a short confirmation** in the user's language:
-- KO: `✅ Claw-Empire 업무지시 전달 완료` (회의 진행) / `✅ Claw-Empire 업무지시 전달 완료 (회의 생략)` (회의 없이)
+- KO: `✅ Sentinel 업무지시 전달 완료` (회의 진행) / `✅ Sentinel 업무지시 전달 완료 (회의 생략)` (회의 없이)
 - EN: `✅ Directive sent` (with meeting) / `✅ Directive sent (no meeting)` (without meeting)
 - JA: `✅ 指令を送信しました` (会議あり) / `✅ 指令を送信しました（会議なし）` (会議なし)
 - ZH: `✅ 指令已发送` (召开会议) / `✅ 指令已发送（免会议）` (不开会)
@@ -250,7 +250,7 @@ If API status is non-`200`, do NOT send success text.
 
 If status is `428` and response `error` is `agent_upgrade_required`, this is mandatory:
 1. Show installer file paths (prefer absolute paths from response fields if provided).
-2. Show the target AGENTS path (`~/.openclaw/workspace/AGENTS.md` by default, or response field).
+2. Show the target AGENTS path (`~/.opensentinel/workspace/AGENTS.md` by default, or response field).
 3. Ask the user for installation consent in the same language:
    - KO: `OpenClaw AGENTS가 구버전입니다(HTTP 428). 최신 규칙 설치가 필요합니다. 설치 파일 경로를 안내드렸습니다. 지금 제가 직접 설치해드릴까요? (예/아니오)`
    - EN: `OpenClaw AGENTS is outdated (HTTP 428). Latest rules must be installed. I listed installer paths. Should I install it now? (yes/no)`
@@ -260,7 +260,7 @@ If status is not the upgrade case above, return only a short failure notice (sta
 
 ### What happens on the server
 
-The Claw-Empire server detects the `$` prefix and automatically:
+The Sentinel server detects the `$` prefix and automatically:
 - Broadcasts a company-wide announcement
 - If meeting: Planning team leader convenes a team leader meeting -> discussion -> agent assignment -> CLI execution
 - If no meeting: Planning team leader directly delegates to the best agent -> CLI execution
@@ -464,7 +464,7 @@ curl http://127.0.0.1:__PORT__/api/cli-status
 
 When processing `$` or `#` commands, the response to the user must be **minimal and clean**:
 
-1. **`$` directive**: After collecting required meeting/path inputs and sending to API, reply with only `✅ Claw-Empire 업무지시 전달 완료` (or language equivalent). Nothing else.
+1. **`$` directive**: After collecting required meeting/path inputs and sending to API, reply with only `✅ Sentinel 업무지시 전달 완료` (or language equivalent). Nothing else.
 2. **`#` task**: Only `✅ 태스크 등록 완료` (or language equivalent). Nothing else.
 3. **Failure case**: If API status is non-`200`, do not send success text.
    - Exception: for `HTTP 428` + `agent_upgrade_required`, you MUST show installer paths and ask `지금 제가 직접 설치해드릴까요?` (language-matched).
@@ -479,4 +479,4 @@ When processing `$` or `#` commands, the response to the user must be **minimal 
 
 ---
 
-<!-- END claw-empire orchestration rules -->
+<!-- END sentinel orchestration rules -->

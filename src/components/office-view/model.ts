@@ -8,6 +8,8 @@ import type {
   SubAgent,
   CrossDeptDelivery,
   CeoOfficeCall,
+  Room,
+  Hiring,
 } from "../../types";
 
 interface OfficeViewProps {
@@ -15,6 +17,8 @@ interface OfficeViewProps {
   agents: Agent[];
   tasks: Task[];
   subAgents: SubAgent[];
+  rooms?: Room[];
+  hirings?: Hiring[];
   meetingPresence?: MeetingPresence[];
   activeMeetingTaskId?: string | null;
   unreadAgentIds?: Set<string>;

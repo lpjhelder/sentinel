@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/claw-empire.svg" width="80" alt="Claw-Empire" />
+  <img src="public/sentinel.svg" width="80" alt="Sentinel" />
 </p>
 
-<h1 align="center">Claw-Empire</h1>
+<h1 align="center">Sentinel</h1>
 
 <p align="center">
   <strong>CEO 데스크에서 AI 에이전트 제국을 지휘하세요</strong><br>
@@ -11,7 +11,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-2.0.4-blue" alt="Releases" />
-  <a href="https://github.com/GreenSheep01201/claw-empire/actions/workflows/ci.yml"><img src="https://github.com/GreenSheep01201/claw-empire/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
+  <a href="https://github.com/lpjhelder/sentinel/actions/workflows/ci.yml"><img src="https://github.com/lpjhelder/sentinel/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D22-brightgreen" alt="Node.js 22+" />
   <img src="https://img.shields.io/badge/license-Apache%202.0-orange" alt="License" />
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey" alt="Platform" />
@@ -22,8 +22,8 @@
   <a href="#빠른-시작">빠른 시작</a> &middot;
   <a href="#ai-installation-guide">AI 설치 가이드</a> &middot;
   <a href="docs/releases/v2.0.4.md">릴리즈 노트</a> &middot;
-  <a href="#openclaw-integration">OpenClaw 연동</a> &middot;
-  <a href="#direct-messenger-without-openclaw">직접 메신저</a> &middot;
+  <a href="#opensentinel-integration">OpenClaw 연동</a> &middot;
+  <a href="#direct-messenger-without-opensentinel">직접 메신저</a> &middot;
   <a href="#dollar-command-logic">$ 명령 로직</a> &middot;
   <a href="#주요-기능">주요 기능</a> &middot;
   <a href="#스크린샷">스크린샷</a> &middot;
@@ -43,11 +43,11 @@
 
 ---
 
-## Claw-Empire란?
+## Sentinel란?
 
-Claw-Empire는 **CLI**, **OAuth**, **직접 API 키** 방식으로 연결된 AI 코딩 어시스턴트들을 완전한 **가상 소프트웨어 회사**로 탈바꿈시킵니다. 당신은 CEO입니다. AI 에이전트들은 당신의 직원입니다. 에이전트들이 부서 간 협업하고, 회의를 열고, 업무를 완수하며, 레벨업하는 모습을 아기자기한 픽셀 아트 오피스 화면으로 직접 확인하세요.
+Sentinel는 **CLI**, **OAuth**, **직접 API 키** 방식으로 연결된 AI 코딩 어시스턴트들을 완전한 **가상 소프트웨어 회사**로 탈바꿈시킵니다. 당신은 CEO입니다. AI 에이전트들은 당신의 직원입니다. 에이전트들이 부서 간 협업하고, 회의를 열고, 업무를 완수하며, 레벨업하는 모습을 아기자기한 픽셀 아트 오피스 화면으로 직접 확인하세요.
 
-### 왜 Claw-Empire인가?
+### 왜 Sentinel인가?
 
 - **하나의 인터페이스, 다양한 AI 에이전트** — CLI/OAuth/API 기반 에이전트를 단일 대시보드에서 관리
 - **로컬 퍼스트 & 프라이버시 보장** — 모든 데이터는 내 PC에. SQLite 데이터베이스, 클라우드 의존성 없음
@@ -61,8 +61,8 @@ Claw-Empire는 **CLI**, **OAuth**, **직접 API 키** 방식으로 연결된 AI 
 > **아래 내용을 AI 코딩 에이전트(Claude Code, Codex, Gemini CLI 등)에 붙여넣기만 하세요:**
 >
 > ```
-> Install Claw-Empire following the guide at:
-> https://github.com/GreenSheep01201/claw-empire
+> Install Sentinel following the guide at:
+> https://github.com/lpjhelder/sentinel
 > ```
 >
 > AI가 이 README를 읽고 모든 것을 자동으로 처리합니다.
@@ -178,10 +178,10 @@ Claw-Empire는 **CLI**, **OAuth**, **직접 API 키** 방식으로 연결된 AI 
 인트로 영상 출력 샘플 미리보기:
 
 <p align="center">
-  <video src="Sample_Img/claw-empire-intro.mp4" controls muted playsinline width="100%"></video>
+  <video src="Sample_Img/sentinel-intro.mp4" controls muted playsinline width="100%"></video>
 </p>
 
-- 파일 바로가기: [`Sample_Img/claw-empire-intro.mp4`](Sample_Img/claw-empire-intro.mp4)
+- 파일 바로가기: [`Sample_Img/sentinel-intro.mp4`](Sample_Img/sentinel-intro.mp4)
 
 ### PPT 샘플 소스
 
@@ -261,8 +261,8 @@ git --version
 ### 1단계: 클론 후 원클릭 셋업 실행
 
 ```bash
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/lpjhelder/sentinel.git
+cd sentinel
 git submodule update --init --recursive
 bash install.sh
 ```
@@ -270,8 +270,8 @@ bash install.sh
 Windows PowerShell:
 
 ```powershell
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/lpjhelder/sentinel.git
+cd sentinel
 git submodule update --init --recursive
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
@@ -285,8 +285,8 @@ macOS/Linux:
 [ -f .env ] && [ -f scripts/setup.mjs ] && echo "setup files ok"
 
 # AGENTS 오케스트레이션 규칙 확인
-grep -R "BEGIN claw-empire orchestration rules" ~/.openclaw/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
-grep -R "INBOX_SECRET_DISCOVERY_V2" ~/.openclaw/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
+grep -R "BEGIN sentinel orchestration rules" ~/.opensentinel/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
+grep -R "INBOX_SECRET_DISCOVERY_V2" ~/.opensentinel/workspace/AGENTS.md AGENTS.md 2>/dev/null || true
 
 # OpenClaw inbox 필수 .env 항목 확인
 grep -E '^(INBOX_WEBHOOK_SECRET|OPENCLAW_CONFIG)=' .env || true
@@ -296,8 +296,8 @@ Windows PowerShell:
 
 ```powershell
 if ((Test-Path .\.env) -and (Test-Path .\scripts\setup.mjs)) { "setup files ok" }
-$agentCandidates = @("$env:USERPROFILE\.openclaw\workspace\AGENTS.md", ".\AGENTS.md")
-$agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "BEGIN claw-empire orchestration rules" } }
+$agentCandidates = @("$env:USERPROFILE\.opensentinel\workspace\AGENTS.md", ".\AGENTS.md")
+$agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "BEGIN sentinel orchestration rules" } }
 $agentCandidates | ForEach-Object { if (Test-Path $_) { Select-String -Path $_ -Pattern "INBOX_SECRET_DISCOVERY_V2" } }
 
 # OpenClaw inbox 필수 .env 항목 확인
@@ -341,11 +341,11 @@ curl -X POST http://127.0.0.1:8790/api/inbox \
 - 헤더 누락/불일치 시 `401`
 - 서버에 `INBOX_WEBHOOK_SECRET`이 미설정이면 `503`
 
-<a id="direct-messenger-without-openclaw"></a>
+<a id="direct-messenger-without-opensentinel"></a>
 
 ### 5단계: OpenClaw 없이 메신저 직접 연결
 
-OpenClaw 없이도 Claw-Empire만으로 메신저 채널을 직접 운영할 수 있습니다.
+OpenClaw 없이도 Sentinel만으로 메신저 채널을 직접 운영할 수 있습니다.
 
 1. `Settings > 채널 메시지`로 이동합니다.
 2. `새 채팅 추가`를 누릅니다.
@@ -408,8 +408,8 @@ docker compose up -d --build
 ### 3) 확인
 
 ```bash
-docker ps --filter name=claw-empire
-docker logs -f claw-empire
+docker ps --filter name=sentinel
+docker logs -f sentinel
 ```
 
 접속: `http://127.0.0.1:8790`
@@ -419,8 +419,8 @@ docker logs -f claw-empire
 ```bash
 # packages write 권한이 있는 GitHub Token 필요
 echo "<GITHUB_TOKEN_WITH_PACKAGES_WRITE>" | docker login ghcr.io -u <github-user> --password-stdin
-docker tag claw-empire-claw-empire:latest ghcr.io/<github-user>/claw-empire:latest
-docker push ghcr.io/<github-user>/claw-empire:latest
+docker tag sentinel-sentinel:latest ghcr.io/<github-user>/sentinel:latest
+docker push ghcr.io/<github-user>/sentinel:latest
 ```
 
 ### 사전 요구사항
@@ -435,24 +435,24 @@ docker push ghcr.io/<github-user>/claw-empire:latest
 
 | 플랫폼                   | 명령어                                                                                                                                 |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **macOS / Linux**        | `git clone https://github.com/GreenSheep01201/claw-empire.git && cd claw-empire && bash install.sh`                                    |
-| **Windows (PowerShell)** | `git clone https://github.com/GreenSheep01201/claw-empire.git; cd claw-empire; powershell -ExecutionPolicy Bypass -File .\install.ps1` |
+| **macOS / Linux**        | `git clone https://github.com/lpjhelder/sentinel.git && cd sentinel && bash install.sh`                                    |
+| **Windows (PowerShell)** | `git clone https://github.com/lpjhelder/sentinel.git; cd sentinel; powershell -ExecutionPolicy Bypass -File .\install.ps1` |
 
 이미 클론되어 있다면:
 
 | 플랫폼                   | 명령어                                                                                                           |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| **macOS / Linux**        | `git submodule update --init --recursive && bash scripts/openclaw-setup.sh`                                      |
-| **Windows (PowerShell)** | `git submodule update --init --recursive; powershell -ExecutionPolicy Bypass -File .\scripts\openclaw-setup.ps1` |
+| **macOS / Linux**        | `git submodule update --init --recursive && bash scripts/opensentinel-setup.sh`                                      |
+| **Windows (PowerShell)** | `git submodule update --init --recursive; powershell -ExecutionPolicy Bypass -File .\scripts\opensentinel-setup.ps1` |
 
 ### OpenClaw `.env` 필수값 (`/api/inbox` 사용 시)
 
 채팅 웹훅 연동 전 `.env`에 아래 두 값을 설정하세요.
 
 - `INBOX_WEBHOOK_SECRET=<충분히 긴 랜덤 시크릿>`
-- `OPENCLAW_CONFIG=<openclaw.json 절대경로>` (따옴표 없이 권장)
+- `OPENCLAW_CONFIG=<opensentinel.json 절대경로>` (따옴표 없이 권장)
 
-`scripts/openclaw-setup.sh` / `scripts/openclaw-setup.ps1`는 `INBOX_WEBHOOK_SECRET`이 비어 있으면 자동 생성합니다.
+`scripts/opensentinel-setup.sh` / `scripts/opensentinel-setup.ps1`는 `INBOX_WEBHOOK_SECRET`이 비어 있으면 자동 생성합니다.
 초기 설치(`bash install.sh` / `install.ps1`)도 동일 셋업 스크립트를 거치므로 처음부터 자동 반영됩니다.
 이미 클론된 저장소에서 `git pull`만 한 경우에도 `pnpm dev*` / `pnpm start*` 최초 실행 시 필요 조건에서 1회 자동 보정되며, 이후 반복 실행을 막기 위해 `CLAW_MIGRATION_V1_0_5_DONE=1`이 저장됩니다.
 
@@ -468,8 +468,8 @@ docker push ghcr.io/<github-user>/claw-empire:latest
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/lpjhelder/sentinel.git
+cd sentinel
 
 # 2. corepack으로 pnpm 활성화
 corepack enable
@@ -489,7 +489,7 @@ node -e "
   fs.writeFileSync(p, content.replace('__CHANGE_ME__', crypto.randomBytes(32).toString('hex')));
 "
 
-# 6. AGENTS.md 오케스트레이션 규칙 설정 (AI 에이전트에게 Claw-Empire 프로젝트 매니저 역할을 부여)
+# 6. AGENTS.md 오케스트레이션 규칙 설정 (AI 에이전트에게 Sentinel 프로젝트 매니저 역할을 부여)
 pnpm setup -- --port 8790
 
 # 7. 개발 서버 시작
@@ -503,8 +503,8 @@ pnpm dev:local
 
 ```powershell
 # 1. 저장소 클론
-git clone https://github.com/GreenSheep01201/claw-empire.git
-cd claw-empire
+git clone https://github.com/lpjhelder/sentinel.git
+cd sentinel
 
 # 2. corepack으로 pnpm 활성화
 corepack enable
@@ -518,7 +518,7 @@ Copy-Item .env.example .env
 # 5. 무작위 암호화 시크릿 생성
 node -e "const fs=require('fs');const crypto=require('crypto');const p='.env';const c=fs.readFileSync(p,'utf8');fs.writeFileSync(p,c.replace('__CHANGE_ME__',crypto.randomBytes(32).toString('hex')))"
 
-# 6. AGENTS.md 오케스트레이션 규칙 설정 (AI 에이전트에게 Claw-Empire 프로젝트 매니저 역할을 부여)
+# 6. AGENTS.md 오케스트레이션 규칙 설정 (AI 에이전트에게 Sentinel 프로젝트 매니저 역할을 부여)
 pnpm setup -- --port 8790
 
 # 7. 개발 서버 시작
@@ -532,7 +532,7 @@ pnpm dev:local
 `pnpm setup` 명령은 AI 에이전트의 `AGENTS.md` 파일에 **CEO 디렉티브 오케스트레이션 규칙**을 주입합니다. 이를 통해 AI 코딩 에이전트(Claude Code, Codex 등)가 다음을 수행할 수 있습니다:
 
 - `$` 접두사 **CEO 디렉티브** 해석 및 우선순위 태스크 위임
-- Claw-Empire REST API 호출로 태스크 생성, 에이전트 배정, 상태 보고
+- Sentinel REST API 호출로 태스크 생성, 에이전트 배정, 상태 보고
 - 안전한 병렬 개발을 위한 독립 git worktree 환경에서 작업
 
 ```bash
@@ -546,11 +546,11 @@ pnpm setup -- --agents-path /path/to/your/AGENTS.md
 pnpm setup -- --port 8790
 ```
 
-<a id="openclaw-integration"></a>
+<a id="opensentinel-integration"></a>
 
 ### OpenClaw 연동 셋업 (Telegram/WhatsApp/Discord/Google Chat/Slack/Signal/iMessage)
 
-`install.sh` / `install.ps1` (또는 `scripts/openclaw-setup.*`)은 가능한 경우 `OPENCLAW_CONFIG`를 자동 감지하여 `.env`에 기록합니다.
+`install.sh` / `install.ps1` (또는 `scripts/opensentinel-setup.*`)은 가능한 경우 `OPENCLAW_CONFIG`를 자동 감지하여 `.env`에 기록합니다.
 
 권장 `.env` 형식: `OPENCLAW_CONFIG`는 절대경로(따옴표 없이 권장).
 `v1.0.5`에서는 호환성을 위해 따옴표/선행 `~` 값도 런타임에서 정규화됩니다.
@@ -559,19 +559,19 @@ pnpm setup -- --port 8790
 
 | OS                | 경로                                    |
 | ----------------- | --------------------------------------- |
-| **macOS / Linux** | `~/.openclaw/openclaw.json`             |
-| **Windows**       | `%USERPROFILE%\.openclaw\openclaw.json` |
+| **macOS / Linux** | `~/.opensentinel/opensentinel.json`             |
+| **Windows**       | `%USERPROFILE%\.opensentinel\opensentinel.json` |
 
 수동 실행:
 
 ```bash
 # macOS / Linux
-bash scripts/openclaw-setup.sh --openclaw-config ~/.openclaw/openclaw.json
+bash scripts/opensentinel-setup.sh --opensentinel-config ~/.opensentinel/opensentinel.json
 ```
 
 ```powershell
 # Windows PowerShell
-powershell -ExecutionPolicy Bypass -File .\scripts\openclaw-setup.ps1 -OpenClawConfig "$env:USERPROFILE\.openclaw\openclaw.json"
+powershell -ExecutionPolicy Bypass -File .\scripts\opensentinel-setup.ps1 -OpenClawConfig "$env:USERPROFILE\.opensentinel\opensentinel.json"
 ```
 
 세션 확인:
@@ -584,7 +584,7 @@ curl -s http://127.0.0.1:8790/api/gateway/targets
 
 ### `$` 명령어 기반 OpenClaw 채팅 의뢰 로직
 
-채팅 메시지가 `$`로 시작하면 Claw-Empire는 CEO 디렉티브로 처리합니다.
+채팅 메시지가 `$`로 시작하면 Sentinel는 CEO 디렉티브로 처리합니다.
 
 1. 오케스트레이터가 팀장 회의 진행 여부를 먼저 확인합니다.
 2. 오케스트레이터가 작업 프로젝트 경로/컨텍스트(`project_path` 또는 `project_context`)를 확인합니다.
@@ -610,7 +610,7 @@ curl -X POST http://127.0.0.1:8790/api/inbox \
 curl -X POST http://127.0.0.1:8790/api/inbox \
   -H "content-type: application/json" \
   -H "x-inbox-secret: $INBOX_WEBHOOK_SECRET" \
-  -d '{"source":"telegram","author":"ceo","text":"$프로덕션 로그인 버그 즉시 핫픽스","skipPlannedMeeting":true,"project_context":"기존 작업하던 climpire 프로젝트"}'
+  -d '{"source":"telegram","author":"ceo","text":"$프로덕션 로그인 버그 즉시 핫픽스","skipPlannedMeeting":true,"project_context":"기존 작업하던 sentinel 프로젝트"}'
 ```
 
 브라우저에서 접속:
@@ -634,8 +634,8 @@ curl -X POST http://127.0.0.1:8790/api/inbox \
 | `HOST`                                 | 선택                          | 바인드 주소 (기본값: `127.0.0.1`)                                                                                   |
 | `API_AUTH_TOKEN`                       | 권장                          | 루프백 외부 API/WebSocket 접근용 Bearer 토큰                                                                        |
 | `INBOX_WEBHOOK_SECRET`                 | **`/api/inbox` 사용 시 필수** | `x-inbox-secret` 헤더와 일치해야 하는 공유 시크릿                                                                   |
-| `OPENCLAW_CONFIG`                      | OpenClaw 사용 시 권장         | 게이트웨이 타깃 조회/채팅 릴레이에 사용하는 `openclaw.json` 절대경로                                                |
-| `DB_PATH`                              | 선택                          | SQLite 데이터베이스 경로 (기본값: `./claw-empire.sqlite`)                                                           |
+| `OPENCLAW_CONFIG`                      | OpenClaw 사용 시 권장         | 게이트웨이 타깃 조회/채팅 릴레이에 사용하는 `opensentinel.json` 절대경로                                                |
+| `DB_PATH`                              | 선택                          | SQLite 데이터베이스 경로 (기본값: `./sentinel.sqlite`)                                                           |
 | `LOGS_DIR`                             | 선택                          | 로그 디렉토리 (기본값: `./logs`)                                                                                    |
 | `OAUTH_GITHUB_CLIENT_ID`               | 선택                          | GitHub OAuth 앱 클라이언트 ID                                                                                       |
 | `OAUTH_GITHUB_CLIENT_SECRET`           | 선택                          | GitHub OAuth 앱 클라이언트 시크릿                                                                                   |
@@ -644,7 +644,7 @@ curl -X POST http://127.0.0.1:8790/api/inbox \
 | `OPENAI_API_KEY`                       | 선택                          | OpenAI API 키 (Codex용)                                                                                             |
 | `REVIEW_MEETING_ONESHOT_TIMEOUT_MS`    | 선택                          | 회의 one-shot 타임아웃(밀리초). 기본값 `65000`, 하위호환으로 `600` 이하 값은 초 단위로 해석                         |
 | `UPDATE_CHECK_ENABLED`                 | 선택                          | 인앱 업데이트 확인 배너 활성화 (`1` 기본값, `0`이면 비활성화)                                                       |
-| `UPDATE_CHECK_REPO`                    | 선택                          | 업데이트 확인에 사용할 GitHub 저장소 슬러그 (기본값: `GreenSheep01201/claw-empire`)                                 |
+| `UPDATE_CHECK_REPO`                    | 선택                          | 업데이트 확인에 사용할 GitHub 저장소 슬러그 (기본값: `lpjhelder/sentinel`)                                 |
 | `UPDATE_CHECK_TTL_MS`                  | 선택                          | 업데이트 확인 캐시 TTL(밀리초) (기본값: `1800000`)                                                                  |
 | `UPDATE_CHECK_TIMEOUT_MS`              | 선택                          | GitHub 요청 타임아웃(밀리초) (기본값: `4000`)                                                                       |
 | `AUTO_UPDATE_ENABLED`                  | 선택                          | `settings.autoUpdateEnabled`가 없을 때 사용할 자동 업데이트 기본값 (`0` 기본값)                                     |
@@ -732,7 +732,7 @@ QA_API_AUTH_TOKEN="<API_AUTH_TOKEN>" pnpm run test:qa:project-path
 
 ### 인앱 업데이트 배너
 
-GitHub에 더 최신 릴리즈가 게시되면, Claw-Empire는 UI 상단에 pull 안내와 릴리즈 노트 링크를 포함한 배너를 표시합니다.
+GitHub에 더 최신 릴리즈가 게시되면, Sentinel는 UI 상단에 pull 안내와 릴리즈 노트 링크를 포함한 배너를 표시합니다.
 
 - Windows PowerShell: `git pull; pnpm install`
 - macOS/Linux 셸: `git pull && pnpm install`
@@ -794,7 +794,7 @@ GitHub에 더 최신 릴리즈가 게시되면, Claw-Empire는 UI 상단에 pull
 - direct API 프리셋은 `glm-5`, `kimi-k2.5`, `minimax-m2.5` 같은 실제 endpoint model id를 사용합니다. `opencode-go/<model-id>` 같은 OpenCode CLI 모델 ID를 쓰지 않습니다.
 - Bailian Coding Plan 키는 인터랙티브 코딩 도구 흐름용으로 안내되는 키입니다. 다른 환경에 재사용하기 전에 공식 문서를 확인하세요.
 
-Claw-Empire는 아래 3가지 방식의 프로바이더를 지원합니다:
+Sentinel는 아래 3가지 방식의 프로바이더를 지원합니다:
 
 - **CLI 도구** — 로컬 CLI 설치 후 프로세스 기반으로 실행
 - **OAuth 계정** — 지원 프로바이더를 보안 토큰 교환으로 연결
@@ -820,7 +820,7 @@ CLI 모드로 사용하려면 최소 하나 이상 설치하세요:
 ## 프로젝트 구조
 
 ```
-claw-empire/
+sentinel/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml             # PR CI (Unicode 가드, 포맷, 린트, 테스트)
@@ -846,13 +846,13 @@ claw-empire/
 ├── scripts/
 │   ├── setup.mjs             # 환경/부트스트랩 셋업
 │   ├── auto-apply-v1.0.5.mjs # 시작 시 마이그레이션 보조
-│   ├── openclaw-setup.sh     # 원클릭 셋업 (macOS/Linux)
-│   ├── openclaw-setup.ps1    # 원클릭 셋업 (Windows PowerShell)
+│   ├── opensentinel-setup.sh     # 원클릭 셋업 (macOS/Linux)
+│   ├── opensentinel-setup.ps1    # 원클릭 셋업 (Windows PowerShell)
 │   ├── prepare-e2e-runtime.mjs
 │   ├── preflight-public.sh   # 릴리즈 전 보안 검사
 │   └── generate-architecture-report.mjs
-├── install.sh                # scripts/openclaw-setup.sh 실행 래퍼
-├── install.ps1               # scripts/openclaw-setup.ps1 실행 래퍼
+├── install.sh                # scripts/opensentinel-setup.sh 실행 래퍼
+├── install.ps1               # scripts/opensentinel-setup.ps1 실행 래퍼
 ├── docs/                     # 설계 및 아키텍처 문서
 ├── AGENTS.md                 # 로컬 에이전트/오케스트레이션 규칙
 ├── CONTRIBUTING.md           # 브랜치/PR/리뷰 정책
@@ -865,7 +865,7 @@ claw-empire/
 
 ## 보안
 
-Claw-Empire는 보안을 최우선으로 설계되었습니다:
+Sentinel는 보안을 최우선으로 설계되었습니다:
 
 - **로컬 퍼스트 아키텍처** — 모든 데이터는 SQLite에 로컬로 저장; 외부 클라우드 서비스 불필요
 - **암호화된 OAuth + 메신저 토큰** — 사용자 OAuth 토큰과 직접 메신저 채널 토큰은 **서버 측 SQLite에만 저장**되며, AES-256-GCM + `OAUTH_ENCRYPTION_SECRET`(`SESSION_SECRET` 폴백)으로 암호화됩니다. 브라우저에는 리프레시 토큰이 전달되지 않습니다
@@ -912,6 +912,6 @@ Claw-Empire는 보안을 최우선으로 설계되었습니다:
 
 **픽셀과 열정으로 만들었습니다.**
 
-_Claw-Empire — AI 에이전트들이 일하러 오는 곳._
+_Sentinel — AI 에이전트들이 일하러 오는 곳._
 
 </div>

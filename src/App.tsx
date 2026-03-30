@@ -17,6 +17,8 @@ import type {
   OfficePackProfile,
   RoomTheme,
   WorkflowPackKey,
+  Room,
+  Hiring,
 } from "./types";
 import type { TaskReportDetail } from "./api";
 import * as api from "./api";
@@ -69,6 +71,8 @@ export default function App() {
   const [cliStatus, setCliStatus] = useState<CliStatusMap | null>(null);
   const [subAgents, setSubAgents] = useState<SubAgent[]>([]);
   const [subtasks, setSubtasks] = useState<SubTask[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [hirings, setHirings] = useState<Hiring[]>([]);
 
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [chatAgent, setChatAgent] = useState<Agent | null>(null);
@@ -149,7 +153,7 @@ export default function App() {
       return null;
     }
 
-    const locale = normalizeLanguage(sourceSettings.language) as "ko" | "en" | "ja" | "zh";
+    const locale = normalizeLanguage(sourceSettings.language) as "ko" | "en" | "ja" | "zh" | "pt";
     const presentation = buildOfficePackPresentation({
       packKey,
       locale,
@@ -291,6 +295,8 @@ export default function App() {
     setMeetingPresence,
     setDecisionInboxItems,
     setCustomRoomThemes,
+    setRooms,
+    setHirings,
     setLoading,
   });
 
@@ -326,6 +332,8 @@ export default function App() {
     setSubtasks,
     setSubAgents,
     setStreamingMessage,
+    setRooms,
+    setHirings,
   });
 
   const actions = useAppActions({
@@ -400,6 +408,8 @@ export default function App() {
       tasks={tasks}
       subtasks={subtasks}
       subAgents={subAgents}
+      rooms={rooms}
+      hirings={hirings}
       meetingPresence={meetingPresence}
       settings={settings}
       cliStatus={cliStatus}

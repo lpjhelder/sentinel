@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN corepack enable
 
-# Install CLI providers used by Claw-Empire agent runtime
+# Install CLI providers used by Sentinel agent runtime
 RUN npm install -g \
   @anthropic-ai/claude-code \
   @openai/codex \

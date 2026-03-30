@@ -6,7 +6,7 @@ process.env.NODE_ENV = "test";
 // Force isolated SQLite/log paths for server-side Vitest runs.
 const workerSuffix = process.env.VITEST_WORKER_ID || String(process.pid);
 const runtimeDir = path.resolve(process.cwd(), ".tmp", "vitest-runtime");
-const dbPath = path.join(runtimeDir, `claw-empire.vitest.${workerSuffix}.sqlite`);
+const dbPath = path.join(runtimeDir, `sentinel.vitest.${workerSuffix}.sqlite`);
 const logsDir = path.join(runtimeDir, `logs-${workerSuffix}`);
 
 try {
