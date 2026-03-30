@@ -276,6 +276,30 @@ case "$EVENT" in
     set_status "$OFFICE_AGENT" "idle"
     release_hired "$OFFICE_AGENT"
 
+    # Clear current_task_id when agent stops
+    AID_CLEAR=$(agent_id "$OFFICE_AGENT")
+    [ -n "$AID_CLEAR" ] && curl -s -o /dev/null --connect-timeout 1 --max-time 2 \
+      -X PATCH -H "$AUTH" -H "Content-Type: application/json" \
+      "$API/agents/$AID_CLEAR" -d '{"current_task_id":""}' 2>/dev/null || true
+
+    # Fallback: if agent has an in_progress task, mark it as review
+    # (safety net for when Claude Code forgets to report via CLAUDE.md)
+    AID=$(agent_id "$OFFICE_AGENT")
+    if [ -n "$AID" ]; then
+      curl -s --connect-timeout 1 --max-time 2 -H "$AUTH" "$API/tasks" 2>/dev/null | \
+        node -e "
+          try {
+            const d = JSON.parse(require('fs').readFileSync(0, 'utf8'));
+            const tasks = (d.tasks || []).filter(t => t.assigned_agent_id === '$AID' && t.status === 'in_progress');
+            tasks.forEach(t => console.log(t.id));
+          } catch {}
+        " 2>/dev/null | while read -r TID; do
+          [ -n "$TID" ] && curl -s -o /dev/null --connect-timeout 1 --max-time 2 \
+            -X PATCH -H "$AUTH" -H "Content-Type: application/json" \
+            "$API/tasks/$TID" -d '{"status":"review"}' 2>/dev/null || true
+        done
+    fi
+
     # Auto-close room if nobody else working
     if ! any_working; then
       close_active_room
@@ -331,6 +355,20 @@ case "$EVENT" in
     curl -s -o /dev/null --connect-timeout 1 --max-time 2 \
       -X POST -H "$AUTH" -H "Content-Type: application/json" \
       "$API/meetings/dismiss" -d '{"all":true}' 2>/dev/null || true
+
+    # Fallback: mark all in_progress tasks as review (session ending = work done)
+    curl -s --connect-timeout 1 --max-time 2 -H "$AUTH" "$API/tasks" 2>/dev/null | \
+      node -e "
+        try {
+          const d = JSON.parse(require('fs').readFileSync(0, 'utf8'));
+          (d.tasks || []).filter(t => t.status === 'in_progress').forEach(t => console.log(t.id));
+        } catch {}
+      " 2>/dev/null | while read -r TID; do
+        [ -n "$TID" ] && curl -s -o /dev/null --connect-timeout 1 --max-time 2 \
+          -X PATCH -H "$AUTH" -H "Content-Type: application/json" \
+          "$API/tasks/$TID" -d '{"status":"review"}' 2>/dev/null || true
+      done
+
     idle_all
     close_active_room
     ;;
