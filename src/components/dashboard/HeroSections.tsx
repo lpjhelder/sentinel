@@ -26,10 +26,6 @@ interface DashboardHeroHeaderProps {
   briefing: string;
   reviewQueue: number;
   numberFormatter: Intl.NumberFormat;
-  primaryCtaEyebrow: string;
-  primaryCtaDescription: string;
-  primaryCtaLabel: string;
-  onPrimaryCtaClick: () => void;
   t: TFunction;
 }
 
@@ -40,10 +36,6 @@ export function DashboardHeroHeader({
   briefing,
   reviewQueue,
   numberFormatter,
-  primaryCtaEyebrow,
-  primaryCtaDescription,
-  primaryCtaLabel,
-  onPrimaryCtaClick,
   t,
 }: DashboardHeroHeaderProps) {
   return (
@@ -56,7 +48,7 @@ export function DashboardHeroHeader({
             <h1 className="dashboard-title-gradient text-2xl font-black tracking-tight sm:text-3xl">{companyName}</h1>
             <span className="flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-300">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-              {t({ ko: "실시간", en: "LIVE", ja: "ライブ", zh: "实时" })}
+              {t({ ko: "실시간", en: "LIVE", ja: "ライブ", zh: "实时", pt: "AO VIVO" })}
             </span>
           </div>
           <p className="text-xs" style={{ color: "var(--th-text-muted)" }}>
@@ -65,6 +57,7 @@ export function DashboardHeroHeader({
               en: "Agents are executing missions in real time",
               ja: "エージェントがリアルタイムでミッションを実行中です",
               zh: "代理正在实时执行任务",
+              pt: "Agentes executando missões em tempo real",
             })}
           </p>
         </div>
@@ -84,37 +77,13 @@ export function DashboardHeroHeader({
           </div>
           {reviewQueue > 0 && (
             <span className="flex items-center gap-1.5 rounded-lg border border-orange-400/30 bg-orange-500/15 px-3 py-1.5 text-xs font-bold text-orange-300 animate-neon-pulse-orange">
-              🔔 {t({ ko: "대기", en: "Queued", ja: "待機", zh: "待处理" })} {numberFormatter.format(reviewQueue)}
-              {t({ ko: "건", en: "", ja: "件", zh: "项" })}
+              🔔 {t({ ko: "대기", en: "Queued", ja: "待機", zh: "待处理", pt: "Na fila" })} {numberFormatter.format(reviewQueue)}
+              {t({ ko: "건", en: "", ja: "件", zh: "项", pt: "" })}
             </span>
           )}
         </div>
       </div>
 
-      <div className="relative mt-4 rounded-xl border border-cyan-400/40 bg-gradient-to-r from-cyan-500/20 via-blue-500/15 to-emerald-500/20 p-4 shadow-[0_0_20px_rgba(34,211,238,0.12)]">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="min-w-0">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-200/85">{primaryCtaEyebrow}</p>
-            <p className="mt-1 text-xs sm:text-sm" style={{ color: "var(--th-text-primary)" }}>
-              {primaryCtaDescription}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onPrimaryCtaClick}
-            className="animate-cta-glow group inline-flex w-full items-center justify-center gap-2 rounded-xl border-0 bg-gradient-to-r from-cyan-500 to-blue-500 px-6 py-3 text-sm font-black tracking-tight text-white shadow-[0_4px_20px_rgba(34,211,238,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:from-cyan-400 hover:to-blue-400 hover:shadow-[0_8px_30px_rgba(34,211,238,0.5)] active:translate-y-0 sm:w-auto sm:min-w-[200px]"
-          >
-            <span aria-hidden="true">🚀</span>
-            <span>{primaryCtaLabel}</span>
-            <span
-              className="text-xs text-white/80 transition-transform duration-200 group-hover:translate-x-0.5"
-              aria-hidden="true"
-            >
-              →
-            </span>
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
@@ -198,7 +167,7 @@ export function DashboardRankingBoard({
           </span>
           <div>
             <h2 className="dashboard-ranking-gradient text-lg font-black uppercase tracking-wider">
-              {t({ ko: "랭킹 보드", en: "RANKING BOARD", ja: "ランキングボード", zh: "排行榜" })}
+              {t({ ko: "랭킹 보드", en: "RANKING BOARD", ja: "ランキングボード", zh: "排行榜", pt: "RANKING" })}
             </h2>
             <p className="text-[10px]" style={{ color: "var(--th-text-muted)" }}>
               {t({
@@ -206,6 +175,7 @@ export function DashboardRankingBoard({
                 en: "Agent ranking by XP",
                 ja: "XP 基準のエージェント順位",
                 zh: "按 XP 排名",
+                pt: "Ranking de agentes por XP",
               })}
             </p>
           </div>
@@ -227,6 +197,7 @@ export function DashboardRankingBoard({
               en: "No agents registered",
               ja: "登録されたエージェントがいません",
               zh: "暂无已注册代理",
+              pt: "Nenhum agente registrado",
             })}
           </p>
           <p className="text-[10px]">
@@ -235,6 +206,7 @@ export function DashboardRankingBoard({
               en: "Add agents and start missions",
               ja: "エージェントを追加してミッションを開始しましょう",
               zh: "添加代理并开始任务",
+              pt: "Adicione agentes e inicie missões",
             })}
           </p>
         </div>
@@ -350,7 +322,7 @@ export function DashboardRankingBoard({
                         {agent.name}
                       </p>
                       <p className="text-[10px]" style={{ color: "var(--th-text-muted)" }}>
-                        {agent.department || t({ ko: "미지정", en: "Unassigned", ja: "未指定", zh: "未指定" })}
+                        {agent.department || t({ ko: "미지정", en: "Unassigned", ja: "未指定", zh: "未指定", pt: "Não atribuído" })}
                       </p>
                     </div>
                     <div className="hidden w-28 sm:block">
@@ -400,7 +372,7 @@ export function DashboardRankingBoard({
                       {agent.name}
                     </p>
                     <p className="text-xs" style={{ color: "var(--th-text-muted)" }}>
-                      {agent.department || t({ ko: "미지정", en: "Unassigned", ja: "未指定", zh: "未指定" })}
+                      {agent.department || t({ ko: "미지정", en: "Unassigned", ja: "未指定", zh: "未指定", pt: "Não atribuído" })}
                     </p>
                   </div>
                   <div className="text-right">

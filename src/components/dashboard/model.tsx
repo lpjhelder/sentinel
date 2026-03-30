@@ -30,10 +30,10 @@ export function useNow(localeTag: string, t: TFunction) {
   const hour = now.getHours();
   const briefing =
     hour < 12
-      ? t({ ko: "오전 브리핑", en: "Morning Briefing", ja: "午前ブリーフィング", zh: "上午简报" })
+      ? t({ ko: "오전 브리핑", en: "Morning Briefing", ja: "午前ブリーフィング", zh: "上午简报", pt: "Briefing Matinal" })
       : hour < 18
-        ? t({ ko: "오후 운영 점검", en: "Afternoon Ops Check", ja: "午後運用点検", zh: "下午运行检查" })
-        : t({ ko: "저녁 마감 점검", en: "Evening Wrap-up", ja: "夜間締め点検", zh: "晚间收尾检查" });
+        ? t({ ko: "오후 운영 점검", en: "Afternoon Ops Check", ja: "午後運用点検", zh: "下午运行检查", pt: "Check da Tarde" })
+        : t({ ko: "저녁 마감 점검", en: "Evening Wrap-up", ja: "夜間締め点検", zh: "晚间收尾检查", pt: "Encerramento Noturno" });
 
   return { date, time, briefing };
 }

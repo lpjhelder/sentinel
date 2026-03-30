@@ -48,12 +48,12 @@ export function DashboardDeptAndSquad({
           >
             🏰
           </span>
-          {t({ ko: "부서 성과", en: "DEPT. PERFORMANCE", ja: "部署パフォーマンス", zh: "部门绩效" })}
+          {t({ ko: "부서 성과", en: "DEPT. PERFORMANCE", ja: "部署パフォーマンス", zh: "部门绩效", pt: "DESEMPENHO POR DEPTO" })}
           <span
             className="ml-auto text-[9px] font-medium normal-case tracking-normal"
             style={{ color: "var(--th-text-muted)" }}
           >
-            {t({ ko: "부서별 성과", en: "by department", ja: "部署別", zh: "按部门" })}
+            {t({ ko: "부서별 성과", en: "by department", ja: "部署別", zh: "按部门", pt: "por departamento" })}
           </span>
         </h2>
 
@@ -63,7 +63,7 @@ export function DashboardDeptAndSquad({
             style={{ color: "var(--th-text-muted)" }}
           >
             <span className="text-3xl opacity-30">🏰</span>
-            {t({ ko: "데이터가 없습니다", en: "No data available", ja: "データがありません", zh: "暂无数据" })}
+            {t({ ko: "데이터가 없습니다", en: "No data available", ja: "データがありません", zh: "暂无数据", pt: "Sem dados" })}
           </div>
         ) : (
           <div className="space-y-2.5">
@@ -101,10 +101,10 @@ export function DashboardDeptAndSquad({
                   style={{ color: "var(--th-text-muted)" }}
                 >
                   <span>
-                    {t({ ko: "클리어", en: "cleared", ja: "クリア", zh: "完成" })} {numberFormatter.format(dept.done)}
+                    {t({ ko: "클리어", en: "cleared", ja: "クリア", zh: "完成", pt: "concluídas" })} {numberFormatter.format(dept.done)}
                   </span>
                   <span>
-                    {t({ ko: "전체", en: "total", ja: "全体", zh: "总计" })} {numberFormatter.format(dept.total)}
+                    {t({ ko: "전체", en: "total", ja: "全体", zh: "总计", pt: "total" })} {numberFormatter.format(dept.total)}
                   </span>
                 </div>
               </article>
@@ -125,12 +125,12 @@ export function DashboardDeptAndSquad({
             >
               🤖
             </span>
-            {t({ ko: "스쿼드", en: "SQUAD", ja: "スクワッド", zh: "小队" })}
+            {t({ ko: "스쿼드", en: "SQUAD", ja: "スクワッド", zh: "小队", pt: "EQUIPE" })}
           </h2>
           <div className="flex items-center gap-2 text-[10px]">
             <span className="flex items-center gap-1 rounded-md border border-emerald-400/30 bg-emerald-500/10 px-2 py-0.5 font-bold text-emerald-300">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-              {t({ ko: "ON", en: "ON", ja: "ON", zh: "在线" })} {numberFormatter.format(workingAgents.length)}
+              {t({ ko: "ON", en: "ON", ja: "ON", zh: "在线", pt: "ON" })} {numberFormatter.format(workingAgents.length)}
             </span>
             <span
               className="flex items-center gap-1 rounded-md border px-2 py-0.5 font-bold"
@@ -140,7 +140,7 @@ export function DashboardDeptAndSquad({
                 color: "var(--th-text-secondary)",
               }}
             >
-              {t({ ko: "OFF", en: "OFF", ja: "OFF", zh: "离线" })} {numberFormatter.format(idleAgentsList.length)}
+              {t({ ko: "OFF", en: "OFF", ja: "OFF", zh: "离线", pt: "OFF" })} {numberFormatter.format(idleAgentsList.length)}
             </span>
           </div>
         </div>
@@ -155,8 +155,8 @@ export function DashboardDeptAndSquad({
                 key={agent.id}
                 title={`${localeName(language, agent)} — ${
                   isWorking
-                    ? t({ ko: "작업 중", en: "Working", ja: "作業中", zh: "工作中" })
-                    : t({ ko: "대기 중", en: "Idle", ja: "待機中", zh: "空闲" })
+                    ? t({ ko: "작업 중", en: "Working", ja: "作業中", zh: "工作中", pt: "Trabalhando" })
+                    : t({ ko: "대기 중", en: "Idle", ja: "待機中", zh: "空闲", pt: "Disponível" })
                 } — ${tier.name}`}
                 className={`group relative flex flex-col items-center gap-1.5 ${isWorking ? "animate-bubble-float" : ""}`}
                 style={isWorking ? { animationDelay: `${delay}ms` } : {}}
@@ -227,12 +227,12 @@ export function DashboardMissionLog({
           >
             📡
           </span>
-          {t({ ko: "미션 로그", en: "MISSION LOG", ja: "ミッションログ", zh: "任务日志" })}
+          {t({ ko: "미션 로그", en: "MISSION LOG", ja: "ミッションログ", zh: "任务日志", pt: "LOG DE MISSÕES" })}
           <span
             className="ml-2 text-[9px] font-medium normal-case tracking-normal"
             style={{ color: "var(--th-text-muted)" }}
           >
-            {t({ ko: "최근 활동", en: "Recent activity", ja: "最近の活動", zh: "最近活动" })}
+            {t({ ko: "최근 활동", en: "Recent activity", ja: "最近の活動", zh: "最近活动", pt: "Atividade recente" })}
           </span>
         </h2>
         <span
@@ -243,8 +243,8 @@ export function DashboardMissionLog({
             color: "var(--th-text-secondary)",
           }}
         >
-          {t({ ko: "유휴", en: "Idle", ja: "待機", zh: "空闲" })} {numberFormatter.format(idleAgents)}
-          {t({ ko: "명", en: "", ja: "人", zh: "人" })}
+          {t({ ko: "유휴", en: "Idle", ja: "待機", zh: "空闲", pt: "Disponíveis" })} {numberFormatter.format(idleAgents)}
+          {t({ ko: "명", en: "", ja: "人", zh: "人", pt: "" })}
         </span>
       </div>
 
@@ -254,7 +254,7 @@ export function DashboardMissionLog({
           style={{ color: "var(--th-text-muted)" }}
         >
           <span className="text-3xl opacity-30">📡</span>
-          {t({ ko: "로그 없음", en: "No logs", ja: "ログなし", zh: "暂无日志" })}
+          {t({ ko: "로그 없음", en: "No logs", ja: "ログなし", zh: "暂无日志", pt: "Sem registros" })}
         </div>
       ) : (
         <div className="space-y-2">
@@ -298,7 +298,7 @@ export function DashboardMissionLog({
                     <span className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${statusInfo.dot}`} />
                     {assignedAgent
                       ? localeName(language, assignedAgent)
-                      : t({ ko: "미배정", en: "Unassigned", ja: "未割り当て", zh: "未分配" })}
+                      : t({ ko: "미배정", en: "Unassigned", ja: "未割り当て", zh: "未分配", pt: "Não atribuído" })}
                   </p>
                 </div>
 

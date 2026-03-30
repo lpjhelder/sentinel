@@ -16,10 +16,10 @@ interface DashboardProps {
   agents: Agent[];
   tasks: Task[];
   companyName: string;
-  onPrimaryCtaClick: () => void;
+  onPrimaryCtaClick?: () => void;
 }
 
-export default function Dashboard({ stats, agents, tasks, companyName, onPrimaryCtaClick }: DashboardProps) {
+export default function Dashboard({ stats, agents, tasks, companyName }: DashboardProps) {
   const { t, language, locale: localeTag } = useI18n();
   const { date, time, briefing } = useNow(localeTag, t);
   const agentMap = useMemo(() => new Map(agents.map((agent) => [agent.id, agent])), [agents]);
@@ -39,15 +39,6 @@ export default function Dashboard({ stats, agents, tasks, companyName, onPrimary
   const activeRate = totalAgents > 0 ? Math.round((activeAgents / totalAgents) * 100) : 0;
   const reviewQueue = reviewTasks + pendingTasks;
 
-  const primaryCtaLabel = t({ ko: "미션 시작", en: "Start Mission", ja: "ミッション開始", zh: "开始任务", pt: "Iniciar Missão" });
-  const primaryCtaEyebrow = t({ ko: "빠른 실행", en: "Quick Start", ja: "クイック開始", zh: "快速开始", pt: "Início Rápido" });
-  const primaryCtaDescription = t({
-    ko: "핵심 업무를 바로 생성하고 실행으로 전환하세요",
-    en: "Create a priority task and move execution immediately.",
-    ja: "最優先タスクをすぐ作成して実行へ移行します。",
-    zh: "立即创建优先任务并进入执行。",
-    pt: "Crie uma tarefa prioritária e inicie a execução imediatamente.",
-  });
 
   const deptData = useMemo<DepartmentPerformance[]>(() => {
     if (stats?.tasks_by_department && stats.tasks_by_department.length > 0) {
@@ -184,10 +175,6 @@ export default function Dashboard({ stats, agents, tasks, companyName, onPrimary
         briefing={briefing}
         reviewQueue={reviewQueue}
         numberFormatter={numberFormatter}
-        primaryCtaEyebrow={primaryCtaEyebrow}
-        primaryCtaDescription={primaryCtaDescription}
-        primaryCtaLabel={primaryCtaLabel}
-        onPrimaryCtaClick={onPrimaryCtaClick}
         t={t}
       />
 
