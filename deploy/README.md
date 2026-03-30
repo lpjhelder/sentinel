@@ -88,7 +88,7 @@ curl http://127.0.0.1:8790/api/health
 Authenticated remote check:
 
 ```bash
-curl -H "Authorization: Bearer YOUR_API_AUTH_TOKEN" https://claw.example.com/api/health
+curl -H "Authorization: Bearer YOUR_API_AUTH_TOKEN" https://sentinel.example.com/api/health
 ```
 
 ## 6. Updating

@@ -1,7 +1,7 @@
 # Sentinel — Auditoria de Codigo Nao Utilizado
 
 **Data:** 2026-03-30
-**Projeto:** Sentinel v2.0.4 (`E:\claude\claw-empire-test\`)
+**Projeto:** Sentinel v2.0.4 (`E:\claude\sentinel\`)
 **Metodo:** Analise estatica automatizada (knip, depcheck, grep manual, AST traversal)
 **Modificacoes feitas:** ZERO — somente diagnostico
 
@@ -31,7 +31,7 @@ Estes itens NAO sao apenas dead code — causam **falhas em runtime**:
 | # | Item | Arquivo | Problema |
 |---|------|---------|----------|
 | 1 | `setup.mjs` ref quebrada | `scripts/setup.mjs:20` | Referencia `templates/AGENTS-empire.md` mas arquivo e `AGENTS-sentinel.md`. `pnpm setup` vai crashar. |
-| 2 | `run-sentinel-dev-local.cmd` | `scripts/run-sentinel-dev-local.cmd:10` | Referencia `kill-sentinel-dev.ps1` mas arquivo e `kill-claw-empire-dev.ps1`. Launcher Windows falha. |
+| 2 | `run-sentinel-dev-local.cmd` | `scripts/run-sentinel-dev-local.cmd:10` | ~~CORRIGIDO~~ — `kill-claw-empire-dev.ps1` renomeado para `kill-sentinel-dev.ps1`. |
 | 3 | Favicon 404 | `index.html:7` | Referencia `/sentinel.svg` que NAO existe em `public/`. Todo page load da 404 no favicon. |
 
 **Causa raiz:** Rename incompleto de "Claw Empire" para "Sentinel".
@@ -63,9 +63,9 @@ Estes itens NAO sao apenas dead code — causam **falhas em runtime**:
 
 | Asset | Motivo |
 |-------|--------|
-| `public/claw-empire.png` | Zero referencias — branding antigo |
-| `public/claw-empire.svg` | Zero referencias — branding antigo |
-| `public/climpire.svg` | Zero referencias — variante abandonada |
+| `public/claw-empire.png` | ~~CORRIGIDO~~ — renomeado para `sentinel.png` |
+| `public/claw-empire.svg` | ~~CORRIGIDO~~ — renomeado para `sentinel.svg` |
+| `public/climpire.svg` | ~~CORRIGIDO~~ — renomeado para `sentinel-alt.svg` |
 
 ### Dead code (alta confianca)
 
@@ -108,7 +108,7 @@ Estes itens NAO sao apenas dead code — causam **falhas em runtime**:
 | `scripts/generate-doro-sprites.mjs` | Sem caller automatizado | Sprites ja existem. Util pra regeneracao manual. |
 | `scripts/convert-slides.mjs` | Sem caller automatizado | Utilitario one-time |
 | `scripts/generate-intro-ppt.mjs` | Sem caller automatizado | Gera arquivo com data fixa de 2026-02-20 |
-| `scripts/kill-claw-empire-dev.ps1` | Nome antigo | Funciona mas so e chamado pelo .cmd quebrado |
+| `scripts/kill-claw-empire-dev.ps1` | ~~CORRIGIDO~~ — renomeado para `kill-sentinel-dev.ps1` |
 | Diretorio `slides/` inteiro | Sem trigger automatizado | Toolchain de apresentacao auto-contido |
 
 ### Submodulos vazios
@@ -147,12 +147,12 @@ O rename "Claw Empire" → "Sentinel" ficou incompleto em:
 
 | Arquivo | Problema |
 |---------|----------|
-| `scripts/kill-claw-empire-dev.ps1` | Nome antigo |
-| `scripts/run-sentinel-dev-local.cmd` | Ref `kill-sentinel-dev.ps1` inexistente |
+| `scripts/kill-claw-empire-dev.ps1` | ~~CORRIGIDO~~ — renomeado para `kill-sentinel-dev.ps1` |
+| `scripts/run-sentinel-dev-local.cmd` | ~~CORRIGIDO~~ — `kill-sentinel-dev.ps1` agora existe |
 | `scripts/setup.mjs` | Ref `AGENTS-empire.md` inexistente |
 | `docker-compose.nas.yml` | Service name `agent-office` |
 | `.env.nas` | Header diz "Agent Office" |
-| `public/claw-empire.*`, `public/climpire.svg` | Assets com branding antigo |
+| `public/claw-empire.*`, `public/climpire.svg` | ~~CORRIGIDO~~ — renomeados para `sentinel.*` |
 
 ---
 

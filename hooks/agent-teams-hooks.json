@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash E:/claude/claw-empire-test/hooks/office-hooks.sh TeammateIdle",
+            "command": "bash E:/claude/sentinel/hooks/office-hooks.sh TeammateIdle",
             "timeout": 5,
             "statusMessage": "🏢 Office: teammate idle..."
           }
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash E:/claude/claw-empire-test/hooks/office-hooks.sh TaskCreated",
+            "command": "bash E:/claude/sentinel/hooks/office-hooks.sh TaskCreated",
             "timeout": 5
           }
         ]
@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash E:/claude/claw-empire-test/hooks/office-hooks.sh TaskCompleted",
+            "command": "bash E:/claude/sentinel/hooks/office-hooks.sh TaskCompleted",
             "timeout": 5
           }
         ]
