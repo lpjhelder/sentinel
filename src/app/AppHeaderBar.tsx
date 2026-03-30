@@ -13,6 +13,8 @@ interface AppHeaderBarProps {
   currentView: View;
   connected: boolean;
   viewTitle: string;
+  liveLabel: string;
+  offlineLabel: string;
   tasksPrimaryLabel: string;
   decisionLabel: string;
   decisionInboxLoading: boolean;
@@ -45,6 +47,8 @@ export default function AppHeaderBar({
   currentView,
   connected,
   viewTitle,
+  liveLabel,
+  offlineLabel,
   tasksPrimaryLabel,
   decisionLabel,
   decisionInboxLoading,
@@ -219,7 +223,7 @@ export default function AppHeaderBar({
               background: "var(--th-bg-surface)",
               color: "var(--th-text-secondary)",
             }}
-            aria-label="더보기 메뉴"
+            aria-label="More menu"
           >
             <svg
               width="18"
@@ -310,7 +314,7 @@ export default function AppHeaderBar({
         </div>
         <div className="flex items-center gap-2 text-xs" style={{ color: "var(--th-text-muted)" }}>
           <div className={`w-2 h-2 rounded-full ${connected ? "bg-green-500" : "bg-red-500"}`} />
-          <span className="hidden sm:inline">{connected ? "Live" : "Offline"}</span>
+          <span className="hidden sm:inline">{connected ? liveLabel : offlineLabel}</span>
         </div>
       </div>
     </header>

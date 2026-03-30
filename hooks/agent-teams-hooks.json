@@ -1,0 +1,39 @@
+{
+  "_README": "Merge estes hooks no settings.json quando ativar CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1",
+  "hooks": {
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash E:/claude/claw-empire-test/hooks/office-hooks.sh TeammateIdle",
+            "timeout": 5,
+            "statusMessage": "🏢 Office: teammate idle..."
+          }
+        ]
+      }
+    ],
+    "TaskCreated": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash E:/claude/claw-empire-test/hooks/office-hooks.sh TaskCreated",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash E:/claude/claw-empire-test/hooks/office-hooks.sh TaskCompleted",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

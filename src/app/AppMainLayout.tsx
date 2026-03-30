@@ -15,7 +15,9 @@ import type {
   CompanySettings,
   CrossDeptDelivery,
   Department,
+  Hiring,
   MeetingPresence,
+  Room,
   SubAgent,
   SubTask,
   Task,
@@ -45,6 +47,8 @@ interface AppMainLayoutLabels {
   tasksPrimaryLabel: string;
   agentStatusLabel: string;
   decisionLabel: string;
+  liveLabel: string;
+  offlineLabel: string;
   autoUpdateNoticeVisible: boolean;
   autoUpdateNoticeTitle: string;
   autoUpdateNoticeHint: string;
@@ -73,6 +77,8 @@ interface AppMainLayoutProps {
   tasks: Task[];
   subtasks: SubTask[];
   subAgents: SubAgent[];
+  rooms?: Room[];
+  hirings?: Hiring[];
   meetingPresence: MeetingPresence[];
   settings: CompanySettings;
   cliStatus: CliStatusMap | null;
@@ -144,6 +150,8 @@ export default function AppMainLayout({
   tasks,
   subtasks,
   subAgents,
+  rooms,
+  hirings,
   meetingPresence,
   settings,
   cliStatus,
@@ -377,6 +385,8 @@ export default function AppMainLayout({
             currentView={view}
             connected={connected}
             viewTitle={labels.viewTitle}
+            liveLabel={labels.liveLabel}
+            offlineLabel={labels.offlineLabel}
             tasksPrimaryLabel={labels.tasksPrimaryLabel}
             decisionLabel={labels.decisionLabel}
             decisionInboxLoading={decisionInboxLoading}
@@ -475,6 +485,8 @@ export default function AppMainLayout({
                 agents={officePresentation.agents}
                 tasks={tasks}
                 subAgents={subAgents}
+                rooms={rooms}
+                hirings={hirings}
                 meetingPresence={meetingPresence}
                 activeMeetingTaskId={activeMeetingTaskId}
                 unreadAgentIds={unreadAgentIds}

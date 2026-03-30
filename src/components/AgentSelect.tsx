@@ -15,10 +15,10 @@ interface AgentSelectProps {
 }
 
 const ROLE_LABELS: Record<string, LangText> = {
-  team_leader: { ko: "팀장", en: "Team Leader", ja: "チームリーダー", zh: "组长" },
-  senior: { ko: "시니어", en: "Senior", ja: "シニア", zh: "高级" },
-  junior: { ko: "주니어", en: "Junior", ja: "ジュニア", zh: "初级" },
-  intern: { ko: "인턴", en: "Intern", ja: "インターン", zh: "实习生" },
+  team_leader: { ko: "팀장", en: "Team Leader", ja: "チームリーダー", zh: "组长", pt: "Lider de Equipe" },
+  senior: { ko: "시니어", en: "Senior", ja: "シニア", zh: "高级", pt: "Senior" },
+  junior: { ko: "주니어", en: "Junior", ja: "ジュニア", zh: "初级", pt: "Junior" },
+  intern: { ko: "인턴", en: "Intern", ja: "インターン", zh: "实习生", pt: "Estagiario" },
 };
 
 export default function AgentSelect({
@@ -47,7 +47,7 @@ export default function AgentSelect({
   const padY = size === "md" ? "py-2" : "py-1";
   const avatarSize = size === "md" ? 22 : 18;
 
-  const tr = (ko: string, en: string, ja = en, zh = en) => t({ ko, en, ja, zh });
+  const tr = (ko: string, en: string, ja = en, zh = en, pt = en) => t({ ko, en, ja, zh, pt });
 
   const getAgentName = (agent: Agent) => localeName(locale, agent);
 
@@ -63,7 +63,7 @@ export default function AgentSelect({
   };
 
   const effectivePlaceholder =
-    placeholder ?? tr("-- 담당자 없음 --", "-- Unassigned --", "-- 担当者なし --", "-- 无负责人 --");
+    placeholder ?? tr("-- 담당자 없음 --", "-- Unassigned --", "-- 担当者なし --", "-- 无负责人 --", "-- Sem responsavel --");
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
