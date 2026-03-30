@@ -16,6 +16,7 @@ import {
 
 interface TaskCardProps {
   task: Task;
+  allTasks: Task[];
   agents: Agent[];
   departments: Department[];
   taskSubtasks: SubTask[];
@@ -44,6 +45,7 @@ const SUBTASK_STATUS_ICON: Record<string, string> = {
 
 export default function TaskCard({
   task,
+  allTasks,
   agents,
   departments,
   taskSubtasks,
@@ -69,6 +71,13 @@ export default function TaskCard({
   const [showDiff, setShowDiff] = useState(false);
   const [showSubtasks, setShowSubtasks] = useState(false);
   const [agentWarning, setAgentWarning] = useState(false);
+
+  // Child/parent task relationships
+  const parentTask = task.source_task_id ? allTasks.find((t) => t.id === task.source_task_id) : null;
+  const childTasks = allTasks.filter((t) => t.source_task_id === task.id);
+  const childDone = childTasks.filter((t) => t.status === "done").length;
+  const isChildTask = !!task.source_task_id;
+  const isCrossDept = isChildTask && parentTask && parentTask.department_id !== task.department_id;
 
   const assignedAgent = task.assigned_agent ?? agents.find((agent) => agent.id === task.assigned_agent_id);
   const fallbackAssignedName =
@@ -125,6 +134,39 @@ export default function TaskCard({
         {department && (
           <span className="rounded-full bg-slate-700 px-2 py-0.5 text-xs text-slate-300">
             {department.icon} {locale === "ko" ? department.name_ko : department.name}
+          </span>
+        )}
+        {isCrossDept && (
+          <span
+            className="rounded-full px-2 py-0.5 text-xs font-medium"
+            style={{ background: "rgba(139, 92, 246, 0.2)", color: "#a78bfa" }}
+            title={t({
+              ko: `상위 작업에서 위임됨`,
+              en: `Cross-dept from parent task`,
+              ja: `親タスクから部門間委任`,
+              zh: `从父任务跨部门委派`,
+              pt: `Cross-dept da task pai`,
+            })}
+          >
+            {t({ ko: "부서간", en: "Cross-dept", ja: "部門間", zh: "跨部门", pt: "Cross-dept" })}
+          </span>
+        )}
+        {isChildTask && parentTask && !isCrossDept && (
+          <span
+            className="rounded-full px-2 py-0.5 text-xs"
+            style={{ background: "rgba(59, 130, 246, 0.15)", color: "#60a5fa" }}
+            title={parentTask.title}
+          >
+            {t({ ko: "하위", en: "Child", ja: "子タスク", zh: "子任务", pt: "Filha" })}
+          </span>
+        )}
+        {childTasks.length > 0 && (
+          <span
+            className="rounded-full px-2 py-0.5 text-xs"
+            style={{ background: "rgba(16, 185, 129, 0.15)", color: "#34d399" }}
+            title={`${childDone}/${childTasks.length} ${t({ ko: "완료", en: "done", ja: "完了", zh: "完成", pt: "concluídas" })}`}
+          >
+            {childDone}/{childTasks.length} {t({ ko: "하위작업", en: "children", ja: "子タスク", zh: "子任务", pt: "filhas" })}
           </span>
         )}
       </div>

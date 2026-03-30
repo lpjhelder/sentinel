@@ -269,6 +269,7 @@ export function TaskBoard({
                     <TaskCard
                       key={task.id}
                       task={task}
+                      allTasks={filteredTasks}
                       agents={agents}
                       departments={departments}
                       taskSubtasks={subtasksByTask[task.id] ?? []}
