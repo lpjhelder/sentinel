@@ -236,6 +236,33 @@ export async function saveRoomThemes(roomThemes: Record<string, RoomTheme>): Pro
   await put("/api/settings", { roomThemes });
 }
 
+/* ------------------------------------------------------------------ */
+/*  Agents Disk (Claude Code .md files on disk)                        */
+/* ------------------------------------------------------------------ */
+
+export interface AgentDiskEntry {
+  name: string;
+  filename: string;
+  size: number;
+  modifiedAt: string;
+}
+
+export async function getAgentsDisk(): Promise<{ agents: AgentDiskEntry[]; dir: string; warning?: string }> {
+  return request("/api/agents-disk");
+}
+
+export async function getAgentDiskContent(name: string): Promise<{ name: string; content: string; size: number; modifiedAt: string }> {
+  return request(`/api/agents-disk/${encodeURIComponent(name)}`);
+}
+
+export async function saveAgentDisk(name: string, content: string): Promise<void> {
+  await put(`/api/agents-disk/${encodeURIComponent(name)}`, { content });
+}
+
+export async function deleteAgentDisk(name: string): Promise<void> {
+  await del(`/api/agents-disk/${encodeURIComponent(name)}`);
+}
+
 export interface UpdateStatus {
   current_version: string;
   latest_version: string | null;

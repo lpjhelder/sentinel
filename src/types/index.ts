@@ -427,6 +427,7 @@ export interface CompanySettings {
   messengerChannels?: MessengerChannelsConfig;
   officePackProfiles?: OfficePackProfiles;
   officePackHydratedPacks?: string[];
+  agentsDir?: string;
 }
 
 export const DEFAULT_SETTINGS: CompanySettings = {

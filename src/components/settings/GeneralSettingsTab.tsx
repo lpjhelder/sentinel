@@ -88,6 +88,33 @@ export default function GeneralSettingsTab({ t, form, setForm, saved, onSave }: 
           />
         </div>
 
+        <div>
+          <label className="block text-xs mb-1" style={{ color: "var(--th-text-secondary)" }}>
+            {t({ ko: "에이전트 디렉토리", en: "Agents Directory", ja: "エージェントディレクトリ", zh: "代理目录", pt: "Diretório de Agentes" })}
+          </label>
+          <input
+            type="text"
+            value={form.agentsDir ?? ""}
+            onChange={(e) => setForm({ ...form, agentsDir: e.target.value })}
+            placeholder="~/.claude/agents/"
+            className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors"
+            style={{
+              background: "var(--th-input-bg)",
+              borderColor: "var(--th-input-border)",
+              color: "var(--th-text-primary)",
+            }}
+          />
+          <p className="text-[10px] mt-1" style={{ color: "var(--th-text-secondary)", opacity: 0.7 }}>
+            {t({
+              ko: "우선순위: ENV AGENTS_DIR > 이 설정 > ~/.claude/agents/",
+              en: "Priority: ENV AGENTS_DIR > this setting > ~/.claude/agents/",
+              ja: "優先順位: ENV AGENTS_DIR > この設定 > ~/.claude/agents/",
+              zh: "优先级: ENV AGENTS_DIR > 此设置 > ~/.claude/agents/",
+              pt: "Prioridade: ENV AGENTS_DIR > esta config > ~/.claude/agents/",
+            })}
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <ToggleSettingCard
             label={t({ ko: "자동 배정", en: "Auto Assign", ja: "自動割り当て", zh: "自动分配", pt: "Atribuição Automática" })}

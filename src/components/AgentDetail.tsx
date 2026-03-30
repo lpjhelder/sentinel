@@ -14,6 +14,7 @@ import type {
 } from "../types";
 import AgentAvatar from "./AgentAvatar";
 import AgentDetailTabContent from "./agent-detail/AgentDetailTabContent";
+import AgentProfileEditor from "./agent-detail/AgentProfileEditor";
 import { CLI_LABELS, oauthAccountLabel, roleLabel, STATUS_CONFIG, statusLabel } from "./agent-detail/constants";
 
 interface AgentDetailProps {
@@ -56,7 +57,7 @@ export default function AgentDetail({
   onAgentUpdated,
 }: AgentDetailProps) {
   const { t, language } = useI18n();
-  const [tab, setTab] = useState<"info" | "tasks" | "alba">("info");
+  const [tab, setTab] = useState<"info" | "tasks" | "alba" | "profile">("info");
   const [editingCli, setEditingCli] = useState(false);
   const [selectedCli, setSelectedCli] = useState(agent.cli_provider);
   const [selectedOAuthAccountId, setSelectedOAuthAccountId] = useState(agent.oauth_account_id ?? "");
@@ -743,6 +744,10 @@ export default function AgentDetail({
               key: "alba",
               label: `${t({ ko: "알바생", en: "Sub-agents", ja: "サブエージェント", zh: "子代理", pt: "Sub-agentes" })} (${agentSubAgents.length})`,
             },
+            {
+              key: "profile",
+              label: t({ ko: "프로필", en: "Profile", ja: "プロファイル", zh: "配置", pt: "Perfil" }),
+            },
           ].map((tabItem) => (
             <button
               key={tabItem.key}
@@ -757,21 +762,25 @@ export default function AgentDetail({
         </div>
 
         <div className="p-4 overflow-y-auto max-h-[40vh]">
-          <AgentDetailTabContent
-            tab={tab}
-            t={t}
-            language={language}
-            agent={agent}
-            departments={departments}
-            agentTasks={agentTasks}
-            agentSubAgents={agentSubAgents}
-            subtasksByTask={subtasksByTask}
-            expandedTaskId={expandedTaskId}
-            setExpandedTaskId={setExpandedTaskId}
-            onChat={onChat}
-            onAssignTask={onAssignTask}
-            onOpenTerminal={onOpenTerminal}
-          />
+          {tab === "profile" ? (
+            <AgentProfileEditor agentName={agent.name} t={t} language={language} />
+          ) : (
+            <AgentDetailTabContent
+              tab={tab}
+              t={t}
+              language={language}
+              agent={agent}
+              departments={departments}
+              agentTasks={agentTasks}
+              agentSubAgents={agentSubAgents}
+              subtasksByTask={subtasksByTask}
+              expandedTaskId={expandedTaskId}
+              setExpandedTaskId={setExpandedTaskId}
+              onChat={onChat}
+              onAssignTask={onAssignTask}
+              onOpenTerminal={onOpenTerminal}
+            />
+          )}
         </div>
       </div>
     </div>
