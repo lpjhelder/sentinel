@@ -5,6 +5,29 @@ All notable changes to Sentinel will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.5] - 2026-03-30
+
+### Added
+
+- **Child task distribution** -- new `sentinel-task.sh child` command creates full
+  tasks (not subtasks) for each spawned agent, so every agent appears with their own
+  task on the board. Linked via `source_task_id` to parent task.
+- **POST /api/tasks** now accepts `source_task_id` for parent-child task linking.
+- **SETUP.md** -- comprehensive 12-section installation and usage guide covering
+  all components: Sentinel, agents, hooks, task board, Docker/NAS deployment.
+- **CHANGELOG.md** -- this file.
+
+### Changed
+
+- **sentinel-task.sh** -- `status` and `substatus` commands now automatically link
+  agents to tasks via `current_task_id` (sets on `in_progress`, clears on `done`).
+- **office-hooks.sh** -- SubagentStop clears `current_task_id`, fallback marks
+  orphaned `in_progress` tasks as `review`. SessionEnd cleans up all tasks.
+- **Settings tooltips** -- all 4 toggle cards (Auto Assign, YOLO Mode, Auto Update,
+  OAuth Auto Swap) now have clear descriptions and recommendations in 5 languages.
+
+---
+
 ## [2.0.4] - 2026-03-30
 
 This is the first release under the **Sentinel** name. The project was previously
@@ -21,10 +44,9 @@ assets, hooks, and deploy scripts.
 - **Agent Profile Editor** -- new "Profile" tab in the Agent Detail panel with an
   inline editor for `.md` files. Supports save, discard, and reload operations.
   Auto-loads the matching agent file from the configured agents directory.
-- **Sentinel Task Board** -- `sentinel-task.sh` helper script that allows Claude Code
-  sessions to report task progress back to Sentinel. Hook fallback automatically marks
-  tasks as "review" on SubagentStop/SessionEnd events. Full lifecycle support: create,
-  subtask, status updates, and done.
+- **Sentinel Task Board Integration** -- `sentinel-task.sh` helper script that allows
+  Claude Code sessions to report task progress back to Sentinel. Hook fallback
+  automatically marks tasks as "review" on SubagentStop/SessionEnd events.
 - **Global Agent Setup** -- 16 agents moved from project-level configuration to
   `~/.claude/agents/` (global scope). `CLAUDE.md` and `workflows.md` also moved to
   `~/.claude/` so they work across all projects. `settings.json` hooks updated with
