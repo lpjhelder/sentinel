@@ -120,6 +120,13 @@ export default function GeneralSettingsTab({ t, form, setForm, saved, onSave }: 
             label={t({ ko: "자동 배정", en: "Auto Assign", ja: "自動割り当て", zh: "自动分配", pt: "Atribuição Automática" })}
             checked={form.autoAssign}
             onToggle={() => setForm({ ...form, autoAssign: !form.autoAssign })}
+            title={t({
+              ko: "서버 시작 시 인증된 CLI 프로바이더가 없는 에이전트에 기본 프로바이더를 자동 할당합니다. 추천: ON",
+              en: "On startup, auto-assigns the default CLI provider to agents that have none configured. Recommended: ON",
+              ja: "起動時、CLIプロバイダ未設定のエージェントにデフォルトプロバイダを自動割り当てします。推奨: ON",
+              zh: "启动时，自动将默认CLI提供方分配给未配置的代理。推荐: 开启",
+              pt: "Na inicialização, atribui automaticamente o provedor CLI padrão aos agentes sem provedor configurado. Recomendado: ON",
+            })}
           />
 
           <ToggleSettingCard
@@ -127,11 +134,11 @@ export default function GeneralSettingsTab({ t, form, setForm, saved, onSave }: 
             checked={form.yoloMode === true}
             onToggle={() => setForm({ ...form, yoloMode: !(form.yoloMode === true) })}
             title={t({
-              ko: "켜면 기획팀장이 의사결정 단계를 자동으로 분석하고 다음 단계를 진행합니다.",
-              en: "When enabled, the planning lead auto-analyzes decision steps and proceeds automatically.",
-              ja: "有効にすると、企画リードが意思決定段階を自動分析して次段階へ進めます。",
-              zh: "启用后，规划负责人会自动分析决策步骤并推进到下一阶段。",
-              pt: "Quando ativado, o líder de planejamento analisa automaticamente as etapas de decisão e prossegue.",
+              ko: "켜면 리뷰/기획 결정을 자동 승인합니다 (사람 확인 없이). 빠르지만 위험. 추천: OFF (프로덕션), ON (프로토타입)",
+              en: "Auto-approves review meetings and planning decisions without human confirmation. Faster but risky. Recommended: OFF (production), ON (prototyping)",
+              ja: "レビューや企画の決定を人間の確認なしに自動承認します。速いがリスクあり。推奨: OFF（本番）、ON（試作）",
+              zh: "自动批准审查和规划决策，无需人工确认。更快但有风险。推荐: 关闭（生产），开启（原型）",
+              pt: "Aprova automaticamente reuniões de review e decisões de planejamento sem confirmação humana. Mais rápido mas arriscado. Recomendado: OFF (produção), ON (prototipagem)",
             })}
           />
 
@@ -146,11 +153,11 @@ export default function GeneralSettingsTab({ t, form, setForm, saved, onSave }: 
             checked={form.autoUpdateEnabled}
             onToggle={() => setForm({ ...form, autoUpdateEnabled: !form.autoUpdateEnabled })}
             title={t({
-              ko: "서버 전체 자동 업데이트 루프를 켜거나 끕니다.",
-              en: "Enable or disable auto-update loop for the whole server.",
-              ja: "サーバー全体の自動更新ループを有効/無効にします。",
-              zh: "启用或禁用整个服务器的自动更新循环。",
-              pt: "Ativa ou desativa o loop de atualização automática para todo o servidor.",
+              ko: "GitHub에서 새 버전을 자동으로 확인합니다. OFF면 수동으로만 업데이트. 추천: OFF (안정성 우선)",
+              en: "Periodically checks GitHub for new Sentinel versions. OFF means manual updates only. Recommended: OFF (stability first)",
+              ja: "GitHubから新バージョンを定期的にチェックします。OFFは手動更新のみ。推奨: OFF（安定性優先）",
+              zh: "定期检查GitHub上的新版本。关闭时仅手动更新。推荐: 关闭（稳定性优先）",
+              pt: "Verifica periodicamente no GitHub se há novas versões do Sentinel. OFF = só atualização manual. Recomendado: OFF (estabilidade primeiro)",
             })}
           />
 
@@ -159,11 +166,11 @@ export default function GeneralSettingsTab({ t, form, setForm, saved, onSave }: 
             checked={form.oauthAutoSwap !== false}
             onToggle={() => setForm({ ...form, oauthAutoSwap: !(form.oauthAutoSwap !== false) })}
             title={t({
-              ko: "실패/한도 시 다음 OAuth 계정으로 자동 전환",
-              en: "Auto-switch to next OAuth account on failures/limits",
-              ja: "失敗/上限時に次の OAuth アカウントへ自動切替",
-              zh: "失败/额度限制时自动切换到下一个 OAuth 账号",
-              pt: "Alternar automaticamente para a próxima conta OAuth em falhas/limites",
+              ko: "OAuth 인증 실패/한도 초과 시 다음 계정으로 자동 전환 (라운드 로빈). 여러 계정이 있을 때 유용. 추천: ON",
+              en: "When an OAuth account hits rate limits or fails, automatically rotates to the next one (round-robin). Useful with multiple accounts. Recommended: ON",
+              ja: "OAuthアカウントのレート制限/失敗時に次のアカウントへ自動ローテーション。複数アカウント時に有用。推奨: ON",
+              zh: "当OAuth账号达到速率限制或失败时，自动轮换到下一个账号。多账号时有用。推荐: 开启",
+              pt: "Quando uma conta OAuth atinge limite de uso ou falha, alterna automaticamente para a próxima (round-robin). Útil com múltiplas contas. Recomendado: ON",
             })}
           />
         </div>
