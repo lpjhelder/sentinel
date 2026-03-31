@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Sentinel — Isometric Office v5</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;overflow:hidden;font-family:system-ui,sans-serif}
+canvas{display:block}
+#hud{position:fixed;bottom:0;left:0;right:0;z-index:10;background:linear-gradient(to top,rgba(15,15,30,0.95),rgba(15,15,30,0.6));border-top:1px solid rgba(56,189,248,0.15);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.hs{text-align:center;margin:0 12px}.hv{font-size:18px;font-weight:800}.hl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:#64748b}
+#ctrl{position:fixed;top:12px;right:12px;z-index:10;background:rgba(10,10,20,0.85);border:1px solid rgba(56,189,248,0.15);border-radius:8px;padding:8px 12px;color:#94a3b8;font-size:10px;line-height:1.8;backdrop-filter:blur(8px)}
+</style>
+</head>
+<body>
+<div id="ctrl">WASD — Mover CEO · Scroll — Zoom · Espaço — Meeting</div>
+<div id="hud">
+  <div style="display:flex;align-items:center">
+    <div class="hs"><div class="hv" style="color:#3b82f6" id="ht">0</div><div class="hl">Agents</div></div>
+    <div class="hs"><div class="hv" style="color:#10b981" id="hw">0</div><div class="hl">Working</div></div>
+    <div class="hs"><div class="hv" style="color:#f59e0b" id="hi">0</div><div class="hl">Idle</div></div>
+    <div class="hs"><div class="hv" style="color:#a78bfa" id="hm">0</div><div class="hl">Meeting</div></div>
+  </div>
+  <div style="text-align:right"><div style="font-size:13px;font-weight:800;letter-spacing:3px;color:#38bdf8">SENTINEL</div><div style="font-size:9px;color:#475569">ISOMETRIC OFFICE v5</div></div>
+</div>
+<canvas id="c"></canvas>
+<script>
+const C=document.getElementById('c'),$=C.getContext('2d');
+
+// Grid config — each tile = 1 unit in map space
+// Floor tiles are 500x500 and already isometric diamonds
+// Objects are 500x1000 (1 tile footprint, top half is empty space for height)
+const TILE_RENDER_W = 100; // how wide to render a single floor tile on screen
+const TILE_RENDER_H = 100; // floor tiles are 1:1 ratio
+const OBJ_RENDER_W = 50;   // object base width on screen (1 tile = 50px wide)
+const OBJ_RENDER_H = 100;  // objects are 1:2 ratio
+
+// Isometric positioning: map(x,y) → screen position
+// We place tiles by their center. The floor tile image IS the diamond.
+// For a grid, each tile center is offset from neighbors.
+// tile(0,0) at screen center. tile(1,0) is right-down, tile(0,1) is left-down.
+const STEP_X = TILE_RENDER_W / 2; // half tile width for iso offset
+const STEP_Y = TILE_RENDER_H / 4; // quarter tile height (because diamond has 2:1 w:h ratio visually)
+
+// Actually, the floor PNGs are square (500x500) but contain an isometric diamond.
+// The diamond inside fills the full 500x500 with transparent corners.
+// So rendering at 100x100 gives us the correct tile shape.
+// Iso step: x+1 moves screen right by half-width and down by quarter-height
+// But since our tiles are 100x100 and the diamond inside is roughly 2:1 aspect...
+// Let me just use the standard iso math with tile visual size.
+
+const TW = 100; // rendered tile width
+const TH = 50;  // rendered tile apparent height (diamond is 2:1 inside the square image)
+const TW2 = TW/2;
+const TH2 = TH/2;
+
+let camX=0,camY=0,zoom=1.2,tick=0;
+const keys={};
+addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='Space'){e.preventDefault();toggleMeet()}});
+addEventListener('keyup',e=>keys[e.code]=false);
+addEventListener('wheel',e=>zoom=Math.max(0.4,Math.min(3,zoom-e.deltaY*0.001)));
+
+function m2s(mx,my){return{x:(mx-my)*TW2,y:(mx+my)*TH2}}
+
+// ═══ Assets ═══
+const IM={};let ld=0,tt=0;
+function li(n,s){tt++;const i=new Image();i.src=s;i.onload=()=>{IM[n]=i;ld++};i.onerror=()=>{console.warn('Failed:',s);ld++}}
+const P='/sprites/paid/',I=P+'Ultimate_Isometric_Interior/Exports/',R=P+'Ultimate_Protagonist/AnimationSheets/PremadeCharacters/';
+
+li('floor',I+'FloorTiles/Grey/BlankFloor_Sides1.png');
+li('table',I+'Tables/DarkWood/1x1_TableSquareMetalLegs_DarkWood.png');
+li('bigtable',I+'Tables/DarkWood/1x1_TableRound_DarkWood.png');
+li('comp',I+'Miscellanious/1x1_Computer_Black.png');
+li('comp_w',I+'Miscellanious/1x1_Computer_White.png');
+li('chair_f',I+'Chairs/Black/1x1_ModernChairLegs_Front_Black.png');
+li('chair_b',I+'Chairs/Black/1x1_ModernChairLegs_BackLayerOver_Black.png');
+li('lamp_on',I+'Lights/SoftLight/1x1_BendingLamp_On.png');
+li('lamp_off',I+'Lights/SoftLight/1x1_BendingLamp_Off.png');
+li('bonsai',I+'Miscellanious/1x1_Bonsai_Green.png');
+li('bonsai_p',I+'Miscellanious/1x1_Bonsai_Pink.png');
+li('sofa',I+'SofaGroups/Blue/2x2_SofaFancy.png');
+li('chess',I+'Miscellanious/1x1_ChessBoard.png');
+
+for(let i=0;i<=8;i++){
+  const base=i===0?'/sprites/IsometricCharacter/Character0/Character0':R+`Character${i}/Character${i}`;
+  li(`c${i}_idle`,base+'_Idle.png');
+  li(`c${i}_walk`,base+'_Walk.png');
+}
+
+const SH={idle:{cols:8,rows:5,fw:460,fh:460},walk:{cols:6,rows:5,fw:460,fh:460}};
+const DR={s:0,sw:1,w:2,nw:3,n:4,se:1,e:2,ne:3};
+const DM={s:0,sw:0,w:0,nw:0,n:0,se:1,e:1,ne:1};
+
+function drawChar(ci,anim,row,fr,cx,cy,sz,mir){
+  const img=IM[`c${ci}_${anim}`];if(!img)return;
+  const sh=SH[anim],fw=sh.fw,fh=sh.fh,sc=sz/fw;
+  $.save();$.translate(cx,cy);if(mir)$.scale(-1,1);
+  $.drawImage(img,fr*fw,row*fh,fw,fh,-fw*sc/2,-fh*sc+sz*0.35,fw*sc,fh*sc);
+  $.restore();
+}
+
+function getDir(vx,vy){
+  const ax=Math.abs(vx),ay=Math.abs(vy);
+  if(ax<0.001&&ay<0.001)return 's';
+  if(ax<ay*0.4)return vy>0?'sw':'ne';
+  if(ay<ax*0.4)return vx>0?'se':'nw';
+  if(vx>0&&vy>0)return 's';if(vx>0)return 'e';if(vy>0)return 'w';return 'n';
+}
+
+// ═══ World ═══
+const GW=14,GH=12;
+const DEPTS=[
+  {name:'CEO Office',color:'#f59e0b',x:1,y:1,w:3,h:2},
+  {name:'Análise',color:'#3b82f6',x:5,y:1,w:3,h:2},
+  {name:'Geração',color:'#10b981',x:9,y:1,w:3,h:2},
+  {name:'Avaliação',color:'#ef4444',x:1,y:4,w:3,h:2},
+  {name:'Humanização',color:'#a78bfa',x:5,y:4,w:3,h:2},
+  {name:'Entrega',color:'#f97316',x:9,y:4,w:3,h:2},
+  {name:'Reunião',color:'#22d3ee',x:5,y:7,w:3,h:3},
+  {name:'Copa',color:'#84cc16',x:1,y:7,w:3,h:3},
+];
+
+const AG=[
+  {x:6,y:1.5,name:'Architect',dept:1,st:'idle',ci:1,_hx:6,_hy:1.5},
+  {x:7.5,y:2,name:'API Designer',dept:1,st:'idle',ci:2,_hx:7.5,_hy:2},
+  {x:10,y:1.5,name:'Developer',dept:2,st:'working',ci:3,_hx:10,_hy:1.5},
+  {x:11.5,y:2,name:'DBA',dept:2,st:'idle',ci:4,_hx:11.5,_hy:2},
+  {x:2,y:4.5,name:'Tester',dept:3,st:'idle',ci:5,_hx:2,_hy:4.5},
+  {x:3.5,y:5,name:'Security',dept:3,st:'working',ci:6,_hx:3.5,_hy:5},
+  {x:6,y:4.5,name:'UX Writer',dept:4,st:'idle',ci:7,_hx:6,_hy:4.5},
+  {x:7.5,y:5,name:'i18n',dept:4,st:'idle',ci:8,_hx:7.5,_hy:5},
+  {x:10,y:4.5,name:'DevOps',dept:5,st:'working',ci:1,_hx:10,_hy:4.5},
+  {x:11.5,y:5,name:'Docs',dept:5,st:'working',ci:2,_hx:11.5,_hy:5},
+];
+AG.forEach(a=>{a._dx=a.x;a._dy=a.y;a._st='desk';a._bt=0;a._wp=0;a._fx=0;a._fy=0;a._tx=0;a._ty=0;a._dir='s';a._mv=false});
+
+const ceo={x:2,y:2,tx:2,ty:2,dir:'s',mv:false,fr:0};
+const bub=[];let meetOn=false,meetAg=[];let atgt=null,atmr=0;
+const BRK=[{x:2,y:8},{x:3,y:8.5},{x:2,y:9},{x:3,y:9}];
+
+// ═══ Render helpers ═══
+
+// Draw a floor tile at map position (x,y)
+// The tile PNG is a 500x500 square containing an isometric diamond
+// We render it so the diamond fills exactly one grid cell
+function drawFloor(mx,my){
+  const s=m2s(mx,my);
+  const img=IM.floor;
+  if(img){
+    // Floor PNG is 500x500, diamond doesn't fill 100% — render slightly bigger to close gaps
+    const sz = TW * 1.15;
+    $.drawImage(img, s.x - sz/2, s.y - sz*0.03, sz, sz);
+  } else {
+    $.beginPath();$.moveTo(s.x,s.y-TH2);$.lineTo(s.x+TW2,s.y);$.lineTo(s.x,s.y+TH2);$.lineTo(s.x-TW2,s.y);$.closePath();
+    $.fillStyle='#2a2a4a';$.fill();
+  }
+}
+
+// Draw an object (1:2 ratio PNG) at map position
+// The object sits on a tile — its bottom-center aligns with the tile center
+// Since objects are 500x1000 (w:h = 1:2), we render proportionally
+function drawObj(name,mx,my,scale){
+  const img=IM[name];if(!img)return;
+  const s=m2s(mx,my);
+  const sc=scale||1;
+  const w=TW*0.7*sc; // object width relative to tile
+  const h=w*(img.height/img.width); // preserve original ratio
+  // Bottom of object aligns with tile position
+  $.drawImage(img, s.x - w/2, s.y - h*0.65, w, h);
+}
+
+// Draw wider object (like sofa, 900x1000)
+function drawWideObj(name,mx,my,scale){
+  const img=IM[name];if(!img)return;
+  const s=m2s(mx,my);
+  const sc=scale||1;
+  const w=TW*1.2*sc;
+  const h=w*(img.height/img.width);
+  $.drawImage(img, s.x - w/2, s.y - h*0.65, w, h);
+}
+
+function drawDeptLabel(d){
+  const c=m2s(d.x+d.w/2,d.y-0.1);
+  $.font='bold 13px system-ui';$.textAlign='center';
+  $.strokeStyle='rgba(0,0,0,0.7)';$.lineWidth=4;$.strokeText(d.name,c.x,c.y);
+  $.fillStyle=d.color;$.fillText(d.name,c.x,c.y);
+  const tl=m2s(d.x,d.y),tr=m2s(d.x+d.w,d.y),bl=m2s(d.x,d.y+d.h),br=m2s(d.x+d.w,d.y+d.h);
+  $.strokeStyle=d.color+'30';$.lineWidth=1.5;
+  $.beginPath();$.moveTo(tl.x,tl.y);$.lineTo(tr.x,tr.y);$.lineTo(br.x,br.y);$.lineTo(bl.x,bl.y);$.closePath();$.stroke();
+}
+
+function drawAgent(a,t){
+  const s=m2s(a._dx,a._dy),sy=s.y;
+  const w=a.st==='working',mv=a._mv;
+  const anim=(w||mv)?'walk':'idle';
+  const mf=SH[anim].cols;
+  const ph=a._hx*7+a._hy*13;
+  const fi=Math.floor((t*(mv?0.15:w?0.1:0.05)+ph)%mf);
+  const dir=a._dir||'s';
+  const row=DR[dir]??0,mir=DM[dir]??0;
+
+  $.globalAlpha=0.25;$.beginPath();$.ellipse(s.x,sy+4,14,7,0,0,Math.PI*2);$.fillStyle='#000';$.fill();$.globalAlpha=1;
+  drawChar(a.ci,anim,row,fi,s.x,sy+8,52,mir);
+
+  if(w&&!mv){
+    for(let i=0;i<3;i++){
+      const an=t*0.04+i*2.1+ph;
+      $.globalAlpha=0.4+Math.sin(t*0.06+i)*0.3;
+      $.fillStyle=['#22d3ee','#a78bfa','#34d399'][i];
+      $.beginPath();$.arc(s.x+Math.cos(an)*20,sy+Math.sin(an)*10,2,0,Math.PI*2);$.fill();
+    }
+    $.globalAlpha=1;
+  }
+
+  if(!meetAg.includes(a)){
+    $.font='bold 10px system-ui';$.textAlign='center';
+    $.strokeStyle='rgba(0,0,0,0.6)';$.lineWidth=3;$.strokeText(a.name,s.x,sy+24);
+    $.fillStyle='#e2e8f0';$.fillText(a.name,s.x,sy+24);
+    $.font='8px system-ui';
+    const st=a._st==='at_break'?'☕ no café':mv?'🚶 caminhando':w?'● trabalhando':'○ disponível';
+    const sc=a._st==='at_break'?'#84cc16':mv?'#fbbf24':w?'#10b981':'#64748b';
+    $.strokeStyle='rgba(0,0,0,0.5)';$.lineWidth=2;$.strokeText(st,s.x,sy+34);
+    $.fillStyle=sc;$.fillText(st,s.x,sy+34);
+  } else {
+    $.font='bold 9px system-ui';$.fillStyle='#22d3ee';$.textAlign='center';$.fillText('EM REUNIÃO',s.x,sy+24);
+  }
+}
+
+function drawCEO(t){
+  const s=m2s(ceo.x,ceo.y),sy=s.y;
+  const anim=ceo.mv?'walk':'idle';
+  const fi=Math.floor(ceo.fr)%SH[anim].cols;
+  const row=DR[ceo.dir]??0,mir=DM[ceo.dir]??0;
+  $.globalAlpha=0.25;$.beginPath();$.ellipse(s.x,sy+5,16,8,0,0,Math.PI*2);$.fillStyle='#000';$.fill();$.globalAlpha=1;
+  drawChar(0,anim,row,fi,s.x,sy+10,58,mir);
+  $.font='16px serif';$.textAlign='center';$.fillText('👑',s.x,sy-24+Math.sin(t*0.05)*2);
+  $.globalAlpha=0.08+Math.sin(t*0.04)*0.04;$.strokeStyle='#f59e0b';$.lineWidth=1.5;
+  $.beginPath();$.arc(s.x,sy,24,0,Math.PI*2);$.stroke();$.globalAlpha=1;
+  $.font='bold 12px system-ui';$.textAlign='center';
+  $.strokeStyle='rgba(0,0,0,0.6)';$.lineWidth=3;$.strokeText('CEO',s.x,sy+26);
+  $.fillStyle='#f59e0b';$.fillText('CEO',s.x,sy+26);
+}
+
+function drawBubble(mx,my,text,age){
+  const s=m2s(mx,my);$.globalAlpha=Math.min(1,(1-age/150)*1.5);
+  $.font='11px system-ui';const tw=$.measureText(text).width;
+  const bw=tw+20,bh=28,bx=s.x-bw/2,by=s.y-60-age*0.1;
+  $.fillStyle='rgba(15,15,30,0.92)';$.strokeStyle='#38bdf8';$.lineWidth=1;
+  $.beginPath();$.roundRect(bx,by,bw,bh,8);$.fill();$.stroke();
+  $.beginPath();$.moveTo(s.x-5,by+bh);$.lineTo(s.x,by+bh+7);$.lineTo(s.x+5,by+bh);$.fillStyle='rgba(15,15,30,0.92)';$.fill();
+  $.fillStyle='#e2e8f0';$.textAlign='center';$.fillText(text,s.x,by+18);$.globalAlpha=1;
+}
+
+// ═══ Logic ═══
+function toggleMeet(){
+  if(meetOn){meetOn=false;meetAg.forEach(a=>{a.x=a._hx;a.y=a._hy;a._dx=a._hx;a._dy=a._hy});meetAg=[];return}
+  meetOn=true;
+  const p=AG.filter(a=>a.st==='working').slice(0,4);
+  if(p.length<2){p.length=0;p.push(AG[0],AG[2])}
+  [[6,8],[7.5,8],[6,9],[7.5,9]].forEach((s,i)=>{if(p[i]){p[i].x=s[0];p[i].y=s[1];p[i]._dx=s[0];p[i]._dy=s[1]}});
+  meetAg=p;ceo.tx=6.8;ceo.ty=7.5;atgt=null;
+  bub.push({mx:6.8,my:7.5,text:'Hora da reunião!',age:0});
+}
+function pickTgt(){const a=AG[Math.floor(Math.random()*AG.length)];atgt={x:a._hx-0.6,y:a._hy,ag:a}}
+
+function resize(){C.width=innerWidth;C.height=innerHeight}
+addEventListener('resize',resize);resize();
+
+function loop(){
+  tick++;
+  if(ld<tt){$.fillStyle='#1a1a2e';$.fillRect(0,0,C.width,C.height);$.fillStyle='#38bdf8';$.font='14px system-ui';$.textAlign='center';$.fillText(`Carregando ${ld}/${tt}...`,C.width/2,C.height/2);requestAnimationFrame(loop);return}
+
+  const W=C.width,H=C.height;
+  $.fillStyle='#1a1a2e';$.fillRect(0,0,W,H);
+
+  // Input
+  const sp=0.06;
+  if(keys.ArrowLeft||keys.KeyA){ceo.tx-=sp;atgt=null}
+  if(keys.ArrowRight||keys.KeyD){ceo.tx+=sp;atgt=null}
+  if(keys.ArrowUp||keys.KeyW){ceo.ty-=sp;atgt=null}
+  if(keys.ArrowDown||keys.KeyS){ceo.ty+=sp;atgt=null}
+
+  if(!atgt&&!meetOn&&tick%200===0)pickTgt();
+  if(atgt){
+    const dx=atgt.x-ceo.x,dy=atgt.y-ceo.y;
+    if(Math.hypot(dx,dy)>0.15){ceo.tx=ceo.x+dx*0.03;ceo.ty=ceo.y+dy*0.03}
+    else{if(atmr===0)bub.push({mx:atgt.ag._dx,my:atgt.ag._dy,text:`Verificando ${atgt.ag.name}...`,age:0});atmr++;if(atmr>120){atgt=null;atmr=0}}
+  }
+
+  const px=ceo.x,py=ceo.y;
+  ceo.x+=(ceo.tx-ceo.x)*0.08;ceo.y+=(ceo.ty-ceo.y)*0.08;
+  ceo.x=Math.max(0,Math.min(GW,ceo.x));ceo.y=Math.max(0,Math.min(GH,ceo.y));
+  const vx=ceo.x-px,vy=ceo.y-py;
+  ceo.mv=Math.hypot(vx,vy)>0.003;
+  if(ceo.mv){ceo.dir=getDir(vx,vy);ceo.fr+=0.15}else ceo.fr+=0.06;
+
+  // Breaks
+  for(const a of AG){
+    if(meetAg.includes(a))continue;
+    if(a._st==='desk'&&a.st==='idle'&&Math.random()<0.0012&&AG.filter(g=>g._st!=='desk').length<3){
+      const s=BRK[Math.floor(Math.random()*BRK.length)];
+      a._st='wb';a._fx=a._dx;a._fy=a._dy;a._tx=s.x;a._ty=s.y;a._wp=0;
+      bub.push({mx:a._dx,my:a._dy,text:`${a.name}: Café! ☕`,age:0});
+    }
+    if(a._st==='wb'||a._st==='wr'){
+      a._wp+=0.007;const t=Math.min(1,a._wp);const e=t<0.5?2*t*t:-1+(4-2*t)*t;
+      a._dx=a._fx+(a._tx-a._fx)*e;a._dy=a._fy+(a._ty-a._fy)*e;a._mv=true;
+      a._dir=getDir(a._tx-a._fx,a._ty-a._fy);
+      if(t>=1){if(a._st==='wb'){a._st='at_break';a._bt=200+Math.random()*200;a._mv=false;a._dir='s'}else{a._st='desk';a._dx=a._hx;a._dy=a._hy;a._mv=false;a._dir='s'}}
+    }
+    if(a._st==='at_break'){a._bt--;a._mv=false;if(a._bt<=0){a._st='wr';a._fx=a._dx;a._fy=a._dy;a._tx=a._hx;a._ty=a._hy;a._wp=0}}
+    if(a._st==='desk'){a._dx=a.x;a._dy=a.y}
+  }
+
+  // Camera
+  const cs=m2s(ceo.x,ceo.y);camX+=(cs.x-camX)*0.04;camY+=(cs.y-camY)*0.04;
+  $.save();$.translate(W/2,H/2.5);$.scale(zoom,zoom);$.translate(-camX,-camY);
+
+  // 1. Floor tiles (only in department zones)
+  for(const d of DEPTS)
+    for(let y=d.y;y<d.y+d.h;y++)
+      for(let x=d.x;x<d.x+d.w;x++)
+        drawFloor(x,y);
+
+  // 2. Department labels
+  for(const d of DEPTS) drawDeptLabel(d);
+
+  // 3. Depth-sorted objects
+  const ob=[];
+
+  // Desk setups (table + computer + chair + lamp)
+  for(const a of AG){
+    if(meetAg.includes(a))continue;
+    const hx=a._hx,hy=a._hy;
+    const w=a.st==='working'&&a._st==='desk';
+    ob.push({d:hx+hy-0.15,fn:()=>{
+      drawObj('chair_f',hx+0.25,hy+0.35,1);
+    }});
+    ob.push({d:hx+hy-0.1,fn:()=>{
+      drawObj('table',hx,hy,1.1);
+      drawObj(w?'comp_w':'comp',hx-0.1,hy-0.05,0.85);
+      drawObj(w?'lamp_on':'lamp_off',hx+0.35,hy-0.15,0.75);
+    }});
+  }
+
+  // Decorations
+  const decoList=[
+    ['bonsai',1,0.5,0.9],['bonsai_p',4.5,0.5,0.9],['bonsai',8.5,0.5,0.9],['bonsai_p',12.5,0.5,0.9],
+    ['bonsai',1,3.5,0.9],['bonsai_p',4.5,3.5,0.9],['bonsai',8.5,3.5,0.9],['bonsai_p',12.5,3.5,0.9],
+    ['bonsai',4.5,6.5,0.9],['bonsai',8.5,6.5,0.9],
+  ];
+  for(const[name,dx,dy,sc] of decoList) ob.push({d:dx+dy,fn:()=>drawObj(name,dx,dy,sc)});
+
+  // Meeting table
+  ob.push({d:6.5+8.5,fn:()=>drawObj('bigtable',6.5,8.5,1.4)});
+  ob.push({d:7+8,fn:()=>drawObj('chess',7,8,1)});
+
+  // Copa sofa
+  ob.push({d:2+8,fn:()=>drawWideObj('sofa',2,8,0.8)});
+
+  // Agents
+  for(const a of AG) ob.push({d:a._dx+a._dy+0.1,fn:()=>drawAgent(a,tick)});
+
+  // CEO
+  ob.push({d:ceo.x+ceo.y+0.2,fn:()=>drawCEO(tick)});
+
+  ob.sort((a,b)=>a.d-b.d);
+  for(const o of ob) o.fn();
+
+  // Bubbles
+  for(let i=bub.length-1;i>=0;i--){drawBubble(bub[i].mx,bub[i].my,bub[i].text,bub[i].age);bub[i].age++;if(bub[i].age>150)bub.splice(i,1)}
+
+  // Status toggle
+  if(tick%150===0&&!meetOn){const a=AG[Math.floor(Math.random()*AG.length)];if(!meetAg.includes(a)&&a._st==='desk')a.st=a.st==='working'?'idle':'working'}
+
+  $.restore();
+
+  document.getElementById('ht').textContent=AG.length;
+  document.getElementById('hw').textContent=AG.filter(a=>a.st==='working').length;
+  document.getElementById('hi').textContent=AG.filter(a=>a.st==='idle').length;
+  document.getElementById('hm').textContent=meetAg.length;
+
+  requestAnimationFrame(loop);
+}
+pickTgt();loop();
+</script>
+</body>
+</html>
