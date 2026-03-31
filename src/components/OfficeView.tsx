@@ -13,6 +13,8 @@ import { useTheme, type ThemeMode } from "../ThemeContext";
 import CliUsagePanel from "./office-view/CliUsagePanel";
 import VirtualPadOverlay from "./office-view/VirtualPadOverlay";
 import {
+  type CeoAction,
+  type CeoAutoWalk,
   type OfficeViewProps,
   type Delivery,
   type RoomRect,
@@ -24,6 +26,7 @@ import {
   type MobileMoveDirection,
   type SubCloneBurstParticle,
 } from "./office-view/model";
+import { useCeoAutoBehavior } from "./office-view/useCeoAutoBehavior";
 import { type SupportedLocale } from "./office-view/themes-locale";
 import { useCliUsage } from "./office-view/useCliUsage";
 import {
@@ -100,6 +103,10 @@ export default function OfficeView({
   const officeWRef = useRef(MIN_OFFICE_W);
   const ceoOfficeRectRef = useRef<{ x: number; y: number; w: number; h: number } | null>(null);
   const breakRoomRectRef = useRef<{ x: number; y: number; w: number; h: number } | null>(null);
+  const ceoAutoWalkRef = useRef<CeoAutoWalk | null>(null);
+  const ceoActionQueueRef = useRef<CeoAction[]>([]);
+  const prevAgentStatusRef = useRef<Map<string, string>>(new Map());
+  const prevMeetingCountRef = useRef(0);
   const breakAnimItemsRef = useRef<
     Array<{
       sprite: Container;
@@ -323,6 +330,9 @@ export default function OfficeView({
       totalHRef,
       dataRef,
       followCeoInView,
+      ceoAutoWalkRef,
+      ceoActionQueueRef,
+      agentPosRef,
     }),
     [followCeoInView, cliUsageRef],
   );
@@ -392,6 +402,8 @@ export default function OfficeView({
     agentPosRef,
     processedCeoOfficeRef,
   });
+
+  useCeoAutoBehavior(agents, meetingPresence, ceoActionQueueRef, prevAgentStatusRef, prevMeetingCountRef);
 
   return (
     <div className="w-full overflow-auto" style={{ minHeight: "100%" }}>

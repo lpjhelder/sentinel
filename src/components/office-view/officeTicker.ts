@@ -1,11 +1,16 @@
 import type { MutableRefObject } from "react";
-import { Graphics, Text, TextStyle, type AnimatedSprite, type Container, type Sprite } from "pixi.js";
+import { Container as PixiContainer, Graphics, Text, TextStyle, type AnimatedSprite, type Container, type Sprite } from "pixi.js";
 import type { MeetingPresence } from "../../types";
 import {
+  type CeoAction,
+  type CeoAutoWalk,
   type Delivery,
   type RoomRect,
   type SubCloneBurstParticle,
   type WallClockVisual,
+  CEO_BUBBLE_DURATION,
+  CEO_DESK_POS,
+  CEO_IDLE_RETURN_DELAY,
   CEO_SIZE,
   CEO_SPEED,
   SUB_CLONE_FIREWORK_INTERVAL,
@@ -83,6 +88,9 @@ export interface OfficeTickerContext {
   totalHRef: MutableRefObject<number>;
   dataRef: MutableRefObject<OfficeTickerData>;
   followCeoInView: () => void;
+  ceoAutoWalkRef: MutableRefObject<CeoAutoWalk | null>;
+  ceoActionQueueRef: MutableRefObject<CeoAction[]>;
+  agentPosRef: MutableRefObject<Map<string, { x: number; y: number }>>;
 }
 
 export function runOfficeTickerStep(ctx: OfficeTickerContext): void {
@@ -106,10 +114,15 @@ export function runOfficeTickerStep(ctx: OfficeTickerContext): void {
     if (keys["ArrowDown"] || keys["KeyS"]) dy += CEO_SPEED;
 
     if (dx || dy) {
+      // Manual movement cancels auto-walk
+      ctx.ceoAutoWalkRef.current = null;
       ctx.ceoPosRef.current.x = Math.max(28, Math.min(ctx.officeWRef.current - 28, ctx.ceoPosRef.current.x + dx));
       ctx.ceoPosRef.current.y = Math.max(18, Math.min(ctx.totalHRef.current - 28, ctx.ceoPosRef.current.y + dy));
       ceo.position.set(ctx.ceoPosRef.current.x, ctx.ceoPosRef.current.y);
       ctx.followCeoInView();
+    } else {
+      // Auto-walk when no manual input
+      processCeoAutoWalk(ctx, ceo);
     }
 
     const crown = ctx.crownRef.current;
@@ -458,4 +471,127 @@ export function runOfficeTickerStep(ctx: OfficeTickerContext): void {
     },
     tick,
   );
+}
+
+/* ------------------------------------------------------------------ */
+/*  CEO Auto-Walk & Speech Bubbles                                     */
+/* ------------------------------------------------------------------ */
+
+function processCeoAutoWalk(ctx: OfficeTickerContext, ceo: Container): void {
+  let autoWalk = ctx.ceoAutoWalkRef.current;
+
+  // Dequeue next action if idle
+  if (!autoWalk) {
+    const queue = ctx.ceoActionQueueRef.current;
+    if (queue.length === 0) return;
+
+    queue.sort((a, b) => b.priority - a.priority);
+    const action = queue.shift()!;
+
+    let targetX: number;
+    let targetY: number;
+
+    if (action.type === "walk_to_agent" && action.agentId) {
+      const pos = ctx.agentPosRef.current.get(action.agentId);
+      if (!pos) return;
+      targetX = pos.x;
+      targetY = pos.y - 30;
+    } else if (action.type === "walk_to_meeting") {
+      targetX = ctx.officeWRef.current / 2;
+      targetY = 40;
+    } else {
+      targetX = CEO_DESK_POS.x;
+      targetY = CEO_DESK_POS.y;
+    }
+
+    const dist = Math.hypot(targetX - ctx.ceoPosRef.current.x, targetY - ctx.ceoPosRef.current.y);
+    if (dist < 5) {
+      // Already there, just show bubble
+      if (action.message && action.type !== "walk_to_desk") {
+        showCeoBubble(ceo, action.message);
+      }
+      return;
+    }
+
+    const speed = Math.max(0.008, Math.min(0.025, 120 / dist / 60));
+
+    autoWalk = {
+      targetX,
+      targetY,
+      startX: ctx.ceoPosRef.current.x,
+      startY: ctx.ceoPosRef.current.y,
+      progress: 0,
+      speed,
+      reason: action.message,
+      bubbleShown: action.type === "walk_to_desk",
+      idleReturnTimer: 0,
+    };
+    ctx.ceoAutoWalkRef.current = autoWalk;
+  }
+
+  // Advance progress
+  autoWalk.progress = Math.min(1, autoWalk.progress + autoWalk.speed);
+  const t = autoWalk.progress;
+  const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+  ctx.ceoPosRef.current.x = autoWalk.startX + (autoWalk.targetX - autoWalk.startX) * ease;
+  ctx.ceoPosRef.current.y = autoWalk.startY + (autoWalk.targetY - autoWalk.startY) * ease;
+  ceo.position.set(ctx.ceoPosRef.current.x, ctx.ceoPosRef.current.y);
+  ctx.followCeoInView();
+
+  // On arrival
+  if (t >= 1) {
+    if (!autoWalk.bubbleShown && autoWalk.reason) {
+      showCeoBubble(ceo, autoWalk.reason);
+      autoWalk.bubbleShown = true;
+    }
+    autoWalk.idleReturnTimer++;
+    if (autoWalk.idleReturnTimer > CEO_IDLE_RETURN_DELAY) {
+      ctx.ceoAutoWalkRef.current = null;
+    }
+  }
+}
+
+function showCeoBubble(ceo: Container, message: string): void {
+  const bubble = new PixiContainer();
+
+  const maxW = 130;
+  const padding = 6;
+  const fontSize = 9;
+
+  const textObj = new Text({
+    text: message,
+    style: new TextStyle({
+      fontSize,
+      fill: 0xffffff,
+      wordWrap: true,
+      wordWrapWidth: maxW - padding * 2,
+      fontFamily: "Arial",
+      lineHeight: fontSize + 3,
+    }),
+  });
+
+  const bw = Math.min(maxW, textObj.width + padding * 2);
+  const bh = textObj.height + padding * 2;
+
+  const bg = new Graphics();
+  bg.roundRect(0, 0, bw, bh, 5).fill({ color: 0x1e293b, alpha: 0.92 });
+  bg.roundRect(0, 0, bw, bh, 5).stroke({ width: 1, color: 0x38bdf8, alpha: 0.6 });
+
+  // Tail
+  const tailX = bw / 2;
+  bg.moveTo(tailX - 4, bh).lineTo(tailX, bh + 5).lineTo(tailX + 4, bh).fill({ color: 0x1e293b, alpha: 0.92 });
+
+  textObj.position.set(padding, padding);
+  bubble.addChild(bg, textObj);
+  bubble.position.set(-bw / 2, -CEO_SIZE / 2 - bh - 12);
+
+  ceo.addChild(bubble);
+
+  setTimeout(() => {
+    if (bubble.parent) {
+      bubble.parent.removeChild(bubble);
+      bubble.destroy({ children: true });
+    }
+  }, CEO_BUBBLE_DURATION);
 }

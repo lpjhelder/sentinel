@@ -54,6 +54,25 @@ interface Delivery {
   badgeText?: Text;
 }
 
+interface CeoAutoWalk {
+  targetX: number;
+  targetY: number;
+  startX: number;
+  startY: number;
+  progress: number;
+  speed: number;
+  reason: string;
+  bubbleShown: boolean;
+  idleReturnTimer: number;
+}
+
+interface CeoAction {
+  type: "walk_to_agent" | "walk_to_meeting" | "walk_to_desk" | "speech_only";
+  agentId?: string;
+  message: string;
+  priority: number;
+}
+
 interface RoomRect {
   dept: Department;
   x: number;
@@ -140,6 +159,10 @@ const COLS_PER_ROW = 3;
 const ROOM_PAD = 16;
 const TILE = 20;
 const CEO_SPEED = 7;
+const CEO_AUTO_WALK_SPEED = 0.015;
+const CEO_IDLE_RETURN_DELAY = 180;
+const CEO_DESK_POS = { x: 82, y: 74 };
+const CEO_BUBBLE_DURATION = 2800;
 const DELIVERY_SPEED = 0.012;
 
 const BREAK_ROOM_H = 110;
@@ -285,6 +308,12 @@ export {
   ROOM_PAD,
   TILE,
   CEO_SPEED,
+  CEO_AUTO_WALK_SPEED,
+  CEO_IDLE_RETURN_DELAY,
+  CEO_DESK_POS,
+  CEO_BUBBLE_DURATION,
+  type CeoAutoWalk,
+  type CeoAction,
   DELIVERY_SPEED,
   BREAK_ROOM_H,
   BREAK_ROOM_GAP,
