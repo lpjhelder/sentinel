@@ -403,7 +403,7 @@ export default function OfficeView({
     processedCeoOfficeRef,
   });
 
-  useCeoAutoBehavior(agents, meetingPresence, ceoActionQueueRef, prevAgentStatusRef, prevMeetingCountRef);
+  useCeoAutoBehavior(agents, meetingPresence, ceoActionQueueRef, prevAgentStatusRef, prevMeetingCountRef, language);
 
   return (
     <div className="w-full overflow-auto" style={{ minHeight: "100%" }}>
